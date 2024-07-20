@@ -23,7 +23,7 @@ Y = fileMatrix[:, (numberFeatures + 2)];
 θ = inv(X'X) * (X') * Y;
 
 # Define hypothesis function
-h(x) = x' * θ;
+h(x) = θ' * x;
 
 # Estimate price of a house
 testEntry = X[300,:];
