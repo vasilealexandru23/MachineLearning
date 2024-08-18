@@ -30,14 +30,8 @@ plot(train_x[:, 1], train_x[:, 2] , seriestype = :scatter, color = [train_y[i] =
 # Define theta params
 θ = zeros(n + 1)
 
-# Define sigmoid function
-sigmoid(z) = 1 / (1 + exp(-z))
-
-# Define hypothesis function
-h(x) = sigmoid(θ' * x)
-
 # Apply logistic regression
-θ, J = logisticRegression(train_x, train_y, n, m, h)
+θ, J = logisticRegression(train_x, train_y, n, m)
 
 # Define decision boundary
 db(x) = -(θ[1] + θ[2] * x) / θ[3]

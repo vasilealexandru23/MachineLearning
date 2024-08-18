@@ -1,15 +1,21 @@
-function logisticRegression(train_X, Y, n, m, h)
+function logisticRegression(train_X, Y, n, m)
     # Define learning rate
-    α = 0.1
+    α = 0.01
 
     # Add bias term
     X = [ones(m) train_X]
     
     # Theta params
-    θ = zeros(n + 1)
+    θ = ones(n + 1)
+
+    # Define sigmoid function
+    sigmoid(z) = 1 / (1 + exp(-z))
+
+    # Define hypothesis function - change here for different types
+    h(x) = sigmoid(θ[1] + θ[2] * x[2] * x[2] + θ[3] * x[3] * x[3])
 
     # Define maxIterations
-    maxIter = 1000
+    maxIter = 1200
 
     # Error function values
     Jhistory = []
@@ -18,12 +24,12 @@ function logisticRegression(train_X, Y, n, m, h)
     for k ∈ 1:maxIter
         newθ = θ
         for j ∈ 1:(n + 1)
-            diff = 0.0
+            grad = 0.0
             for i ∈ 1:m
-                diff += (Y[i] - h(X[i,:])) * X[i, j]
+                grad += (Y[i] - h(X[i,:])) * X[i, j]
             end
 
-            newθ[j] = newθ[j] + α * diff / m
+            newθ[j] = newθ[j] + (α * grad / m)
         end
         θ = newθ
 

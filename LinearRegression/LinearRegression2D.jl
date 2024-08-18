@@ -2,7 +2,7 @@ using CSV
 using DataFrames
 using Plots
 
-file = CSV.File("2Dim.csv"; ignoreemptyrows = true);
+file = CSV.File("CSVsamples/2Dim.csv"; ignoreemptyrows = true);
 
 fileMatrix = file|>DataFrame|>Matrix;
 

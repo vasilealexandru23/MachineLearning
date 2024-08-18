@@ -1,6 +1,6 @@
 # Machine Learning models
 
-### This directory contains some machine learning models in julia & python (TensorFlow).
+### This directory contains some machine learning models in Julia & Python3 (TensorFlow).
 
 ## `Structure of the directory:`
   * `CSVsamples/` -> Directory with different csv samples data for training. 
@@ -12,6 +12,6 @@
   * `LogisticRegression/` -> Directory with implementation and visualization of logistic regression.
   * `NeuralNetworks/` -> 
 
-**NOTE: For more details about implementation check JavaDoc.**
+**NOTE: For more details about implementation check comments.**
 
 Copyright 2024 Vasile Alexandru-Gabriel (vasilealexandru37@gmail.com)

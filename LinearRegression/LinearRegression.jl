@@ -2,7 +2,7 @@ using CSV
 using DataFrames
 using Plots
 
-file = CSV.File("RealEstate.csv"; ignoreemptyrows = true);
+file = CSV.File("CSVsamples/RealEstate.csv"; ignoreemptyrows = true);
 
 fileMatrix = file|>DataFrame|>Matrix;
 
@@ -19,7 +19,7 @@ featureMatrix = fileMatrix[:,2:(numberFeatures + 1)];
 X = [ones(numberTrainingSamples) featureMatrix];
 Y = fileMatrix[:, (numberFeatures + 2)];
 
-# Use normal equation to find theta (Xθ = Y => Xθ = P, P = projection of θ onto the column space of X)
+# Use normal equation to find theta (Xθ = Y => Xθ = P, P = projection of Y onto the column space of X)
 θ = inv(X'X) * (X') * Y;
 
 # Define hypothesis function
