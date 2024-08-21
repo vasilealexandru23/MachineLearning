@@ -14,6 +14,7 @@
     * `Softmax.jl` -> The function used for getting the params and cost function history (for convergence test).
     * `TestSoftmax.jl` -> The file were softmax is tested and prints the accuracy and visualizations for J and data points.
   * `NeuralNetworks/` -> 
+    * `MNIST/` -> Two implementations of MNIST in Julia & Python3.
 
 **NOTE: For more details about implementation check comments.**
 
