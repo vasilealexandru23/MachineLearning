@@ -5,15 +5,15 @@ def load_data():
     X = np.loadtxt(open("TrainX.csv", "rb"), delimiter=",", skiprows=0)
     Y = np.loadtxt(open("TrainY.csv", "rb"), delimiter=",", skiprows=0)
 
-    # Combine them for shuffle
-    T = np.c_[X, Y]
+    # # Combine them for shuffle
+    # T = np.c_[X, Y]
 
-    # Shuffle rows
-    np.random.shuffle(T)
+    # # Shuffle rows
+    # np.random.shuffle(T)
 
-    # Extract final data
-    X = T[:,0:-1]
-    Y = T[:,-1]
+    # # Extract final data
+    # X = T[:,0:-1]
+    # Y = T[:,-1]
 
     # Modifie Y to one-hot encoding
     one_hot_Y = np.zeros((Y.size, int(np.max(Y)) + 1))
@@ -22,11 +22,11 @@ def load_data():
     return X, one_hot_Y.T
 
 def compileModel(n, units1, units2):
-    W1 = np.random.randn(units1, n) - 1.
-    B1 = np.random.randn(units1, 1) - 1.
+    W1 = np.random.randn(units1, n) * np.sqrt(1 / units1)
+    B1 = np.random.randn(units1, 1) * np.sqrt(1 / units1)
 
-    W2 = np.random.randn(units2, units1) - 1.
-    B2 = np.random.randn(units2, 1) - 1.
+    W2 = np.random.randn(units2, units1) * np.sqrt(1 / units2)
+    B2 = np.random.randn(units2, 1) * np.sqrt(1 / units2)
 
     return W1, B1, W2, B2
 
@@ -37,7 +37,8 @@ def deriv_ReLU(Z):
     return Z > 0
 
 def softmax(Z):
-    return np.exp(Z) / np.sum(np.exp(Z))
+    exp_Z = np.exp(Z - np.max(Z, axis=0))  # subtracting the max value for numerical stability
+    return exp_Z / np.sum(exp_Z, axis=0, keepdims=True)
 
 def forwardPropagation(W1, B1, W2, B2, x):
     Z1 = W1.dot(x) + B1
@@ -52,7 +53,7 @@ def cost_function(W1, B1, W2, B2, X, Y, m):
     # Compute cost function
     J = 0
     for i in range(m):
-        A2 = forwardPropagation(W1, B1, W2, B2, X[i])
+        A2 = forwardPropagation(W1, B1, W2, B2, X[i,:])
         # Least square error
         J += np.sum((A2 - Y[:,i]) ** 2)
 
@@ -63,7 +64,7 @@ def fitData(W1, B1, W2, B2, X, Y, m):
     alpha = 0.1
 
     # Maximum iteration for gradient descent
-    maxIter = 1000
+    maxIter = 500
 
     # Cost function history
     J = []
@@ -79,11 +80,13 @@ def fitData(W1, B1, W2, B2, X, Y, m):
         # Backward propagation
         dZ2 = A2 - Y
         dW2 = 1 / m * dZ2.dot(A1.T)
-        dB2 = 1 / m * np.sum(dZ2)
+        # dB2 = 1 / m * np.sum(dZ2)
+        dB2 = 1 / m * np.sum(dZ2, axis=1, keepdims=True)
 
         dZ1 = W2.T.dot(dZ2) * deriv_ReLU(Z1)
         dW1 = 1 / m * dZ1.dot(A0.T)
-        dB1 = 1 / m * np.sum(dZ1)
+        # dB1 = 1 / m * np.sum(dZ1)
+        dB1 = 1 / m * np.sum(dZ1, axis=1, keepdims=True)
 
         # Update params
         W1 = W1 - alpha * dW1
@@ -131,7 +134,7 @@ def main():
     # Get accuracy over all trainig set
     correct = 0
     for i in range(m):
-        if predict(W1, B1, W2, B2, train_x[i]) == np.argmax(train_y[:,i], 0):
+        if predict(W1, B1, W2, B2, train_x[i,:]) == np.argmax(train_y[:,i]):
             correct += 1
     
     print("Accuracy: ", correct / m)

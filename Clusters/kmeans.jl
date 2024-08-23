@@ -28,7 +28,7 @@ plot(X[:, 1], X[:, 2], seriestype = :scatter, title = "Data", label = "Data", xl
 # Number of clusters
 K = 3;
 
-# Number of iterations
+# Number of iterations to find global minima of cost function
 maxIter = 100;
 
 # Closest centroid for points and best initial cost
@@ -36,7 +36,6 @@ best_cost = Inf;
 best_c = zeros(m);
 
 for i ∈ 1:maxIter
-
     local μ = zeros(K, n);
     # Randomly initialise cluster centroids
     for j ∈ 1:K
@@ -57,32 +56,19 @@ for i ∈ 1:maxIter
         end
     end
 
+    # Move the centroids to the mean of the points in the cluster
     for k ∈ 1:K
-        new_centroid = zeros(n, 1)
-        count = 0
-        for j ∈ 1:m
-            if c[j] == k
-                new_centroid += X[j, :]
-                count += 1
-            end
-        end
-
-        if (count == 0)
-            μ[k, :] = X[rand(1:m), :]
-            continue
-        end
-
-        μ[k, :] = new_centroid / count
+        μ[k, :] = mean(X[c .== k, :], dims = 1)
     end
 
     # Compute new cost
     J = 1 / m * sum([norm(X[i, :] - μ[Int(c[i]), :])^2 for i ∈ 1:m])
 
+    # Based on cost function update it's value and the cluster vector
     if J < best_cost
         global best_cost = J
         global best_c = c
     end
-
 end
 
 # Plot the points colored by cluster
