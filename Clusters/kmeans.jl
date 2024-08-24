@@ -4,7 +4,7 @@ using Plots
 using LinearAlgebra
 using Statistics
 
-file = CSV.File("Clusters/data.csv"; ignoreemptyrows = true);
+file = CSV.File("Clusters/Data/data.csv"; ignoreemptyrows = true);
 
 fileMatrix = file|>DataFrame|>Matrix;
 

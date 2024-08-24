@@ -5,6 +5,9 @@
 ## `Structure of the directory:`
   * `CSVsamples/` -> Directory with different csv samples data for training LR. 
   * `Clusters/` -> Directory implementing clustering algorithms using k-means.
+    * `Data/` -> Directory with all data used for applications.
+    * `kmeans.jl` -> Julia implementation for points in 2D plane (3 clusters).
+    * `imageCompression.py` -> Python implmenetation of image compression using kmeans (factor of 6).
   * `LinearRegression/` -> Directory with different types of linear regression.
     * `LinearRegression.jl` -> Simple implementation of LR using Normal Equation.
     * `LinearRegression2D.jl` -> A visualization of LR in 2D space (1 feature) using normal equation.
