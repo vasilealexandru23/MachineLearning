@@ -13,6 +13,7 @@
     * `LinearRegression2D.jl` -> A visualization of LR in 2D space (1 feature) using normal equation.
     * `DynamicLinearRegression.jl` -> Implementation for new data coming for trainig using low-rank changes.
     * `LinearRegressionGradientDescent.jl` -> Simple implementation of LR using Gradient Descent and data compression.
+    * `LocallyWeightedLinearRegression.jl` -> Linear Regression using locally weighted optimisation for better locally results.
   * `LogisticRegression/` -> Directory with implementation and visualization of logistic regression.
   * `NeuralNetworks/` -> 
     * `MNIST/` -> Two implementations of MNIST in Julia & Python3.
