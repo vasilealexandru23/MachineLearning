@@ -17,6 +17,9 @@
   * `LogisticRegression/` -> Directory with implementation and visualization of logistic regression.
   * `NeuralNetworks/` -> 
     * `MNIST/` -> Two implementations of MNIST in Julia & Python3.
+      * `mnist.py` -> Python implementation with one hidden layer with 93% - 97% accuarcy.
+      * `mnist.jl` -> Julia implementation using 2 hidden layers with 
+      * `visualize.py` -> Tool function to visualize array as image.
   * `SoftmaxRegression/` -> Directory with implementation of softmax regression with 98% accuracy on 3-class dataset.
     * `Softmax.jl` -> The function used for getting the params and cost function history (for convergence test).
     * `TestSoftmax.jl` -> The file were softmax is tested and prints the accuracy and visualizations for J and data points.

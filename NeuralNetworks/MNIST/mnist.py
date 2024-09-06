@@ -64,7 +64,7 @@ def fitData(X, Y, m, n):
     alpha = 0.9
 
     # Maximum iteration for gradient descent
-    maxIter = 500
+    maxIter = 300
 
     # Cost function history
     J = []
@@ -136,4 +136,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
