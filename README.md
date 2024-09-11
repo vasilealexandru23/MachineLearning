@@ -13,7 +13,7 @@
     * `LinearRegression2D.jl` -> A visualization of LR in 2D space (1 feature) using normal equation.
     * `DynamicLinearRegression.jl` -> Implementation for new data coming for trainig using low-rank changes.
     * `LinearRegressionGradientDescent.jl` -> Simple implementation of LR using Gradient Descent and data compression.
-    * `LocallyWeightedLinearRegression.jl` -> Linear Regression using locally weighted optimisation for better locally results.
+    * `LocallyWeightedLinearRegression.jl` -> Linear Regression using locally weighted optimization for better locally results.
   * `LogisticRegression/` -> Directory with implementation and visualization of logistic regression.
   * `NeuralNetworks/` -> 
     * `MNIST/` -> Two implementations of MNIST in Julia & Python3.
@@ -21,9 +21,12 @@
       * `mnist.jl` -> Julia implementation using 2 hidden layers with 
       * `visualize.py` -> Tool function to visualize array as image.
     * `CatsDogs/` -> Directory that contains a neural network used to predict if in a JPG image there is a cat or a dog.
+    * `DeepLlayerNN/` -> Directory with general implementation of a deep L layer neural network with different optimizations(mini-batches, momentum, adam) + vizualizations.
+      * `LlayerNN.py` -> OOP implementation of a generalized NN.
+      * `test.py` -> Test the NN on cats and dogs dataset + visualization of gradient descent.
   * `SoftmaxRegression/` -> Directory with implementation of softmax regression with 98% accuracy on 3-class dataset.
     * `Softmax.jl` -> The function used for getting the params and cost function history (for convergence test).
-    * `TestSoftmax.jl` -> The file were softmax is tested and prints the accuracy and visualizations for J and data points.
+    * `TestSoftmax.jl` -> The file where softmax is tested and prints the accuracy and visualizations for J and data points.
 
 
 **NOTE: For more details about implementation check comments.**

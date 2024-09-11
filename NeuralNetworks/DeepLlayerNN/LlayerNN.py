@@ -30,7 +30,7 @@ class NeuralNetwork:
     def initializeParameters(self):
         for l in range(1, self.L):
             self.parameters["W" + str(l)] = np.random.randn(self.layersDims[l], self.layersDims[l - 1]) * np.sqrt(2./self.layersDims[l])
-            self.parameters["b" + str(l)] = np.zeros((self.layersDims[l], 1))
+            self.parameters["b" + str(l)] = np.random.randn(self.layersDims[l], 1) * np.sqrt(2./self.layersDims[l])
     
     def compile(self, learningRate, epochs, normalize = True, lambd = 1):
         self.learningRate = learningRate
@@ -57,7 +57,7 @@ class NeuralNetwork:
                 
         return cache
 
-    def backPropagation(self, cache, m):
+    def backPropagation(self, cache, m, epsilon = 1e-10):
         # Dictionary with derivatives
         dcache = {}
 
@@ -65,8 +65,18 @@ class NeuralNetwork:
             if l == self.L - 1:
                 # Check here for different loss
                 AL = cache["A" + str(l)]  
-                dAL = - (np.divide(self.Y, AL) - np.divide(1 - self.Y, 1 - AL))
-                dcache["dA" + str(l)] = dAL
+                # Add epsilon to avoid division by zero
+                # dAL = -(np.divide(self.Y, AL + epsilon) - np.divide(1 - self.Y, 1 + epsilon - AL))
+                # dcache["dA" + str(l)] = dAL
+
+                # More numeric stability to direct computation of dZ
+                dZl = AL - self.Y
+                dcache["dZ" + str(l)] = dZl
+                dWl = 1./ m * np.dot(dcache["dZ" + str(l)], cache["A" + str(l-1)].T)
+                dbl = 1./ m * np.sum(dcache["dZ" + str(l)], axis=1, keepdims=True)
+                dcache["dW" + str(l)] = dWl
+                dcache["db" + str(l)] = dbl
+                continue
             else:
                 dAl = np.dot(self.parameters["W" + str(l+1)].T, dcache["dZ" + str(l+1)])
                 dcache["dA" + str(l)] = dAl 
@@ -92,12 +102,12 @@ class NeuralNetwork:
             self.parameters["W" + str(l)] -= self.learningRate * dcache["dW" + str(l)]
             self.parameters["b" + str(l)] -= self.learningRate * dcache["db" + str(l)]
 
-    def computeCost(self, AL):
+    def computeCost(self, AL, epsilon = 1e-10):
         # Number of trainig samples
         m = self.X.shape[1]
         
         # Cost function -> Binary classification
-        J = -1./m * np.sum(self.Y * np.log(np.maximum(1, AL)) + (1 - self.Y) * np.log(np.maximum(1, 1 - AL)))
+        J = -1 / m * np.sum(self.Y * np.log(AL + epsilon) + (1 - self.Y) * np.log(1 - AL + epsilon))
         
         return J
 

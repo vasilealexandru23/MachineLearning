@@ -54,16 +54,20 @@ def main():
     X, Y = shuffle(X_train, Y_train)
 
     # Instance the model
-    model = NeuralNetwork([12288, 64, 1], ["relu", "sigmoid"])
+    model = NeuralNetwork([12288, 64, 64,  1], ["relu", "relu", "sigmoid"])
 
     # Compile model, initialize params
-    model.compile(0.01, 200)
+    model.compile(0.01, 100)
     
     # Run gradient descent to fit the model
     J = model.fit(X, Y)
 
     # Plot cost function history
-    print(J)
+    J = np.array(J)
+    plt.plot(J[:,0], J[:,1])
+    plt.xlabel("Iteration")
+    plt.ylabel("Cost")
+    plt.show()
 
     # Get accuracy over all trainig set
     correct = 0
