@@ -57,7 +57,7 @@ class NeuralNetwork:
                 
         return cache
 
-    def backPropagation(self, cache, m, epsilon = 1e-10):
+    def backPropagation(self, cache, m,regularization = True, epsilon = 1e-10):
         # Dictionary with derivatives
         dcache = {}
 
@@ -92,6 +92,10 @@ class NeuralNetwork:
             dWl = 1./ m * np.dot(dcache["dZ" + str(l)], cache["A" + str(l-1)].T)
             dbl = 1./ m * np.sum(dcache["dZ" + str(l)], axis=1, keepdims=True)
 
+            if regularization:
+                dWl += self.lambd * self.parameters["W" + str(l)]
+                dbl += self.lambd * self.parameters["b" + str(l)]
+
             dcache["dW" + str(l)] = dWl
             dcache["db" + str(l)] = dbl
 
@@ -102,16 +106,20 @@ class NeuralNetwork:
             self.parameters["W" + str(l)] -= self.learningRate * dcache["dW" + str(l)]
             self.parameters["b" + str(l)] -= self.learningRate * dcache["db" + str(l)]
 
-    def computeCost(self, AL, epsilon = 1e-10):
+    def computeCost(self, AL, regularization, epsilon = 1e-10):
         # Number of trainig samples
         m = self.X.shape[1]
         
         # Cost function -> Binary classification
         J = -1 / m * np.sum(self.Y * np.log(AL + epsilon) + (1 - self.Y) * np.log(1 - AL + epsilon))
+
+        if regularization:
+            for l in range(1, self.L):
+                J += self.lambd / (2 * m) * np.sum(np.square(self.parameters["W" + str(l)]))
         
         return J
 
-    def fit(self, X, Y):
+    def fit(self, X, Y, regularization = True):
         self.X = X
         self.Y = Y
 
@@ -124,11 +132,11 @@ class NeuralNetwork:
         # Run gradient descent
         for i in range(self.epochs):
             cache = self.forwardPropagation(X)
-            dcache = self.backPropagation(cache, m)
+            dcache = self.backPropagation(cache, m, regularization)
             self.updateParameters(dcache)
 
             # Compute new cost
-            J.append((i, self.computeCost(cache["A" + str(self.L - 1)])))
+            J.append((i, self.computeCost(cache["A" + str(self.L - 1)], regularization)))
             
         return J
 
