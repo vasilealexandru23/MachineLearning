@@ -27,7 +27,8 @@
   * `SoftmaxRegression/` -> Directory with implementation of softmax regression with 98% accuracy on 3-class dataset.
     * `Softmax.jl` -> The function used for getting the params and cost function history (for convergence test).
     * `TestSoftmax.jl` -> The file where softmax is tested and prints the accuracy and visualizations for J and data points.
-
+  * `AnomalyDetection` -> Directory with implementation of basic anomaly detection.
+    
 
 **NOTE: For more details about implementation check comments.**
 
