@@ -48,6 +48,7 @@ if __name__ == '__main__':
     for i in range(X.shape[0]):
         distrib.append(findDistribution(X[i, :, None]))
 
+    # Computed with f1-score
     threshold = 1e-23
 
     # Test accuracy for the model

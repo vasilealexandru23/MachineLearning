@@ -4,7 +4,7 @@
 
 ## `Structure of the directory:`
   * `detect.py` -> Implementation in python assuming every feature has standard distribution + visualization of data and distribution fit.
-  * `credicard.csv` -> Data with anonymized features representing various transaction attributes (e.g., time, location, etc.) from [Kaggle]()
+  * `credicard.csv` ->  Truncated data with anonymized features representing various transaction attributes (e.g., time, location, etc.) from [Kaggle]()
  
 **NOTE: For more details about implementation check comments.**
 
