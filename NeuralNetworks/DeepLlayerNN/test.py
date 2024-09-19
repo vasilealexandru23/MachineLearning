@@ -57,7 +57,7 @@ def main():
     model = NeuralNetwork([12288, 64, 64,  1], ["relu", "relu", "sigmoid"])
 
     # Compile model, initialize params
-    model.compile(0.01, 100)
+    model.compile(0.01, 50)
     
     # Run gradient descent to fit the model
     J = model.fit(X, Y)

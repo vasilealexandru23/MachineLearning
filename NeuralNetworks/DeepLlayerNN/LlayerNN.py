@@ -57,7 +57,7 @@ class NeuralNetwork:
                 
         return cache
 
-    def backPropagation(self, cache, m,regularization = True, epsilon = 1e-10):
+    def backPropagation(self, Y, cache, m,regularization = True, epsilon = 1e-10):
         # Dictionary with derivatives
         dcache = {}
 
@@ -70,7 +70,7 @@ class NeuralNetwork:
                 # dcache["dA" + str(l)] = dAL
 
                 # More numeric stability to direct computation of dZ
-                dZl = AL - self.Y
+                dZl = AL - Y
                 dcache["dZ" + str(l)] = dZl
                 dWl = 1./ m * np.dot(dcache["dZ" + str(l)], cache["A" + str(l-1)].T)
                 dbl = 1./ m * np.sum(dcache["dZ" + str(l)], axis=1, keepdims=True)
@@ -106,12 +106,12 @@ class NeuralNetwork:
             self.parameters["W" + str(l)] -= self.learningRate * dcache["dW" + str(l)]
             self.parameters["b" + str(l)] -= self.learningRate * dcache["db" + str(l)]
 
-    def computeCost(self, AL, regularization, epsilon = 1e-10):
+    def computeCost(self, Y, AL, regularization, epsilon = 1e-10):
         # Number of trainig samples
         m = self.X.shape[1]
         
         # Cost function -> Binary classification
-        J = -1 / m * np.sum(self.Y * np.log(AL + epsilon) + (1 - self.Y) * np.log(1 - AL + epsilon))
+        J = -1 / m * np.sum(Y * np.log(AL + epsilon) + (1 - Y) * np.log(1 - AL + epsilon))
 
         if regularization:
             for l in range(1, self.L):
@@ -119,25 +119,74 @@ class NeuralNetwork:
         
         return J
 
-    def fit(self, X, Y, regularization = True):
-        self.X = X
-        self.Y = Y
-
+    def batch_gradient_descent(self, X, regularization = True):
         # Number of trainig samples
         m = X.shape[1]
 
-        # Function to plot J
+        # Function of cost
         J = []
 
         # Run gradient descent
         for i in range(self.epochs):
             cache = self.forwardPropagation(X)
-            dcache = self.backPropagation(cache, m, regularization)
+            dcache = self.backPropagation(self.Y, cache, m, regularization)
             self.updateParameters(dcache)
 
             # Compute new cost
-            J.append((i, self.computeCost(cache["A" + str(self.L - 1)], regularization)))
+            J.append((i, self.computeCost(self.Y, cache["A" + str(self.L - 1)], regularization)))
+
+        return J
+
+    def mini_batch_gradient_descent(self, X, regularization = True):
+        # Number of trainig samples
+        m = X.shape[1]
+
+        # Function of cost
+        J = []
+
+        # Mini-batch size
+        mini_batch_size = 64
+
+        # Get input into mini-batches of size 64
+        num_mini_batches = m // mini_batch_size
+
+        # Separate input into mini-batches
+        mini_batches_X = []
+        mini_batches_Y = []
+        for i in range(num_mini_batches):
+            mini_batch = X[:, i * mini_batch_size: (i + 1) * mini_batch_size]
+            mini_batches_X.append(mini_batch)
             
+            mini_batch = self.Y[:, i * mini_batch_size: (i + 1) * mini_batch_size]
+            mini_batches_Y.append(mini_batch)
+
+        if m % mini_batch_size != 0:
+            mini_batch = X[:, num_mini_batches * mini_batch_size:]
+            mini_batches_X.append(mini_batch)
+
+            mini_batch = self.Y[:, num_mini_batches * mini_batch_size:]
+            mini_batches_Y.append(mini_batch)
+
+        # Run gradient descent
+        for i in range(self.epochs):
+            for j in range(num_mini_batches):
+                cache = self.forwardPropagation(mini_batches_X[j])
+                dcache = self.backPropagation(mini_batches_Y[j], cache, mini_batch.shape[1], regularization)
+                self.updateParameters(dcache)
+
+                # Compute new cost
+                J.append((i, self.computeCost(mini_batches_Y[j], cache["A" + str(self.L - 1)], regularization)))
+
+        return J
+
+
+    def fit(self, X, Y, regularization = True):
+        self.X = X
+        self.Y = Y
+
+        # Function to plot J
+        J = self.batch_gradient_descent(X) 
+    
         return J
 
     def predict(self, x):
