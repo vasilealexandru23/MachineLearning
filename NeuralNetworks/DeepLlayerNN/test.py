@@ -75,10 +75,10 @@ def main():
     model = NeuralNetwork([64 * 64 * 3, 128, 64, 64, 1], ["relu", "relu", "relu", "sigmoid"])
 
     # Compile model, initialize params
-    model.compile(0.001, 500)
+    model.compile(0.001, 100)
     
     # Run gradient descent to fit the model
-    J = model.fit(X, Y)
+    J = model.fit(X, Y, optimizer="adam")
 
     # Plot cost function history
     J = np.array(J)

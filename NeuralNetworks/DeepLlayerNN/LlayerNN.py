@@ -137,7 +137,48 @@ class NeuralNetwork:
 
         return J
 
-    def mini_batch_gradient_descent(self, X, regularization = True):
+    def initialize_velocity(self):
+        V = {}
+        for l in range(1, self.L):
+            V["dW" + str(l)] = np.zeros(self.parameters["W" + str(l)].shape)
+            V["db" + str(l)] = np.zeros(self.parameters["b" + str(l)].shape)
+        return V
+
+    def update_parameters_with_momentum(self, V, dcache, beta = 0.9):
+        for l in range(1, self.L):
+            V["dW" + str(l)] = beta * V["dW" + str(l)] + (1 - beta) * dcache["dW" + str(l)]
+            V["db" + str(l)] = beta * V["db" + str(l)] + (1 - beta) * dcache["db" + str(l)]
+            self.parameters["W" + str(l)] -= self.learningRate * V["dW" + str(l)]
+            self.parameters["b" + str(l)] -= self.learningRate * V["db" + str(l)]
+
+    def update_parameters_with_rmsprop(self, S, dcache, beta = 0.999, epsilon = 1e-8):
+        for l in range(1, self.L):
+            S["dW" + str(l)] = beta * S["dW" + str(l)] + (1 - beta) * dcache["dW" + str(l)] * dcache["dW" + str(l)]
+            S["db" + str(l)] = beta * S["db" + str(l)] + (1 - beta) * dcache["db" + str(l)] * dcache["db" + str(l)]
+            self.parameters["W" + str(l)] -= self.learningRate * dcache["dW" + str(l)] / (np.sqrt(S["dW" + str(l)]) + epsilon)
+            self.parameters["b" + str(l)] -= self.learningRate * dcache["db" + str(l)] / (np.sqrt(S["db" + str(l)]) + epsilon)
+
+    def update_parameters_with_adam(self, V, S, t, dcache, beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8):
+        for l in range(1, self.L):
+            # Momentum
+            V["dW" + str(l)] = beta1 * V["dW" + str(l)] + (1 - beta1) * dcache["dW" + str(l)]
+            V["db" + str(l)] = beta1 * V["db" + str(l)] + (1 - beta1) * dcache["db" + str(l)]
+
+            # RMSProp
+            S["dW" + str(l)] = beta2 * S["dW" + str(l)] + (1 - beta2) * dcache["dW" + str(l)] * dcache["dW" + str(l)]
+            S["db" + str(l)] = beta2 * S["db" + str(l)] + (1 - beta2) * dcache["db" + str(l)] * dcache["db" + str(l)]
+
+            # Bias correction
+            V_corrected_dW = V["dW" + str(l)] / (1 - beta1 ** t)
+            V_corrected_db = V["db" + str(l)] / (1 - beta1 ** t)
+            S_corrected_dW = S["dW" + str(l)] / (1 - beta2 ** t)
+            S_corrected_db = S["db" + str(l)] / (1 - beta2 ** t)
+
+            # Update parameters
+            self.parameters["W" + str(l)] -= self.learningRate * V_corrected_dW / (np.sqrt(S_corrected_dW) + epsilon)
+            self.parameters["b" + str(l)] -= self.learningRate * V_corrected_db / (np.sqrt(S_corrected_db) + epsilon)
+
+    def mini_batch_gradient_descent(self, X, regularization = True, optimizer="None"):
         # Number of trainig samples
         m = X.shape[1]
 
@@ -149,6 +190,15 @@ class NeuralNetwork:
 
         # Get input into mini-batches of size 64
         num_mini_batches = m // mini_batch_size
+
+        if optimizer == "momentum":
+            V = self.initialize_velocity()
+        elif optimizer == "rmsprop":
+            S = self.initialize_velocity()
+        elif optimizer == "adam":
+            t = 0 # Adam counter
+            V = self.initialize_velocity()
+            S = self.initialize_velocity()
 
         # Separate input into mini-batches
         mini_batches_X = []
@@ -172,7 +222,16 @@ class NeuralNetwork:
             for j in range(num_mini_batches):
                 cache = self.forwardPropagation(mini_batches_X[j])
                 dcache = self.backPropagation(mini_batches_Y[j], cache, mini_batch.shape[1], regularization)
-                self.updateParameters(dcache)
+
+                if optimizer == "momentum":
+                    self.update_parameters_with_momentum(V, dcache)
+                elif optimizer == "rmsprop":
+                    self.update_parameters_with_rmsprop(S, dcache)
+                elif optimizer == "adam":
+                    t = t + 1   # Adam counter
+                    self.update_parameters_with_adam(V, S, t, dcache)
+                else:
+                    self.updateParameters(dcache)
 
                 # Compute new cost
                 J.append((i, self.computeCost(mini_batches_Y[j], cache["A" + str(self.L - 1)], regularization)))
@@ -180,12 +239,12 @@ class NeuralNetwork:
         return J
 
 
-    def fit(self, X, Y, regularization = True):
+    def fit(self, X, Y, regularization = True, optimizer = "None"):
         self.X = X
         self.Y = Y
 
         # Function to plot J
-        J = self.batch_gradient_descent(X) 
+        J = self.mini_batch_gradient_descent(X, False, optimizer) 
     
         return J
 
