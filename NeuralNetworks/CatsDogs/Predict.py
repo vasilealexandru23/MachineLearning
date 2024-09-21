@@ -1,14 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-def load_data():
-    img = plt.imread('train/cat (1).jpg')
-
-    # Divide by 255 so that all pixel values
-    # are between 0 and 1 (not needed for PNG files)
-    img = img / 255.
-
-    return img
+from PIL import Image 
 
 def visualize(img):
     plt.imshow(img)
@@ -145,7 +137,7 @@ def main():
     # Number of tests
     m = X.shape[1]
 
-    J, W1, b1, W2, b2 = model_train(X, Y, 0.01, 50)
+    J, W1, b1, W2, b2 = model_train(X, Y, 0.0003, 500)
 
     # Plot cost function history
     J = np.array(J)
