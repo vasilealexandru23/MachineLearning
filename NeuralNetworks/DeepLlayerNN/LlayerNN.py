@@ -29,8 +29,8 @@ class NeuralNetwork:
 
     def initializeParameters(self):
         for l in range(1, self.L):
-            self.parameters["W" + str(l)] = np.random.randn(self.layersDims[l], self.layersDims[l - 1]) * np.sqrt(2./self.layersDims[l])
-            self.parameters["b" + str(l)] = np.random.randn(self.layersDims[l], 1) * np.sqrt(2./self.layersDims[l])
+            self.parameters["W" + str(l)] = np.random.randn(self.layersDims[l], self.layersDims[l - 1]) * np.sqrt(1./self.layersDims[l])
+            self.parameters["b" + str(l)] = np.random.randn(self.layersDims[l], 1) * np.sqrt(1./self.layersDims[l])
     
     def compile(self, learningRate, epochs, normalize = True, lambd = 1):
         self.learningRate = learningRate

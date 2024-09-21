@@ -1,33 +1,45 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from LlayerNN import NeuralNetwork
+from PIL import Image
 
 def load_input():
     # Load all images from train folder
     # Prepare X_train
-    X_train = np.zeros((110, 64 * 64 * 3))
-    for i in range(1, 55):
-        img = plt.imread('../CatsDogs/train/cat (' + str(i) + ').jpg')
+    X_train = np.zeros((400, 150 * 150 * 3))
+    for i in range(1, 200):
+        img = Image.open('../../training_set_big/cats/cat.' + str(i) + '.jpg')
+
+        # Resize to 64x64
+        img = img.resize((150, 150))
+        img = np.asarray(img)
+
         img = img / 255.
         img = img.reshape(img.shape[0] * img.shape[1] * img.shape[2], 1)
-
+        
         X_train[i, :, None] = img
 
-    for i in range(1, 55):
-        img = plt.imread('../CatsDogs/train/dog (' + str(i) + ').jpg')
+    for i in range(1, 200):
+        img = Image.open('../../training_set_big/dogs/dog.' + str(i) + '.jpg')
+
+        # Resize to 120x120
+        img = img.resize((150, 150))
+
+        img = np.asarray(img)
+
         img = img / 255.
         img = img.reshape(img.shape[0] * img.shape[1] * img.shape[2], 1)
 
-        X_train[i + 55, :, None] = img
+        X_train[i + 200, :, None] = img
 
     return X_train
 
 def load_output():
     # Load all images from train folder
     # Prepare Y_train
-    Y_train = np.zeros((110, 1))
+    Y_train = np.zeros((400, 1))
 
-    for i in range(55, 110):
+    for i in range(200, 400):
         Y_train[i] = 1
 
     return Y_train
@@ -54,10 +66,10 @@ def main():
     X, Y = shuffle(X_train, Y_train)
 
     # Instance the model
-    model = NeuralNetwork([12288, 64, 64,  1], ["relu", "relu", "sigmoid"])
+    model = NeuralNetwork([150 * 150 * 3, 256, 128, 64, 64, 1], ["relu", "relu", "relu", "relu", "sigmoid"])
 
     # Compile model, initialize params
-    model.compile(0.01, 50)
+    model.compile(0.01, 800)
     
     # Run gradient descent to fit the model
     J = model.fit(X, Y)
