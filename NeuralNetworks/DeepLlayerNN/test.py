@@ -1,33 +1,39 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import tensorflow as tf
 from LlayerNN import NeuralNetwork
 from PIL import Image
 
 def load_input():
     # Load all images from train folder
     # Prepare X_train
-    X_train = np.zeros((400, 150 * 150 * 3))
+    X_train = np.zeros((400, 64 * 64 * 3))
     for i in range(1, 200):
-        img = Image.open('../../training_set_big/cats/cat.' + str(i) + '.jpg')
+        img = tf.keras.utils.load_img(
+            '../../training_set_big/cats/cat.' + str(i) + '.jpg',
+            target_size=(64,64),
+            color_mode='rgb',
+            interpolation='nearest')
 
-        # Resize to 64x64
-        img = img.resize((150, 150))
-        img = np.asarray(img)
+        img = tf.keras.utils.img_to_array(img)
+        img = np.array(img)/255.
 
-        img = img / 255.
+        # Reshape image to a column vector
         img = img.reshape(img.shape[0] * img.shape[1] * img.shape[2], 1)
-        
+
         X_train[i, :, None] = img
 
     for i in range(1, 200):
-        img = Image.open('../../training_set_big/dogs/dog.' + str(i) + '.jpg')
+        img = tf.keras.utils.load_img(
+            '../../training_set_big/dogs/dog.' + str(i) + '.jpg',
+            target_size=(64,64),
+            color_mode='rgb',
+            interpolation='nearest')
 
-        # Resize to 120x120
-        img = img.resize((150, 150))
+        img = tf.keras.utils.img_to_array(img)
+        img = np.array(img)/255. 
 
-        img = np.asarray(img)
-
-        img = img / 255.
+        # Reshape image to a column vector
         img = img.reshape(img.shape[0] * img.shape[1] * img.shape[2], 1)
 
         X_train[i + 200, :, None] = img
@@ -66,10 +72,10 @@ def main():
     X, Y = shuffle(X_train, Y_train)
 
     # Instance the model
-    model = NeuralNetwork([150 * 150 * 3, 256, 128, 64, 64, 1], ["relu", "relu", "relu", "relu", "sigmoid"])
+    model = NeuralNetwork([64 * 64 * 3, 128, 64, 64, 1], ["relu", "relu", "relu", "sigmoid"])
 
     # Compile model, initialize params
-    model.compile(0.01, 800)
+    model.compile(0.001, 500)
     
     # Run gradient descent to fit the model
     J = model.fit(X, Y)
