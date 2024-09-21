@@ -7,8 +7,8 @@ from PIL import Image
 def load_input():
     # Load all images from train folder
     # Prepare X_train
-    X_train = np.zeros((400, 64 * 64 * 3))
-    for i in range(1, 200):
+    X_train = np.zeros((4000, 64 * 64 * 3))
+    for i in range(1, 2000):
         img = tf.keras.utils.load_img(
             '../../training_set_big/cats/cat.' + str(i) + '.jpg',
             target_size=(64,64),
@@ -23,7 +23,7 @@ def load_input():
 
         X_train[i, :, None] = img
 
-    for i in range(1, 200):
+    for i in range(1, 2000):
         img = tf.keras.utils.load_img(
             '../../training_set_big/dogs/dog.' + str(i) + '.jpg',
             target_size=(64,64),
@@ -36,16 +36,16 @@ def load_input():
         # Reshape image to a column vector
         img = img.reshape(img.shape[0] * img.shape[1] * img.shape[2], 1)
 
-        X_train[i + 200, :, None] = img
+        X_train[i + 2000, :, None] = img
 
     return X_train
 
 def load_output():
     # Load all images from train folder
     # Prepare Y_train
-    Y_train = np.zeros((400, 1))
+    Y_train = np.zeros((4000, 1))
 
-    for i in range(200, 400):
+    for i in range(2000, 4000):
         Y_train[i] = 1
 
     return Y_train
@@ -75,10 +75,10 @@ def main():
     model = NeuralNetwork([64 * 64 * 3, 128, 64, 64, 1], ["relu", "relu", "relu", "sigmoid"])
 
     # Compile model, initialize params
-    model.compile(0.001, 100)
+    model.compile(0.001, 200)
     
     # Run gradient descent to fit the model
-    J = model.fit(X, Y, optimizer="adam")
+    J = model.fit(X, Y, optimizer="momentum")
 
     # Plot cost function history
     J = np.array(J)
