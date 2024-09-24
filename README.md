@@ -6,6 +6,9 @@
   * `AnomalyDetection` -> Directory with implementation of basic anomaly detection.
   * `CSVsamples/` -> Directory with different csv samples data for training LR. 
   * `Clusters/` -> Directory implementing clustering algorithms using k-means + image compression.
+    * `Data/` -> Directory with all data used for applications.
+    * `kmeans.jl` -> Julia implementation for points in 2D plane (3 clusters).
+    * `imageCompression.py` -> Python implmenetation of image compression using kmeans (factor of 6).
   * `LinearRegression/` -> Directory with different types of linear regression.
     * `LinearRegression.jl` -> Simple implementation of LR using Normal Equation.
     * `LinearRegression2D.jl` -> A visualization of LR in 2D space (1 feature) using normal equation.
@@ -18,6 +21,7 @@
     * `CNN/` ->  Directory with implementations of CNN (TensorFlow + scratch) used on two datasets with LeNet-5 Architecture.
     * `DeepLlayerNN/` -> Directory with generic implementation of a deep L layer neural network with different optimizations(mini-batches, momentum, adam) + vizualizations.
     * `MNIST/` -> Two implementations of MNIST in Julia & Python3 with 93%-97% accuracy.
+    * `ResNet/` -> Implementation + tests on Residual Neural Network using 50 layers with 80% accuracy on testset.
   * `Paperworks/` -> Directory with paperworks downloaded from https://arxiv.org/.
   * `SoftmaxRegression/` -> Directory with implementation of softmax regression with 98% accuracy on 3-class dataset.
     * `Softmax.jl` -> The function used for getting the params and cost function history (for convergence test).
