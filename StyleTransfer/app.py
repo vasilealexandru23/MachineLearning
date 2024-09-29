@@ -255,7 +255,6 @@ for i in range(epochs):
     print(f"EPOCH: {i}")
     train_step(generated_image)
 
-
 # Show the 3 images in a row
 fig = plt.figure(figsize=(16, 4))
 ax = fig.add_subplot(1, 3, 1)
