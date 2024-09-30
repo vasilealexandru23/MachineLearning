@@ -22,6 +22,7 @@
   * `SoftmaxRegression/` -> Directory with implementation of softmax regression with 98% accuracy on 3-class dataset.
     * `Softmax.jl` -> The function used for getting the params and cost function history (for convergence test).
     * `TestSoftmax.jl` -> The file where softmax is tested and prints the accuracy and visualizations for J and data points.
+  * `StlyeTransfer/` -> Directory with implementation of Art Generation with Neural Style Transfer using a pretrained Inception model.
   * `UnsupervisedLearning/` -> Directory with recommenders and reinforcement learning.
     * `AnomalyDetection` -> Directory with implementation of basic anomaly detection.
     * `Clusters/` -> Directory implementing clustering algorithms using k-means + image compression.

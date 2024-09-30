@@ -177,93 +177,101 @@ def tensor_to_image(tensor):
         tensor = tensor[0]
     return Image.fromarray(tensor)
 
-# Import pre-trained weights into model
-image_size = 400
-model = tf.keras.applications.VGG19(include_top=False,
-                                    input_shape = (image_size, image_size, 3),
-                                    weights='Pretrained-Model/vgg19_weights_tf_dim_ordering_tf_kernels_notop.h5')
+def main():
+    # Change this paths with your own images
+    content_path= "./images/jim.jpg"
+    style_path = "./images/style_gogh.jpg"
 
-# Print the model architecture
-print(model.summary())
+    # Import pre-trained weights into model
+    image_size = 400
+    model = tf.keras.applications.VGG19(include_top=False,
+                                        input_shape = (image_size, image_size, 3),
+                                        weights='Pretrained-Model/vgg19_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
-# Get the content image
-content = Image.open("./images/jim.jpg")
-content = np.array(content.resize((image_size, image_size)))
-content = tf.constant(np.reshape(content, ((1,) + content.shape)))
+    # Print the model architecture
+    print(model.summary())
 
-# Get the style image
-style = Image.open("./images/style_gogh.jpg")
-style = np.array(style.resize((image_size, image_size)))
-style = tf.constant(np.reshape(style, ((1,) + style.shape)))
+    # Get the content image
+    content = Image.open(content_path)
+    content = np.array(content.resize((image_size, image_size)))
+    content = tf.constant(np.reshape(content, ((1,) + content.shape)))
 
-# Initialize the "generated" image as a noisy image created from the content image
-generated_image = tf.Variable(tf.image.convert_image_dtype(content, tf.float32))
-noise = tf.random.uniform(tf.shape(generated_image), -0.25, 0.25)
-generated_image = tf.add(generated_image, noise)
-generated_image = tf.clip_by_value(generated_image, clip_value_min=0.0, clip_value_max=1.0)
+    # Get the style image
+    style = Image.open(style_path)
+    style = np.array(style.resize((image_size, image_size)))
+    style = tf.constant(np.reshape(style, ((1,) + style.shape)))
 
-# Define the content layer and build the model
-content_layer = [('block5_conv4', 1)]
-vgg_model_outputs = get_layer_outputs(model, STYLE_LAYERS + content_layer)
+    # Initialize the "generated" image as a noisy image created from the content image
+    generated_image = tf.Variable(tf.image.convert_image_dtype(content, tf.float32))
+    noise = tf.random.uniform(tf.shape(generated_image), -0.25, 0.25)
+    generated_image = tf.add(generated_image, noise)
+    generated_image = tf.clip_by_value(generated_image, clip_value_min=0.0, clip_value_max=1.0)
 
-content_target = vgg_model_outputs(content)  # Content encoder
-style_targets = vgg_model_outputs(style)     # Style encoder
+    # Define the content layer and build the model
+    content_layer = [('block5_conv4', 1)]
+    vgg_model_outputs = get_layer_outputs(model, STYLE_LAYERS + content_layer)
 
-# Assign the content image to be the input of the VGG model.  
-# Set a_C to be the hidden layer activation from the layer we have selected
-preprocessed_content =  tf.Variable(tf.image.convert_image_dtype(content, tf.float32))
-a_C = vgg_model_outputs(preprocessed_content)
+    content_target = vgg_model_outputs(content)  # Content encoder
+    style_targets = vgg_model_outputs(style)     # Style encoder
 
-# Assign the input of the model to be the "style" image 
-preprocessed_style =  tf.Variable(tf.image.convert_image_dtype(style, tf.float32))
-a_S = vgg_model_outputs(preprocessed_style)
+    # Assign the content image to be the input of the VGG model.  
+    # Set a_C to be the hidden layer activation from the layer we have selected
+    preprocessed_content =  tf.Variable(tf.image.convert_image_dtype(content, tf.float32))
+    a_C = vgg_model_outputs(preprocessed_content)
 
-optimizer = tf.keras.optimizers.Adam(learning_rate=0.01)
+    # Assign the input of the model to be the "style" image 
+    preprocessed_style =  tf.Variable(tf.image.convert_image_dtype(style, tf.float32))
+    a_S = vgg_model_outputs(preprocessed_style)
 
-@tf.function()
-def train_step(generated_image):
-    with tf.GradientTape() as tape:
+    optimizer = tf.keras.optimizers.Adam(learning_rate=0.01)
+
+    @tf.function()
+    def train_step(generated_image):
+        with tf.GradientTape() as tape:
         
-        # Compute a_G as the vgg_model_outputs for the current generated image
-        a_G = vgg_model_outputs(generated_image)
+            # Compute a_G as the vgg_model_outputs for the current generated image
+            a_G = vgg_model_outputs(generated_image)
         
-        # Compute the style cost
-        J_style = compute_style_cost(a_G, a_S)
+            # Compute the style cost
+            J_style = compute_style_cost(a_G, a_S)
 
-        # Compute the content cost
-        J_content = content_cost_func(a_G, a_C)
-        # Compute the total cost
-        J = total_cost(J_content, J_style, alpha = 10, beta = 40)
+            # Compute the content cost
+            J_content = content_cost_func(a_G, a_C)
+            # Compute the total cost
+            J = total_cost(J_content, J_style, alpha = 10, beta = 40)
         
-    # Compute the gradients of the total cost with respect to the generated image
-    grads = tape.gradient(J, generated_image)
+        # Compute the gradients of the total cost with respect to the generated image
+        grads = tape.gradient(J, generated_image)
 
-    # Update the generated image
-    optimizer.apply_gradients([(grads, generated_image)])
+        # Update the generated image
+        optimizer.apply_gradients([(grads, generated_image)])
 
-    # Clip the generated image
-    generated_image.assign(clip_0_1(generated_image))
+        # Clip the generated image
+        generated_image.assign(clip_0_1(generated_image))
 
-    return J
+        return J
 
-# Assign the generated image to the variable generated_image
-generated_image = tf.Variable(generated_image)
+    # Assign the generated image to the variable generated_image
+    generated_image = tf.Variable(generated_image)
 
-# Train the model
-epochs = 1000
-for i in range(epochs):
-    print(f"EPOCH: {i}")
-    train_step(generated_image)
+    # Train the model
+    epochs = 1000
+    for i in range(epochs):
+        print(f"EPOCH: {i}")
+        train_step(generated_image)
 
-# Show the 3 images in a row
-fig = plt.figure(figsize=(16, 4))
-ax = fig.add_subplot(1, 3, 1)
-imshow(content[0])
-ax.title.set_text('Content image')
-ax = fig.add_subplot(1, 3, 2)
-imshow(style[0])
-ax.title.set_text('Style image')
-ax = fig.add_subplot(1, 3, 3)
-imshow(generated_image[0])
-ax.title.set_text('Generated image')
-plt.show()
+    # Show the 3 images in a row
+    fig = plt.figure(figsize=(16, 4))
+    ax = fig.add_subplot(1, 3, 1)
+    imshow(content[0])
+    ax.title.set_text('Content image')
+    ax = fig.add_subplot(1, 3, 2)
+    imshow(style[0])
+    ax.title.set_text('Style image')
+    ax = fig.add_subplot(1, 3, 3)
+    imshow(generated_image[0])
+    ax.title.set_text('Generated image')
+    plt.show()
+
+if __name__ == "__main__":
+    main()
