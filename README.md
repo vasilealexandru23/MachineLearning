@@ -4,6 +4,7 @@
 
 ## `Structure of the directory:`
   * `CSVsamples/` -> Directory with different csv samples data for training LR. 
+  * `FaceRecognition/` -> Directory with implementation of Face Verification and Recognition using pretrained Inception Model.
   * `ImageSegmentation/` -> Directory with implmentation of U-Net used in Image Segmentation.
   * `LinearRegression/` -> Directory with different types of linear regression.
     * `LinearRegression.jl` -> Simple implementation of LR using Normal Equation.
@@ -22,7 +23,7 @@
   * `SoftmaxRegression/` -> Directory with implementation of softmax regression with 98% accuracy on 3-class dataset.
     * `Softmax.jl` -> The function used for getting the params and cost function history (for convergence test).
     * `TestSoftmax.jl` -> The file where softmax is tested and prints the accuracy and visualizations for J and data points.
-  * `StlyeTransfer/` -> Directory with implementation of Art Generation with Neural Style Transfer using a pretrained Inception model.
+  * `StlyeTransfer/` -> Directory with implementation of Art Generation with Neural Style Transfer using a pretrained VGG-19 model.
   * `UnsupervisedLearning/` -> Directory with recommenders and reinforcement learning.
     * `AnomalyDetection` -> Directory with implementation of basic anomaly detection.
     * `Clusters/` -> Directory implementing clustering algorithms using k-means + image compression.
@@ -32,6 +33,7 @@
     * `ContentBased/` -> Directory with implementation of content based filtering using 2 neural networks w/ TensorFlow.
     
 
-**NOTE: For more details about implementation check comments.**
+**NOTE: For more details about implementation check comments.**      
+**NOTE: Part of datasets/models/functions used are from [DeepLearning.AI](https://www.deeplearning.ai/).**
 
 Copyright 2024 Vasile Alexandru-Gabriel (vasilealexandru37@gmail.com)
