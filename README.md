@@ -32,6 +32,7 @@
       * `kmeans.jl` -> Julia implementation for points in 2D plane (3 clusters).
       * `imageCompression.py` -> Python implmenetation of image compression using kmeans (factor of 6).
     * `ContentBased/` -> Directory with implementation of content based filtering using 2 neural networks w/ TensorFlow.
+  * `WordEmbeddings/` -> 
     
 
 **NOTE: For more details about implementation check comments.**      
