@@ -19,6 +19,7 @@
     * `DeepLlayerNN/` -> Directory with generic implementation of a deep L layer neural network with different optimizations(mini-batches, momentum, adam) + vizualizations.
     * `MNIST/` -> Two implementations of MNIST in Julia & Python3 with 93%-97% accuracy.
     * `ResNet/` -> Implementation + tests on Residual Neural Network using 50 layers with 80% accuracy on testset.
+    * `RNN/` -> Directory with implementation and different applications of Recurent Neural Networks.
   * `Paperworks/` -> Directory with paperworks downloaded from https://arxiv.org/.
   * `SoftmaxRegression/` -> Directory with implementation of softmax regression with 98% accuracy on 3-class dataset.
     * `Softmax.jl` -> The function used for getting the params and cost function history (for convergence test).
