@@ -32,13 +32,11 @@ def read_glove_vecs(glove_file):
         
         i = 1
         words_to_index = {}
-        index_to_words = {}
         for w in sorted(words):
             words_to_index[w] = i
-            index_to_words[i] = w
             i = i + 1
 
-    return words_to_index, index_to_words, word_to_vec_map
+    return words_to_index, word_to_vec_map
 
 def convert_to_one_hot(Y, C):
     Y = np.eye(C)[Y.reshape(-1)]
@@ -172,7 +170,7 @@ def main():
     index_to_word -- the coresponding word of the index in the sorted array
     word_to_vec_map -- mapping between a word and it's vector representation
     """
-    word_to_index, index_to_word, word_to_vec_map = read_glove_vecs('data/glove.6B.50d.txt')
+    word_to_index, word_to_vec_map = read_glove_vecs('data/glove.6B.50d.txt')
 
     # Find maximum len of a sentence in the input.
     max_len = len(max(X_train, key=lambda x: len(x.split())).split())
@@ -189,7 +187,7 @@ def main():
     # Train the model and use it on validation test set
     model.fit(X_train_indices, Y_train_oh, epochs = 50, batch_size = 32, shuffle=True, validation_data=[X_test_indices, Y_test_oh])
 
-    # Visualize what the model emoji generates.
+    # Visualize what emoji is model generating.
     while (True):
         sentence = input("Type your message:\n")
         sentence = np.array([sentence])
