@@ -1,0 +1,2149 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for grffile with XeLaTeX
+    \def\Gread@@xetex#1{%
+      \IfFileExists{"\Gin@base".bb}%
+      {\Gread@eps{\Gin@base.bb}}%
+      {\Gread@@xetex@aux#1}%
+    }
+    \makeatother
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Dinosaurus\_Island\_Character\_level\_language\_model}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        \ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{character-level-language-model---dinosaurus-island}{%
+\section{Character level language model - Dinosaurus
+Island}\label{character-level-language-model---dinosaurus-island}}
+
+Welcome to Dinosaurus Island! 65 million years ago, dinosaurs existed,
+and in this assignment, they have returned.
+
+You are in charge of a special task: Leading biology researchers are
+creating new breeds of dinosaurs and bringing them to life on earth, and
+your job is to give names to these dinosaurs. If a dinosaur does not
+like its name, it might go berserk, so choose wisely!
+
+Luckily you're equipped with some deep learning now, and you will use it
+to save the day! Your assistant has collected a list of all the dinosaur
+names they could find, and compiled them into this
+\href{dinos.txt}{dataset}. (Feel free to take a look by clicking the
+previous link.) To create new dinosaur names, you will build a
+character-level language model to generate new names. Your algorithm
+will learn the different name patterns, and randomly generate new names.
+Hopefully this algorithm will keep you and your team safe from the
+dinosaurs' wrath!
+
+By the time you complete this assignment, you'll be able to:
+
+\begin{itemize}
+\tightlist
+\item
+  Store text data for processing using an RNN
+\item
+  Build a character-level text generation model using an RNN
+\item
+  Sample novel sequences in an RNN
+\item
+  Explain the vanishing/exploding gradient problem in RNNs
+\item
+  Apply gradient clipping as a solution for exploding gradients
+\end{itemize}
+
+Begin by loading in some functions that are provided for you in
+\texttt{rnn\_utils}. Specifically, you have access to functions such as
+\texttt{rnn\_forward} and \texttt{rnn\_backward} which are equivalent to
+those you've implemented in the previous assignment.
+
+\hypertarget{important-note-on-submission-to-the-autograder}{%
+\subsection{Important Note on Submission to the
+AutoGrader}\label{important-note-on-submission-to-the-autograder}}
+
+Before submitting your assignment to the AutoGrader, please make sure
+you are not doing the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  You have not added any \emph{extra} \texttt{print} statement(s) in the
+  assignment.
+\item
+  You have not added any \emph{extra} code cell(s) in the assignment.
+\item
+  You have not changed any of the function parameters.
+\item
+  You are not using any global variables inside your graded exercises.
+  Unless specifically instructed to do so, please refrain from it and
+  use the local variables instead.
+\item
+  You are not changing the assignment code where it is not required,
+  like creating \emph{extra} variables.
+\end{enumerate}
+
+If you do any of the following, you will get something like,
+\texttt{Grader\ Error:\ Grader\ feedback\ not\ found} (or similarly
+unexpected) error upon submitting your assignment. Before asking for
+help/debugging the errors in your assignment, check for these first. If
+this is the case, and you don't remember the changes you have made, you
+can get a fresh copy of the assignment by following these
+\href{https://www.coursera.org/learn/nlp-sequence-models/supplement/qHIve/h-ow-to-refresh-your-workspace}{instructions}.
+
+    \hypertarget{table-of-contents}{%
+\subsection{Table of Contents}\label{table-of-contents}}
+
+\begin{itemize}
+\tightlist
+\item
+  Section \ref{0}
+\item
+  Section \ref{1}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Section \ref{1-1}
+  \item
+    Section \ref{1-2}
+  \end{itemize}
+\item
+  Section \ref{2}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Section \ref{2-1}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-1}
+    \end{itemize}
+  \item
+    Section \ref{2-2}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-2}
+    \end{itemize}
+  \end{itemize}
+\item
+  Section \ref{3}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Section \ref{3-1}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-3}
+    \end{itemize}
+  \item
+    Section \ref{3-2}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-4}
+    \end{itemize}
+  \end{itemize}
+\item
+  Section \ref{4}
+\item
+  Section \ref{5}
+\end{itemize}
+
+    \#\# Packages
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} v1.1}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{utils} \PY{k+kn}{import} \PY{o}{*}
+\PY{k+kn}{import} \PY{n+nn}{random}
+\PY{k+kn}{import} \PY{n+nn}{pprint}
+\PY{k+kn}{import} \PY{n+nn}{copy}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \#\# 1 - Problem Statement
+
+\#\#\# 1.1 - Dataset and Preprocessing
+
+Run the following cell to read the dataset of dinosaur names, create a
+list of unique characters (such as a-z), and compute the dataset and
+vocabulary size.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{data} \PY{o}{=} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dinos.txt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}
+\PY{n}{data}\PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{lower}\PY{p}{(}\PY{p}{)}
+\PY{n}{chars} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{)}
+\PY{n}{data\PYZus{}size}\PY{p}{,} \PY{n}{vocab\PYZus{}size} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{chars}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{There are }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ total characters and }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{ unique characters in your data.}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{data\PYZus{}size}\PY{p}{,} \PY{n}{vocab\PYZus{}size}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+There are 19909 total characters and 27 unique characters in your data.
+    \end{Verbatim}
+
+    \begin{itemize}
+\tightlist
+\item
+  The characters are a-z (26 characters) plus the ``\n'' (or newline
+  character).
+\item
+  In this assignment, the newline character ``\n'' plays a role similar
+  to the \texttt{\textless{}EOS\textgreater{}} (or ``End of sentence'')
+  token discussed in lecture.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Here, ``\n'' indicates the end of the dinosaur name rather than the
+    end of a sentence.
+  \end{itemize}
+\item
+  \texttt{char\_to\_ix}: In the cell below, you'll create a Python
+  dictionary (i.e., a hash table) to map each character to an index from
+  0-26.
+\item
+  \texttt{ix\_to\_char}: Then, you'll create a second Python dictionary
+  that maps each index back to the corresponding character.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This will help you figure out which index corresponds to which
+    character in the probability distribution output of the softmax
+    layer.
+  \end{itemize}
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{chars} \PY{o}{=} \PY{n+nb}{sorted}\PY{p}{(}\PY{n}{chars}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{chars}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+['\textbackslash{}n', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{char\PYZus{}to\PYZus{}ix} \PY{o}{=} \PY{p}{\PYZob{}} \PY{n}{ch}\PY{p}{:}\PY{n}{i} \PY{k}{for} \PY{n}{i}\PY{p}{,}\PY{n}{ch} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{chars}\PY{p}{)} \PY{p}{\PYZcb{}}
+\PY{n}{ix\PYZus{}to\PYZus{}char} \PY{o}{=} \PY{p}{\PYZob{}} \PY{n}{i}\PY{p}{:}\PY{n}{ch} \PY{k}{for} \PY{n}{i}\PY{p}{,}\PY{n}{ch} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{chars}\PY{p}{)} \PY{p}{\PYZcb{}}
+\PY{n}{pp} \PY{o}{=} \PY{n}{pprint}\PY{o}{.}\PY{n}{PrettyPrinter}\PY{p}{(}\PY{n}{indent}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{pp}\PY{o}{.}\PY{n}{pprint}\PY{p}{(}\PY{n}{ix\PYZus{}to\PYZus{}char}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{   0: '\textbackslash{}n',
+    1: 'a',
+    2: 'b',
+    3: 'c',
+    4: 'd',
+    5: 'e',
+    6: 'f',
+    7: 'g',
+    8: 'h',
+    9: 'i',
+    10: 'j',
+    11: 'k',
+    12: 'l',
+    13: 'm',
+    14: 'n',
+    15: 'o',
+    16: 'p',
+    17: 'q',
+    18: 'r',
+    19: 's',
+    20: 't',
+    21: 'u',
+    22: 'v',
+    23: 'w',
+    24: 'x',
+    25: 'y',
+    26: 'z'\}
+    \end{Verbatim}
+
+    \#\#\# 1.2 - Overview of the Model
+
+Your model will have the following structure:
+
+\begin{itemize}
+\tightlist
+\item
+  Initialize parameters
+\item
+  Run the optimization loop
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Forward propagation to compute the loss function
+  \item
+    Backward propagation to compute the gradients with respect to the
+    loss function
+  \item
+    Clip the gradients to avoid exploding gradients
+  \item
+    Using the gradients, update your parameters with the gradient
+    descent update rule.
+  \end{itemize}
+\item
+  Return the learned parameters
+\end{itemize}
+
+Figure 1: Recurrent Neural Network, similar to what you built in the
+previous notebook ``Building a Recurrent Neural Network - Step by
+Step.''
+
+\begin{itemize}
+\tightlist
+\item
+  At each time-step, the RNN tries to predict what the next character
+  is, given the previous characters.
+\item
+  \(\mathbf{X} = (x^{\langle 1 \rangle}, x^{\langle 2 \rangle}, ..., x^{\langle T_x \rangle})\)
+  is a list of characters from the training set.
+\item
+  \(\mathbf{Y} = (y^{\langle 1 \rangle}, y^{\langle 2 \rangle}, ..., y^{\langle T_x \rangle})\)
+  is the same list of characters but shifted one character forward.
+\item
+  At every time-step \(t\),
+  \(y^{\langle t \rangle} = x^{\langle t+1 \rangle}\). The prediction at
+  time \(t\) is the same as the input at time \(t + 1\).
+\end{itemize}
+
+    \#\# 2 - Building Blocks of the Model
+
+In this part, you will build two important blocks of the overall model:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Gradient clipping: to avoid exploding gradients
+\item
+  Sampling: a technique used to generate characters
+\end{enumerate}
+
+You will then apply these two functions to build the model.
+
+    \#\#\# 2.1 - Clipping the Gradients in the Optimization Loop
+
+In this section you will implement the \texttt{clip} function that you
+will call inside of your optimization loop.
+
+\hypertarget{exploding-gradients}{%
+\paragraph{Exploding gradients}\label{exploding-gradients}}
+
+\begin{itemize}
+\tightlist
+\item
+  When gradients are very large, they're called ``exploding
+  gradients.''\\
+\item
+  Exploding gradients make the training process more difficult, because
+  the updates may be so large that they ``overshoot'' the optimal values
+  during back propagation.
+\end{itemize}
+
+Recall that your overall loop structure usually consists of: * forward
+pass, * cost computation, * backward pass, * parameter update.
+
+Before updating the parameters, you will perform gradient clipping to
+make sure that your gradients are not ``exploding.''
+
+\hypertarget{gradient-clipping}{%
+\paragraph{Gradient clipping}\label{gradient-clipping}}
+
+In the exercise below, you will implement a function \texttt{clip} that
+takes in a dictionary of gradients and returns a clipped version of
+gradients, if needed.
+
+\begin{itemize}
+\tightlist
+\item
+  There are different ways to clip gradients.
+\item
+  You will use a simple element-wise clipping procedure, in which every
+  element of the gradient vector is clipped to fall between some range
+  {[}-N, N{]}.
+\item
+  For example, if the N=10
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The range is {[}-10, 10{]}
+  \item
+    If any component of the gradient vector is greater than 10, it is
+    set to 10.
+  \item
+    If any component of the gradient vector is less than -10, it is set
+    to -10.
+  \item
+    If any components are between -10 and 10, they keep their original
+    values.
+  \end{itemize}
+\end{itemize}
+
+Figure 2: Visualization of gradient descent with and without gradient
+clipping, in a case where the network is running into ``exploding
+gradient'' problems.
+
+\#\#\# Exercise 1 - clip
+
+Return the clipped gradients of your dictionary \texttt{gradients}.
+
+\begin{itemize}
+\tightlist
+\item
+  Your function takes in a maximum threshold and returns the clipped
+  versions of the gradients.
+\item
+  You can check out
+  \href{https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.clip.html}{numpy.clip}
+  for more info.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You will need to use the argument ``\texttt{out\ =\ ...}''.
+  \item
+    Using the ``\texttt{out}'' parameter allows you to update a variable
+    ``in-place''.
+  \item
+    If you don't use ``\texttt{out}'' argument, the clipped variable is
+    stored in the variable ``gradient'' but does not update the gradient
+    variables \texttt{dWax}, \texttt{dWaa}, \texttt{dWya}, \texttt{db},
+    \texttt{dby}.
+  \end{itemize}
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNQ\PYZus{}C1 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)}
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} GRADED FUNCTION: clip}
+
+\PY{k}{def} \PY{n+nf}{clip}\PY{p}{(}\PY{n}{gradients}\PY{p}{,} \PY{n}{maxValue}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    Clips the gradients\PYZsq{} values between minimum and maximum.}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    gradients \PYZhy{}\PYZhy{} a dictionary containing the gradients \PYZdq{}dWaa\PYZdq{}, \PYZdq{}dWax\PYZdq{}, \PYZdq{}dWya\PYZdq{}, \PYZdq{}db\PYZdq{}, \PYZdq{}dby\PYZdq{}}
+\PY{l+s+sd}{    maxValue \PYZhy{}\PYZhy{} everything above this number is set to this number, and everything less than \PYZhy{}maxValue is set to \PYZhy{}maxValue}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Returns: }
+\PY{l+s+sd}{    gradients \PYZhy{}\PYZhy{} a dictionary with the clipped gradients.}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{gradients} \PY{o}{=} \PY{n}{copy}\PY{o}{.}\PY{n}{deepcopy}\PY{p}{(}\PY{n}{gradients}\PY{p}{)}
+    
+    \PY{n}{dWaa}\PY{p}{,} \PY{n}{dWax}\PY{p}{,} \PY{n}{dWya}\PY{p}{,} \PY{n}{db}\PY{p}{,} \PY{n}{dby} \PY{o}{=} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dWaa}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dWax}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dWya}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{db}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dby}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+   
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    \PY{c+c1}{\PYZsh{} Clip to mitigate exploding gradients, loop over [dWax, dWaa, dWya, db, dby]. (≈2 lines)}
+    \PY{k}{for} \PY{n}{gradient} \PY{o+ow}{in} \PY{n}{gradients}\PY{p}{:}
+        \PY{n}{np}\PY{o}{.}\PY{n}{clip}\PY{p}{(}\PY{n}{gradients}\PY{p}{[}\PY{n}{gradient}\PY{p}{]}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{maxValue}\PY{p}{,} \PY{n}{maxValue}\PY{p}{,} \PY{n}{out} \PY{o}{=} \PY{n}{gradients}\PY{p}{[}\PY{n}{gradient}\PY{p}{]}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    
+    \PY{n}{gradients} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWaa}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWax}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWya}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWya}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{db}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dby}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dby}\PY{p}{\PYZcb{}}
+    
+    \PY{k}{return} \PY{n}{gradients}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Test with a max value of 10}
+\PY{k}{def} \PY{n+nf}{clip\PYZus{}test}\PY{p}{(}\PY{n}{target}\PY{p}{,} \PY{n}{mValue}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Gradients for mValue=}\PY{l+s+si}{\PYZob{}}\PY{n}{mValue}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{)}
+    \PY{n}{dWax} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{10}
+    \PY{n}{dWaa} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{10}
+    \PY{n}{dWya} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{10}
+    \PY{n}{db} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{10}
+    \PY{n}{dby} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{l+m+mi}{10}
+    \PY{n}{gradients} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWax}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWaa}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWya}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWya}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{db}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dby}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dby}\PY{p}{\PYZcb{}}
+
+    \PY{n}{gradients2} \PY{o}{=} \PY{n}{target}\PY{p}{(}\PY{n}{gradients}\PY{p}{,} \PY{n}{mValue}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients2}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][3][1] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients2}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWya}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients2}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWya}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{db}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients2}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dby}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients2}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dby}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    
+    \PY{k}{for} \PY{n}{grad} \PY{o+ow}{in} \PY{n}{gradients2}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        \PY{n}{valuei} \PY{o}{=} \PY{n}{gradients}\PY{p}{[}\PY{n}{grad}\PY{p}{]}
+        \PY{n}{valuef} \PY{o}{=} \PY{n}{gradients2}\PY{p}{[}\PY{n}{grad}\PY{p}{]}
+        \PY{n}{mink} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{valuef}\PY{p}{)}
+        \PY{n}{maxk} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{valuef}\PY{p}{)}
+        \PY{k}{assert} \PY{n}{mink} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{o}{\PYZhy{}}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{mValue}\PY{p}{)}\PY{p}{,} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Problem with }\PY{l+s+si}{\PYZob{}}\PY{n}{grad}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{. Set a\PYZus{}min to \PYZhy{}mValue in the np.clip call}\PY{l+s+s2}{\PYZdq{}}
+        \PY{k}{assert} \PY{n}{maxk} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{mValue}\PY{p}{)}\PY{p}{,} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Problem with }\PY{l+s+si}{\PYZob{}}\PY{n}{grad}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{.Set a\PYZus{}max to mValue in the np.clip call}\PY{l+s+s2}{\PYZdq{}}
+        \PY{n}{index\PYZus{}not\PYZus{}clipped} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{logical\PYZus{}and}\PY{p}{(}\PY{n}{valuei} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{mValue}\PY{p}{,} \PY{n}{valuei} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{mValue}\PY{p}{)}
+        \PY{k}{assert} \PY{n}{np}\PY{o}{.}\PY{n}{all}\PY{p}{(}\PY{n}{valuei}\PY{p}{[}\PY{n}{index\PYZus{}not\PYZus{}clipped}\PY{p}{]} \PY{o}{==} \PY{n}{valuef}\PY{p}{[}\PY{n}{index\PYZus{}not\PYZus{}clipped}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ Problem with }\PY{l+s+si}{\PYZob{}}\PY{n}{grad}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{. Some values that should not have changed, changed during the clipping process.}\PY{l+s+s2}{\PYZdq{}}
+    
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}033}\PY{l+s+s2}{[92mAll tests passed!}\PY{l+s+se}{\PYZbs{}x1b}\PY{l+s+s2}{[0m}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    
+\PY{n}{clip\PYZus{}test}\PY{p}{(}\PY{n}{clip}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{clip\PYZus{}test}\PY{p}{(}\PY{n}{clip}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}
+    
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Gradients for mValue=10
+gradients["dWaa"][1][2] = 10.0
+gradients["dWax"][3][1] = -10.0
+gradients["dWya"][1][2] = 0.2971381536101662
+gradients["db"][4] = [10.]
+gradients["dby"][1] = [8.45833407]
+\textcolor{ansi-green-intense}{All tests passed!}
+
+Gradients for mValue=5
+gradients["dWaa"][1][2] = 5.0
+gradients["dWax"][3][1] = -5.0
+gradients["dWya"][1][2] = 0.2971381536101662
+gradients["db"][4] = [5.]
+gradients["dby"][1] = [5.]
+\textcolor{ansi-green-intense}{All tests passed!}
+    \end{Verbatim}
+
+    \textbf{Expected values}
+
+\begin{verbatim}
+Gradients for mValue=10
+gradients["dWaa"][1][2] = 10.0
+gradients["dWax"][3][1] = -10.0
+gradients["dWya"][1][2] = 0.2971381536101662
+gradients["db"][4] = [10.]
+gradients["dby"][1] = [8.45833407]
+
+Gradients for mValue=5
+gradients["dWaa"][1][2] = 5.0
+gradients["dWax"][3][1] = -5.0
+gradients["dWya"][1][2] = 0.2971381536101662
+gradients["db"][4] = [5.]
+gradients["dby"][1] = [5.]
+\end{verbatim}
+
+    \#\#\# 2.2 - Sampling
+
+Now, assume that your model is trained, and you would like to generate
+new text (characters). The process of generation is explained in the
+picture below:
+
+Figure 3: In this picture, you can assume the model is already trained.
+You pass in \(x^{\langle 1\rangle} = \vec{0}\) at the first time-step,
+and have the network sample one character at a time.
+
+    \#\#\# Exercise 2 - sample
+
+Implement the \texttt{sample} function below to sample characters.
+
+You need to carry out 4 steps:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Step 1}: Input the ``dummy'' vector of zeros
+  \(x^{\langle 1 \rangle} = \vec{0}\).
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is the default input before you've generated any characters.
+    You also set \(a^{\langle 0 \rangle} = \vec{0}\)
+  \end{itemize}
+\end{itemize}
+
+    \begin{itemize}
+\tightlist
+\item
+  \textbf{Step 2}: Run one step of forward propagation to get
+  \(a^{\langle 1 \rangle}\) and \(\hat{y}^{\langle 1 \rangle}\). Here
+  are the equations:
+\end{itemize}
+
+\emph{hidden state:}\\
+\[ a^{\langle t+1 \rangle} = \tanh(W_{ax}  x^{\langle t+1 \rangle } + W_{aa} a^{\langle t \rangle } + b)\tag{1}\]
+
+\emph{activation:}
+\[ z^{\langle t + 1 \rangle } = W_{ya}  a^{\langle t + 1 \rangle } + b_y \tag{2}\]
+
+\emph{prediction:}
+\[ \hat{y}^{\langle t+1 \rangle } = softmax(z^{\langle t + 1 \rangle })\tag{3}\]
+
+\begin{itemize}
+\tightlist
+\item
+  Details about \(\hat{y}^{\langle t+1 \rangle }\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Note that \(\hat{y}^{\langle t+1 \rangle }\) is a (softmax)
+    probability vector (its entries are between 0 and 1 and sum to 1).
+  \item
+    \(\hat{y}^{\langle t+1 \rangle}_i\) represents the probability that
+    the character indexed by ``i'' is the next character.\\
+  \item
+    A \texttt{softmax()} function is provided for you to use.
+  \end{itemize}
+\end{itemize}
+
+    Additional Hints: Matrix multiplication with numpy
+
+\(x^{\langle 1 \rangle}\) is \texttt{x} in the code. When creating the
+one-hot vector, make a numpy array of zeros, with the number of rows
+equal to the number of unique characters, and the number of columns
+equal to one. It's a 2D and not a 1D array.
+
+\(a^{\langle 0 \rangle}\) is \texttt{a\_prev} in the code. It is a numpy
+array of zeros, where the number of rows is \(n_{a}\), and number of
+columns is 1. It is a 2D array as well. \(n_{a}\) is retrieved by
+getting the number of columns in \(W_{aa}\) (the numbers need to match
+in order for the matrix multiplication \(W_{aa}a^{\langle t \rangle}\)
+to work.
+
+Official documentation for numpy.dot and numpy.tanh.
+
+Below is some revision code for matrix multiplication
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{matrix1 }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{],[}\DecValTok{2}\NormalTok{,}\DecValTok{2}\NormalTok{],[}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{]]) }\CommentTok{\# (3,2)}
+\NormalTok{matrix2 }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{0}\NormalTok{],[}\DecValTok{0}\NormalTok{],[}\DecValTok{0}\NormalTok{]]) }\CommentTok{\# (3,1) }
+\NormalTok{vector1D }\OperatorTok{=}\NormalTok{ np.array([}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{]) }\CommentTok{\# (2,) }
+\NormalTok{vector2D }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{1}\NormalTok{],[}\DecValTok{1}\NormalTok{]]) }\CommentTok{\# (2,1)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"matrix1 }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, matrix1,}\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"matrix2 }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, matrix2,}\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"vector1D }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, vector1D,}\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"vector2D }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, vector2D)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Multiply 2D and 1D arrays: result is a 1D array}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, }
+\NormalTok{      np.dot(matrix1,vector1D))}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Multiply 2D and 2D arrays: result is a 2D array}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, }
+\NormalTok{      np.dot(matrix1,vector2D))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Adding (3 x 1) vector to a (3 x 1) vector is a (3 x 1) vector}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"This is what we want here!}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, }
+\NormalTok{      np.dot(matrix1,vector2D) }\OperatorTok{+}\NormalTok{ matrix2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{print}\NormalTok{(}\StringTok{"Adding a (3,) vector to a (3 x 1) vector}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"broadcasts the 1D array across the second dimension}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+      \StringTok{"Not what we want here!}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+\NormalTok{      np.dot(matrix1,vector1D) }\OperatorTok{+}\NormalTok{ matrix2}
+\NormalTok{     )}
+\end{Highlighting}
+\end{Shaded}
+
+    \begin{itemize}
+\item
+  \textbf{Step 3}: Sampling:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Now that you have \(y^{\langle t+1 \rangle}\), you want to select
+    the next letter in the dinosaur name. If you select the most
+    probable, the model will always generate the same result given a
+    starting letter. To make the results more interesting, use
+    \texttt{np.random.choice} to select a next letter that is
+    \emph{likely}, but not always the same.
+  \item
+    Pick the next character's \textbf{index} according to the
+    probability distribution specified by
+    \(\hat{y}^{\langle t+1 \rangle }\).
+  \item
+    This means that if \(\hat{y}^{\langle t+1 \rangle }_i = 0.16\), you
+    will pick the index ``i'' with 16\% probability.
+  \item
+    Use
+    \href{https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.random.choice.html}{np.random.choice}.
+  \end{itemize}
+
+  Example of how to use \texttt{np.random.choice()}:
+  \texttt{python\ \ \ np.random.seed(0)\ \ \ probs\ =\ np.array({[}0.1,\ 0.0,\ 0.7,\ 0.2{]})\ \ \ idx\ =\ np.random.choice(range(len(probs)),\ p\ =\ probs)}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This means that you will pick the index (\texttt{idx}) according to
+    the distribution:
+  \end{itemize}
+
+  \(P(index = 0) = 0.1, P(index = 1) = 0.0, P(index = 2) = 0.7, P(index = 3) = 0.2\).
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Note that the value that's set to \texttt{p} should be set to a 1D
+    vector.
+  \item
+    Also notice that \(\hat{y}^{\langle t+1 \rangle}\), which is
+    \texttt{y} in the code, is a 2D array.
+  \item
+    Also notice, while in your implementation, the first argument to
+    \texttt{np.random.choice} is just an ordered list {[}0,1,..,
+    vocab\_len-1{]}, it is \emph{not} appropriate to use
+    \texttt{char\_to\_ix.values()}. The \emph{order} of values returned
+    by a Python dictionary \texttt{.values()} call will be the same
+    order as they are added to the dictionary. The grader may have a
+    different order when it runs your routine than when you run it in
+    your notebook.
+  \end{itemize}
+\end{itemize}
+
+    \hypertarget{additional-hints}{%
+\subparagraph{Additional Hints}\label{additional-hints}}
+
+\begin{itemize}
+\tightlist
+\item
+  Documentation for the built-in Python function
+  \href{https://docs.python.org/3/library/functions.html\#func-range}{range}
+\item
+  Docs for
+  \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.ravel.html}{numpy.ravel},
+  which takes a multi-dimensional array and returns its contents inside
+  of a 1D vector.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{arr }\OperatorTok{=}\NormalTok{ np.array([[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{],[}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{]])}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"arr"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(arr)}
+\BuiltInTok{print}\NormalTok{(}\StringTok{"arr.ravel()"}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{(arr.ravel())}
+\end{Highlighting}
+\end{Shaded}
+
+Output:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{arr}
+\NormalTok{[[}\DecValTok{1} \DecValTok{2}\NormalTok{]}
+\NormalTok{ [}\DecValTok{3} \DecValTok{4}\NormalTok{]]}
+\NormalTok{arr.ravel()}
+\NormalTok{[}\DecValTok{1} \DecValTok{2} \DecValTok{3} \DecValTok{4}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Note that \texttt{append} is an ``in-place'' operation, which means
+  the changes made by the method will remain after the call completes.
+  In other words, don't do this:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fun\_hobbies }\OperatorTok{=}\NormalTok{ fun\_hobbies.append(}\StringTok{\textquotesingle{}learning\textquotesingle{}}\NormalTok{)  }\CommentTok{\#\# Doesn\textquotesingle{}t give you what you want!}
+\end{Highlighting}
+\end{Shaded}
+
+    \begin{itemize}
+\tightlist
+\item
+  \textbf{Step 4}: Update to \(x^{\langle t \rangle }\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The last step to implement in \texttt{sample()} is to update the
+    variable \texttt{x}, which currently stores
+    \(x^{\langle t \rangle }\), with the value of
+    \(x^{\langle t + 1 \rangle }\).
+  \item
+    You will represent \(x^{\langle t + 1 \rangle }\) by creating a
+    one-hot vector corresponding to the character that you have chosen
+    as your prediction.
+  \item
+    You will then forward propagate \(x^{\langle t + 1 \rangle }\) in
+    Step 1 and keep repeating the process until you get a
+    \texttt{"\textbackslash{}n"} character, indicating that you have
+    reached the end of the dinosaur name.
+  \end{itemize}
+\end{itemize}
+
+    \hypertarget{additional-hints}{%
+\subparagraph{Additional Hints}\label{additional-hints}}
+
+\begin{itemize}
+\tightlist
+\item
+  In order to reset \texttt{x} before setting it to the new one-hot
+  vector, you'll want to set all the values to zero.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You can either create a new numpy array:
+    \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html}{numpy.zeros}
+  \item
+    Or fill all values with a single number:
+    \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.fill.html}{numpy.ndarray.fill}
+  \end{itemize}
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNQ\PYZus{}C2 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)}
+\PY{c+c1}{\PYZsh{} GRADED FUNCTION: sample}
+
+\PY{k}{def} \PY{n+nf}{sample}\PY{p}{(}\PY{n}{parameters}\PY{p}{,} \PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{,} \PY{n}{seed}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Sample a sequence of characters according to a sequence of probability distributions output of the RNN}
+
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    parameters \PYZhy{}\PYZhy{} Python dictionary containing the parameters Waa, Wax, Wya, by, and b. }
+\PY{l+s+sd}{    char\PYZus{}to\PYZus{}ix \PYZhy{}\PYZhy{} Python dictionary mapping each character to an index.}
+\PY{l+s+sd}{    seed \PYZhy{}\PYZhy{} Used for grading purposes. Do not worry about it.}
+
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    indices \PYZhy{}\PYZhy{} A list of length n containing the indices of the sampled characters.}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{c+c1}{\PYZsh{} Retrieve parameters and relevant shapes from \PYZdq{}parameters\PYZdq{} dictionary}
+    \PY{n}{Waa}\PY{p}{,} \PY{n}{Wax}\PY{p}{,} \PY{n}{Wya}\PY{p}{,} \PY{n}{by}\PY{p}{,} \PY{n}{b} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Waa}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wax}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wya}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{by}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{b}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{n}{vocab\PYZus{}size} \PY{o}{=} \PY{n}{by}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    \PY{n}{n\PYZus{}a} \PY{o}{=} \PY{n}{Waa}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    \PY{c+c1}{\PYZsh{} Step 1: Create the a zero vector x that can be used as the one\PYZhy{}hot vector }
+    \PY{c+c1}{\PYZsh{} Representing the first character (initializing the sequence generation). (≈1 line)}
+    \PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{vocab\PYZus{}size}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} Step 1\PYZsq{}: Initialize a\PYZus{}prev as zeros (≈1 line)}
+    \PY{n}{a\PYZus{}prev} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Create an empty list of indices. This is the list which will contain the list of indices of the characters to generate (≈1 line)}
+    \PY{n}{indices} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{} idx is the index of the one\PYZhy{}hot vector x that is set to 1}
+    \PY{c+c1}{\PYZsh{} All other positions in x are zero.}
+    \PY{c+c1}{\PYZsh{} Initialize idx to \PYZhy{}1}
+    \PY{n}{idx} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1} 
+    
+    \PY{c+c1}{\PYZsh{} Loop over time\PYZhy{}steps t. At each time\PYZhy{}step:}
+    \PY{c+c1}{\PYZsh{} Sample a character from a probability distribution }
+    \PY{c+c1}{\PYZsh{} And append its index (`idx`) to the list \PYZdq{}indices\PYZdq{}. }
+    \PY{c+c1}{\PYZsh{} You\PYZsq{}ll stop if you reach 50 characters }
+    \PY{c+c1}{\PYZsh{} (which should be very unlikely with a well\PYZhy{}trained model).}
+    \PY{c+c1}{\PYZsh{} Setting the maximum number of characters helps with debugging and prevents infinite loops. }
+    \PY{n}{counter} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{n}{newline\PYZus{}character} \PY{o}{=} \PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    
+    \PY{k}{while} \PY{p}{(}\PY{n}{idx} \PY{o}{!=} \PY{n}{newline\PYZus{}character} \PY{o+ow}{and} \PY{n}{counter} \PY{o}{!=} \PY{l+m+mi}{50}\PY{p}{)}\PY{p}{:}
+        
+        \PY{c+c1}{\PYZsh{} Step 2: Forward propagate x using the equations (1), (2) and (3)}
+        \PY{n}{a} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{tanh}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{Wax}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{Waa}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{)} \PY{o}{+} \PY{n}{b}\PY{p}{)}
+        \PY{n}{z} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{Wya}\PY{p}{,} \PY{n}{a}\PY{p}{)} \PY{o}{+} \PY{n}{by}
+        \PY{n}{y} \PY{o}{=} \PY{n}{softmax}\PY{p}{(}\PY{n}{z}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} For grading purposes}
+        \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{n}{counter} \PY{o}{+} \PY{n}{seed}\PY{p}{)} 
+        
+        \PY{c+c1}{\PYZsh{} Step 3: Sample the index of a character within the vocabulary from the probability distribution y}
+        \PY{c+c1}{\PYZsh{} (see additional hints above)}
+        \PY{n}{idx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n}{vocab\PYZus{}size}\PY{p}{)}\PY{p}{,} \PY{n}{p} \PY{o}{=} \PY{n}{y}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Append the index to \PYZdq{}indices\PYZdq{}}
+        \PY{n}{indices}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{idx}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Step 4: Overwrite the input x with one that corresponds to the sampled index `idx`.}
+        \PY{c+c1}{\PYZsh{} (see additional hints above)}
+        \PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{vocab\PYZus{}size}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+        \PY{n}{x}\PY{p}{[}\PY{n}{idx}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{1}
+        
+        \PY{c+c1}{\PYZsh{} Update \PYZdq{}a\PYZus{}prev\PYZdq{} to be \PYZdq{}a\PYZdq{}}
+        \PY{n}{a\PYZus{}prev} \PY{o}{=} \PY{n}{a}
+        
+        \PY{c+c1}{\PYZsh{} for grading purposes}
+        \PY{n}{seed} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+        \PY{n}{counter} \PY{o}{+}\PY{o}{=}\PY{l+m+mi}{1}
+        
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+
+    \PY{k}{if} \PY{p}{(}\PY{n}{counter} \PY{o}{==} \PY{l+m+mi}{50}\PY{p}{)}\PY{p}{:}
+        \PY{n}{indices}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{indices}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{sample\PYZus{}test}\PY{p}{(}\PY{n}{target}\PY{p}{)}\PY{p}{:}
+    \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{24}\PY{p}{)}
+    \PY{n}{\PYZus{}}\PY{p}{,} \PY{n}{n\PYZus{}a} \PY{o}{=} \PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{100}
+    \PY{n}{Wax}\PY{p}{,} \PY{n}{Waa}\PY{p}{,} \PY{n}{Wya} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{vocab\PYZus{}size}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{n\PYZus{}a}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{vocab\PYZus{}size}\PY{p}{,} \PY{n}{n\PYZus{}a}\PY{p}{)}
+    \PY{n}{b}\PY{p}{,} \PY{n}{by} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{vocab\PYZus{}size}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{parameters} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{Wax}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Waa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{Waa}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wya}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{Wya}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{b}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{b}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{by}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{by}\PY{p}{\PYZcb{}}
+
+
+    \PY{n}{indices} \PY{o}{=} \PY{n}{target}\PY{p}{(}\PY{n}{parameters}\PY{p}{,} \PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sampling:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{list of sampled indices:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{indices}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{list of sampled characters:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{p}{[}\PY{n}{ix\PYZus{}to\PYZus{}char}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{indices}\PY{p}{]}\PY{p}{)}
+    
+    \PY{k}{assert} \PY{n+nb}{len}\PY{p}{(}\PY{n}{indices}\PY{p}{)} \PY{o}{\PYZlt{}} \PY{l+m+mi}{52}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Indices length must be smaller than 52}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{assert} \PY{n}{indices}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{==} \PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{All samples must end with }\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{n}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{assert} \PY{n+nb}{min}\PY{p}{(}\PY{n}{indices}\PY{p}{)} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{l+m+mi}{0} \PY{o+ow}{and} \PY{n+nb}{max}\PY{p}{(}\PY{n}{indices}\PY{p}{)} \PY{o}{\PYZlt{}} \PY{n+nb}{len}\PY{p}{(}\PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{)}\PY{p}{,} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sampled indexes must be between 0 and len(char\PYZus{}to\PYZus{}ix)=}\PY{l+s+si}{\PYZob{}}\PY{n+nb}{len}\PY{p}{(}\PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{assert} \PY{n}{np}\PY{o}{.}\PY{n}{allclose}\PY{p}{(}\PY{n}{indices}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{23}\PY{p}{,} \PY{l+m+mi}{16}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{,} \PY{l+m+mi}{24}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wrong values}\PY{l+s+s2}{\PYZdq{}}
+    
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}033}\PY{l+s+s2}{[92mAll tests passed!}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{sample\PYZus{}test}\PY{p}{(}\PY{n}{sample}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Sampling:
+list of sampled indices:
+ [23, 16, 26, 26, 24, 3, 21, 1, 7, 24, 15, 3, 25, 20, 6, 13, 10, 8, 20, 12, 2,
+0]
+list of sampled characters:
+ ['w', 'p', 'z', 'z', 'x', 'c', 'u', 'a', 'g', 'x', 'o', 'c', 'y', 't', 'f',
+'m', 'j', 'h', 't', 'l', 'b', '\textbackslash{}n']
+\textcolor{ansi-green-intense}{All tests passed!}
+    \end{Verbatim}
+
+    \textbf{Expected output}
+
+\begin{verbatim}
+Sampling:
+list of sampled indices:
+ [23, 16, 26, 26, 24, 3, 21, 1, 7, 24, 15, 3, 25, 20, 6, 13, 10, 8, 20, 12, 2, 0]
+list of sampled characters:
+ ['w', 'p', 'z', 'z', 'x', 'c', 'u', 'a', 'g', 'x', 'o', 'c', 'y', 't', 'f', 'm', 'j', 'h', 't', 'l', 'b', '\n']
+\end{verbatim}
+
+    What you should remember: * Very large, or ``exploding'' gradients
+updates can be so large that they ``overshoot'' the optimal values
+during back prop -- making training difficult * Clip gradients before
+updating the parameters to avoid exploding gradients * Sampling is a
+technique you can use to pick the index of the next character according
+to a probability distribution. * To begin character-level sampling: *
+Input a ``dummy'' vector of zeros as a default input * Run one step of
+forward propagation to get 𝑎⟨1⟩ (your first character) and 𝑦̂ ⟨1⟩
+(probability distribution for the following character) * When sampling,
+avoid generating the same result each time given the starting letter
+(and make your names more interesting!) by using
+\texttt{np.random.choice}
+
+    \#\# 3 - Building the Language Model
+
+It's time to build the character-level language model for text
+generation!
+
+\#\#\# 3.1 - Gradient Descent
+
+In this section you will implement a function performing one step of
+stochastic gradient descent (with clipped gradients). You'll go through
+the training examples one at a time, so the optimization algorithm will
+be stochastic gradient descent.
+
+As a reminder, here are the steps of a common optimization loop for an
+RNN:
+
+\begin{itemize}
+\tightlist
+\item
+  Forward propagate through the RNN to compute the loss
+\item
+  Backward propagate through time to compute the gradients of the loss
+  with respect to the parameters
+\item
+  Clip the gradients
+\item
+  Update the parameters using gradient descent
+\end{itemize}
+
+\#\#\# Exercise 3 - optimize
+
+Implement the optimization process (one step of stochastic gradient
+descent).
+
+The following functions are provided:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ rnn\_forward(X, Y, a\_prev, parameters):}
+    \CommentTok{""" Performs the forward propagation through the RNN and computes the cross{-}entropy loss.}
+\CommentTok{    It returns the loss\textquotesingle{} value as well as a "cache" storing values to be used in backpropagation."""}
+\NormalTok{    ....}
+    \ControlFlowTok{return}\NormalTok{ loss, cache}
+    
+\KeywordTok{def}\NormalTok{ rnn\_backward(X, Y, parameters, cache):}
+    \CommentTok{""" Performs the backward propagation through time to compute the gradients of the loss with respect}
+\CommentTok{    to the parameters. It returns also all the hidden states."""}
+\NormalTok{    ...}
+    \ControlFlowTok{return}\NormalTok{ gradients, a}
+
+\KeywordTok{def}\NormalTok{ update\_parameters(parameters, gradients, learning\_rate):}
+    \CommentTok{""" Updates parameters using the Gradient Descent Update Rule."""}
+\NormalTok{    ...}
+    \ControlFlowTok{return}\NormalTok{ parameters}
+\end{Highlighting}
+\end{Shaded}
+
+Recall that you previously implemented the \texttt{clip} function:
+
+    \hypertarget{parameters}{%
+\paragraph{Parameters}\label{parameters}}
+
+\begin{itemize}
+\tightlist
+\item
+  Note that the weights and biases inside the \texttt{parameters}
+  dictionary are being updated by the optimization, even though
+  \texttt{parameters} is not one of the returned values of the
+  \texttt{optimize} function. The \texttt{parameters} dictionary is
+  passed by reference into the function, so changes to this dictionary
+  are making changes to the \texttt{parameters} dictionary even when
+  accessed outside of the function.
+\item
+  Python dictionaries and lists are ``pass by reference'', which means
+  that if you pass a dictionary into a function and modify the
+  dictionary within the function, this changes that same dictionary
+  (it's not a copy of the dictionary).
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{56}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNQ\PYZus{}C3 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)}
+\PY{c+c1}{\PYZsh{} GRADED FUNCTION: optimize}
+
+\PY{k}{def} \PY{n+nf}{optimize}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{parameters}\PY{p}{,} \PY{n}{learning\PYZus{}rate} \PY{o}{=} \PY{l+m+mf}{0.01}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Execute one step of the optimization to train the model.}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    X \PYZhy{}\PYZhy{} list of integers, where each integer is a number that maps to a character in the vocabulary.}
+\PY{l+s+sd}{    Y \PYZhy{}\PYZhy{} list of integers, exactly the same as X but shifted one index to the left.}
+\PY{l+s+sd}{    a\PYZus{}prev \PYZhy{}\PYZhy{} previous hidden state.}
+\PY{l+s+sd}{    parameters \PYZhy{}\PYZhy{} python dictionary containing:}
+\PY{l+s+sd}{                        Wax \PYZhy{}\PYZhy{} Weight matrix multiplying the input, numpy array of shape (n\PYZus{}a, n\PYZus{}x)}
+\PY{l+s+sd}{                        Waa \PYZhy{}\PYZhy{} Weight matrix multiplying the hidden state, numpy array of shape (n\PYZus{}a, n\PYZus{}a)}
+\PY{l+s+sd}{                        Wya \PYZhy{}\PYZhy{} Weight matrix relating the hidden\PYZhy{}state to the output, numpy array of shape (n\PYZus{}y, n\PYZus{}a)}
+\PY{l+s+sd}{                        b \PYZhy{}\PYZhy{}  Bias, numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        by \PYZhy{}\PYZhy{} Bias relating the hidden\PYZhy{}state to the output, numpy array of shape (n\PYZus{}y, 1)}
+\PY{l+s+sd}{    learning\PYZus{}rate \PYZhy{}\PYZhy{} learning rate for the model.}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    loss \PYZhy{}\PYZhy{} value of the loss function (cross\PYZhy{}entropy)}
+\PY{l+s+sd}{    gradients \PYZhy{}\PYZhy{} python dictionary containing:}
+\PY{l+s+sd}{                        dWax \PYZhy{}\PYZhy{} Gradients of input\PYZhy{}to\PYZhy{}hidden weights, of shape (n\PYZus{}a, n\PYZus{}x)}
+\PY{l+s+sd}{                        dWaa \PYZhy{}\PYZhy{} Gradients of hidden\PYZhy{}to\PYZhy{}hidden weights, of shape (n\PYZus{}a, n\PYZus{}a)}
+\PY{l+s+sd}{                        dWya \PYZhy{}\PYZhy{} Gradients of hidden\PYZhy{}to\PYZhy{}output weights, of shape (n\PYZus{}y, n\PYZus{}a)}
+\PY{l+s+sd}{                        db \PYZhy{}\PYZhy{} Gradients of bias vector, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        dby \PYZhy{}\PYZhy{} Gradients of output bias vector, of shape (n\PYZus{}y, 1)}
+\PY{l+s+sd}{    a[len(X)\PYZhy{}1] \PYZhy{}\PYZhy{} the last hidden state, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    
+    \PY{c+c1}{\PYZsh{} Forward propagate through time (≈1 line)}
+    \PY{n}{loss}\PY{p}{,} \PY{n}{cache} \PY{o}{=} \PY{n}{rnn\PYZus{}forward}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{parameters}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Backpropagate through time (≈1 line)}
+    \PY{n}{gradients}\PY{p}{,} \PY{n}{a} \PY{o}{=} \PY{n}{rnn\PYZus{}backward}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{parameters}\PY{p}{,} \PY{n}{cache}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Clip your gradients between \PYZhy{}5 (min) and 5 (max) (≈1 line)}
+    \PY{n}{gradients} \PY{o}{=} \PY{n}{clip}\PY{p}{(}\PY{n}{gradients}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Update parameters (≈1 line)}
+    \PY{n}{parameters} \PY{o}{=} \PY{n}{update\PYZus{}parameters}\PY{p}{(}\PY{n}{parameters}\PY{p}{,} \PY{n}{gradients}\PY{p}{,} \PY{n}{learning\PYZus{}rate}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    
+    \PY{k}{return} \PY{n}{loss}\PY{p}{,} \PY{n}{gradients}\PY{p}{,} \PY{n}{a}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{57}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{optimize\PYZus{}test}\PY{p}{(}\PY{n}{target}\PY{p}{)}\PY{p}{:}
+    \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{vocab\PYZus{}size}\PY{p}{,} \PY{n}{n\PYZus{}a} \PY{o}{=} \PY{l+m+mi}{27}\PY{p}{,} \PY{l+m+mi}{100}
+    \PY{n}{a\PYZus{}prev} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{Wax}\PY{p}{,} \PY{n}{Waa}\PY{p}{,} \PY{n}{Wya} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{vocab\PYZus{}size}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{n\PYZus{}a}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{vocab\PYZus{}size}\PY{p}{,} \PY{n}{n\PYZus{}a}\PY{p}{)}
+    \PY{n}{b}\PY{p}{,} \PY{n}{by} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{vocab\PYZus{}size}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+    \PY{n}{parameters} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{Wax}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Waa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{Waa}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wya}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{Wya}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{b}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{b}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{by}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{by}\PY{p}{\PYZcb{}}
+    \PY{n}{X} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{11}\PY{p}{,} \PY{l+m+mi}{22}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{]}
+    \PY{n}{Y} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{14}\PY{p}{,} \PY{l+m+mi}{11}\PY{p}{,} \PY{l+m+mi}{22}\PY{p}{,} \PY{l+m+mi}{25}\PY{p}{,} \PY{l+m+mi}{26}\PY{p}{]}
+    \PY{n}{old\PYZus{}parameters} \PY{o}{=} \PY{n}{copy}\PY{o}{.}\PY{n}{deepcopy}\PY{p}{(}\PY{n}{parameters}\PY{p}{)}
+    \PY{n}{loss}\PY{p}{,} \PY{n}{gradients}\PY{p}{,} \PY{n}{a\PYZus{}last} \PY{o}{=} \PY{n}{target}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{parameters}\PY{p}{,} \PY{n}{learning\PYZus{}rate} \PY{o}{=} \PY{l+m+mf}{0.01}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Loss =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{loss}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{np.argmax(gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{]) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{argmax}\PY{p}{(}\PY{n}{gradients}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWya}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWya}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{db}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{db}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dby}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dby}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{a\PYZus{}last[4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{a\PYZus{}last}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+    
+    \PY{k}{assert} \PY{n}{np}\PY{o}{.}\PY{n}{isclose}\PY{p}{(}\PY{n}{loss}\PY{p}{,} \PY{l+m+mf}{126.5039757}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Problems with the call of the rnn\PYZus{}forward function}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{for} \PY{n}{grad} \PY{o+ow}{in} \PY{n}{gradients}\PY{o}{.}\PY{n}{values}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+        \PY{k}{assert} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{grad}\PY{p}{)} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Problems in the clip function call}\PY{l+s+s2}{\PYZdq{}}
+        \PY{k}{assert} \PY{n}{np}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{grad}\PY{p}{)} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Problems in the clip function call}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{assert} \PY{n}{np}\PY{o}{.}\PY{n}{allclose}\PY{p}{(}\PY{n}{gradients}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dWaa}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{l+m+mf}{0.1947093}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Unexpected gradients. Check the rnn\PYZus{}backward call}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{assert} \PY{n}{np}\PY{o}{.}\PY{n}{allclose}\PY{p}{(}\PY{n}{gradients}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dWya}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mf}{0.007773876}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Unexpected gradients. Check the rnn\PYZus{}backward call}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{assert} \PY{o+ow}{not} \PY{n}{np}\PY{o}{.}\PY{n}{allclose}\PY{p}{(}\PY{n}{parameters}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wya}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{old\PYZus{}parameters}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wya}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{parameters were not updated}\PY{l+s+s2}{\PYZdq{}}
+    
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}033}\PY{l+s+s2}{[92mAll tests passed!}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{optimize\PYZus{}test}\PY{p}{(}\PY{n}{optimize}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Loss = 126.50397572165389
+gradients["dWaa"][1][2] = 0.19470931534713587
+np.argmax(gradients["dWax"]) = 93
+gradients["dWya"][1][2] = -0.007773876032002162
+gradients["db"][4] = [-0.06809825]
+gradients["dby"][1] = [0.01538192]
+a\_last[4] = [-1.]
+\textcolor{ansi-green-intense}{All tests passed!}
+    \end{Verbatim}
+
+    \textbf{Expected output}
+
+\begin{verbatim}
+Loss = 126.50397572165389
+gradients["dWaa"][1][2] = 0.19470931534713587
+np.argmax(gradients["dWax"]) = 93
+gradients["dWya"][1][2] = -0.007773876032002162
+gradients["db"][4] = [-0.06809825]
+gradients["dby"][1] = [0.01538192]
+a_last[4] = [-1.]
+\end{verbatim}
+
+    \#\#\# 3.2 - Training the Model
+
+    \begin{itemize}
+\tightlist
+\item
+  Given the dataset of dinosaur names, you'll use each line of the
+  dataset (one name) as one training example.
+\item
+  Every 2000 steps of stochastic gradient descent, you will sample
+  several randomly chosen names to see how the algorithm is doing.
+\end{itemize}
+
+\#\#\# Exercise 4 - model
+
+Implement \texttt{model()}.
+
+When \texttt{examples{[}index{]}} contains one dinosaur name (string),
+to create an example (X, Y), you can use this:
+
+\hypertarget{set-the-index-idx-into-the-list-of-examples}{%
+\subparagraph{\texorpdfstring{Set the index \texttt{idx} into the list
+of
+examples}{Set the index idx into the list of examples}}\label{set-the-index-idx-into-the-list-of-examples}}
+
+\begin{itemize}
+\tightlist
+\item
+  Using the for-loop, walk through the shuffled list of dinosaur names
+  in the list ``examples.''
+\item
+  For example, if there are n\_e examples, and the for-loop increments
+  the index to n\_e onwards, think of how you would make the index cycle
+  back to 0, so that you can continue feeding the examples into the
+  model when j is n\_e, n\_e + 1, etc.
+\item
+  Hint: (n\_e + 1) \% n\_e equals 1, which is otherwise the `remainder'
+  you get when you divide (n\_e + 1) by n\_e.
+\item
+  \texttt{\%} is the
+  \href{https://www.freecodecamp.org/news/the-python-modulo-operator-what-does-the-symbol-mean-in-python-solved/}{modulo
+  operator in python}.
+\end{itemize}
+
+\hypertarget{extract-a-single-example-from-the-list-of-examples}{%
+\subparagraph{Extract a single example from the list of
+examples}\label{extract-a-single-example-from-the-list-of-examples}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{single\_example}: use the \texttt{idx} index that you set
+  previously to get one word from the list of examples.
+\end{itemize}
+
+    \hypertarget{convert-a-string-into-a-list-of-characters-single_example_chars}{%
+\subparagraph{\texorpdfstring{Convert a string into a list of
+characters:
+\texttt{single\_example\_chars}}{Convert a string into a list of characters: single\_example\_chars}}\label{convert-a-string-into-a-list-of-characters-single_example_chars}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{single\_example\_chars}: A string is a list of characters.
+\item
+  You can use a list comprehension (recommended over for-loops) to
+  generate a list of characters.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{str} \OperatorTok{=} \StringTok{\textquotesingle{}I love learning\textquotesingle{}}
+\NormalTok{list\_of\_chars }\OperatorTok{=}\NormalTok{ [c }\ControlFlowTok{for}\NormalTok{ c }\KeywordTok{in} \BuiltInTok{str}\NormalTok{]}
+\BuiltInTok{print}\NormalTok{(list\_of\_chars)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+['I', ' ', 'l', 'o', 'v', 'e', ' ', 'l', 'e', 'a', 'r', 'n', 'i', 'n', 'g']
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  For more on
+  \href{https://docs.python.org/3/tutorial/datastructures.html\#list-comprehensions}{list
+  comprehensions}:
+\end{itemize}
+
+    \hypertarget{convert-list-of-characters-to-a-list-of-integers-single_example_ix}{%
+\subparagraph{\texorpdfstring{Convert list of characters to a list of
+integers:
+\texttt{single\_example\_ix}}{Convert list of characters to a list of integers: single\_example\_ix}}\label{convert-list-of-characters-to-a-list-of-integers-single_example_ix}}
+
+\begin{itemize}
+\tightlist
+\item
+  Create a list that contains the index numbers associated with each
+  character.
+\item
+  Use the dictionary \texttt{char\_to\_ix}
+\item
+  You can combine this with the list comprehension that is used to get a
+  list of characters from a string.
+\end{itemize}
+
+    \hypertarget{create-the-list-of-input-characters-x}{%
+\subparagraph{\texorpdfstring{Create the list of input characters:
+\texttt{X}}{Create the list of input characters: X}}\label{create-the-list-of-input-characters-x}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{rnn\_forward} uses the \textbf{\texttt{None}} value as a flag
+  to set the input vector as a zero-vector.
+\item
+  Prepend the list {[}\textbf{\texttt{None}}{]} in front of the list of
+  input character \emph{indices}.
+\item
+  There is more than one way to prepend a value to a list. One way is to
+  add two lists together:
+  \texttt{{[}\textquotesingle{}a\textquotesingle{}{]}\ +\ {[}\textquotesingle{}b\textquotesingle{}{]}}
+\end{itemize}
+
+    \hypertarget{get-the-integer-representation-of-the-newline-character-ix_newline}{%
+\subparagraph{\texorpdfstring{Get the integer representation of the
+newline character
+\texttt{ix\_newline}}{Get the integer representation of the newline character ix\_newline}}\label{get-the-integer-representation-of-the-newline-character-ix_newline}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{ix\_newline}: The newline character signals the end of the
+  dinosaur name.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Get the integer representation of the newline character
+    \texttt{\textquotesingle{}\textbackslash{}n\textquotesingle{}}.
+  \item
+    Use \texttt{char\_to\_ix}
+  \end{itemize}
+\end{itemize}
+
+    \hypertarget{set-the-list-of-labels-integer-representation-of-the-characters-y}{%
+\subparagraph{\texorpdfstring{Set the list of labels (integer
+representation of the characters):
+\texttt{Y}}{Set the list of labels (integer representation of the characters): Y}}\label{set-the-list-of-labels-integer-representation-of-the-characters-y}}
+
+\begin{itemize}
+\tightlist
+\item
+  The goal is to train the RNN to predict the next letter in the name,
+  so the labels are the list of characters that are one time-step ahead
+  of the characters in the input \texttt{X}.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For example, \texttt{Y{[}0{]}} contains the same value as
+    \texttt{X{[}1{]}}\\
+  \end{itemize}
+\item
+  The RNN should predict a newline at the last letter, so add
+  \texttt{ix\_newline} to the end of the labels.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Append the integer representation of the newline character to the
+    end of \texttt{Y}.
+  \item
+    Note that \texttt{append} is an in-place operation.
+  \item
+    It might be easier for you to add two lists together.
+  \end{itemize}
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{89}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNQ\PYZus{}C4 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)}
+\PY{c+c1}{\PYZsh{} GRADED FUNCTION: model}
+
+\PY{k}{def} \PY{n+nf}{model}\PY{p}{(}\PY{n}{data\PYZus{}x}\PY{p}{,} \PY{n}{ix\PYZus{}to\PYZus{}char}\PY{p}{,} \PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{,} \PY{n}{num\PYZus{}iterations} \PY{o}{=} \PY{l+m+mi}{35000}\PY{p}{,} \PY{n}{n\PYZus{}a} \PY{o}{=} \PY{l+m+mi}{50}\PY{p}{,} \PY{n}{dino\PYZus{}names} \PY{o}{=} \PY{l+m+mi}{7}\PY{p}{,} \PY{n}{vocab\PYZus{}size} \PY{o}{=} \PY{l+m+mi}{27}\PY{p}{,} \PY{n}{verbose} \PY{o}{=} \PY{k+kc}{False}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Trains the model and generates dinosaur names. }
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    data\PYZus{}x \PYZhy{}\PYZhy{} text corpus, divided in words}
+\PY{l+s+sd}{    ix\PYZus{}to\PYZus{}char \PYZhy{}\PYZhy{} dictionary that maps the index to a character}
+\PY{l+s+sd}{    char\PYZus{}to\PYZus{}ix \PYZhy{}\PYZhy{} dictionary that maps a character to an index}
+\PY{l+s+sd}{    num\PYZus{}iterations \PYZhy{}\PYZhy{} number of iterations to train the model for}
+\PY{l+s+sd}{    n\PYZus{}a \PYZhy{}\PYZhy{} number of units of the RNN cell}
+\PY{l+s+sd}{    dino\PYZus{}names \PYZhy{}\PYZhy{} number of dinosaur names you want to sample at each iteration. }
+\PY{l+s+sd}{    vocab\PYZus{}size \PYZhy{}\PYZhy{} number of unique characters found in the text (size of the vocabulary)}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    parameters \PYZhy{}\PYZhy{} learned parameters}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{c+c1}{\PYZsh{} Retrieve n\PYZus{}x and n\PYZus{}y from vocab\PYZus{}size}
+    \PY{n}{n\PYZus{}x}\PY{p}{,} \PY{n}{n\PYZus{}y} \PY{o}{=} \PY{n}{vocab\PYZus{}size}\PY{p}{,} \PY{n}{vocab\PYZus{}size}
+    
+    \PY{c+c1}{\PYZsh{} Initialize parameters}
+    \PY{n}{parameters} \PY{o}{=} \PY{n}{initialize\PYZus{}parameters}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{n\PYZus{}x}\PY{p}{,} \PY{n}{n\PYZus{}y}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Initialize loss (this is required because we want to smooth our loss)}
+    \PY{n}{loss} \PY{o}{=} \PY{n}{get\PYZus{}initial\PYZus{}loss}\PY{p}{(}\PY{n}{vocab\PYZus{}size}\PY{p}{,} \PY{n}{dino\PYZus{}names}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Build list of all dinosaur names (training examples).}
+    \PY{n}{examples} \PY{o}{=} \PY{p}{[}\PY{n}{x}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{data\PYZus{}x}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{} Shuffle list of all dinosaur names}
+    \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+    \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{shuffle}\PY{p}{(}\PY{n}{examples}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Initialize the hidden state of your LSTM}
+    \PY{n}{a\PYZus{}prev} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} for grading purposes}
+    \PY{n}{last\PYZus{}dino\PYZus{}name} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{abc}\PY{l+s+s2}{\PYZdq{}}
+    
+    \PY{c+c1}{\PYZsh{} Optimization loop}
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{num\PYZus{}iterations}\PY{p}{)}\PY{p}{:}
+        
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+        
+        \PY{c+c1}{\PYZsh{} Set the index `idx` (see instructions above)}
+        \PY{n}{idx} \PY{o}{=} \PY{n}{random}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{vocab\PYZus{}size}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Set the input X (see instructions above)}
+        \PY{n}{single\PYZus{}example} \PY{o}{=} \PY{n}{examples}\PY{p}{[}\PY{n}{idx}\PY{p}{]}
+        \PY{n}{single\PYZus{}example\PYZus{}chars} \PY{o}{=} \PY{p}{[}\PY{n}{c} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{single\PYZus{}example}\PY{p}{]}
+        \PY{n}{single\PYZus{}example\PYZus{}ix} \PY{o}{=} \PY{p}{[}\PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{[}\PY{n}{c}\PY{p}{]} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{single\PYZus{}example\PYZus{}chars}\PY{p}{]}
+        \PY{n}{X} \PY{o}{=} \PY{p}{[}\PY{k+kc}{None}\PY{p}{]} \PY{o}{+} \PY{n}{single\PYZus{}example\PYZus{}ix}
+        
+        \PY{c+c1}{\PYZsh{} Set the labels Y (see instructions above)}
+        \PY{n}{ix\PYZus{}newline} \PY{o}{=} \PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        \PY{n}{Y} \PY{o}{=} \PY{n}{single\PYZus{}example\PYZus{}ix} \PY{o}{+} \PY{p}{[}\PY{n}{ix\PYZus{}newline}\PY{p}{]}
+        \PY{c+c1}{\PYZsh{} Perform one optimization step: Forward\PYZhy{}prop \PYZhy{}\PYZgt{} Backward\PYZhy{}prop \PYZhy{}\PYZgt{} Clip \PYZhy{}\PYZgt{} Update parameters}
+        \PY{c+c1}{\PYZsh{} Choose a learning rate of 0.01}
+        \PY{n}{curr\PYZus{}loss}\PY{p}{,} \PY{n}{gradients}\PY{p}{,} \PY{n}{a\PYZus{}prev} \PY{o}{=} \PY{n}{optimize}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{parameters}\PY{p}{,} \PY{n}{learning\PYZus{}rate} \PY{o}{=} \PY{l+m+mf}{0.01}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+        
+        \PY{c+c1}{\PYZsh{} debug statements to aid in correctly forming X, Y}
+        \PY{k}{if} \PY{n}{verbose} \PY{o+ow}{and} \PY{n}{j} \PY{o+ow}{in} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{examples}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{examples}\PY{p}{)}\PY{p}{]}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{j = }\PY{l+s+s2}{\PYZdq{}} \PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{idx = }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{idx}\PY{p}{,}\PY{p}{)} 
+        \PY{k}{if} \PY{n}{verbose} \PY{o+ow}{and} \PY{n}{j} \PY{o+ow}{in} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{single\PYZus{}example =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{single\PYZus{}example}\PY{p}{)}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{single\PYZus{}example\PYZus{}chars}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{single\PYZus{}example\PYZus{}chars}\PY{p}{)}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{single\PYZus{}example\PYZus{}ix}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{single\PYZus{}example\PYZus{}ix}\PY{p}{)}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ X = }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{X}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Y =       }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} to keep the loss smooth.}
+        \PY{n}{loss} \PY{o}{=} \PY{n}{smooth}\PY{p}{(}\PY{n}{loss}\PY{p}{,} \PY{n}{curr\PYZus{}loss}\PY{p}{)}
+
+        \PY{c+c1}{\PYZsh{} Every 2000 Iteration, generate \PYZdq{}n\PYZdq{} characters thanks to sample() to check if the model is learning properly}
+        \PY{k}{if} \PY{n}{j} \PY{o}{\PYZpc{}} \PY{l+m+mi}{2000} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+            
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Iteration: }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{, Loss: }\PY{l+s+si}{\PYZpc{}f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{j}\PY{p}{,} \PY{n}{loss}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+            
+            \PY{c+c1}{\PYZsh{} The number of dinosaur names to print}
+            \PY{n}{seed} \PY{o}{=} \PY{l+m+mi}{0}
+            \PY{k}{for} \PY{n}{name} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{dino\PYZus{}names}\PY{p}{)}\PY{p}{:}
+                
+                \PY{c+c1}{\PYZsh{} Sample indices and print them}
+                \PY{n}{sampled\PYZus{}indices} \PY{o}{=} \PY{n}{sample}\PY{p}{(}\PY{n}{parameters}\PY{p}{,} \PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{,} \PY{n}{seed}\PY{p}{)}
+                \PY{n}{last\PYZus{}dino\PYZus{}name} \PY{o}{=} \PY{n}{get\PYZus{}sample}\PY{p}{(}\PY{n}{sampled\PYZus{}indices}\PY{p}{,} \PY{n}{ix\PYZus{}to\PYZus{}char}\PY{p}{)}
+                \PY{n+nb}{print}\PY{p}{(}\PY{n}{last\PYZus{}dino\PYZus{}name}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+                
+                \PY{n}{seed} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}  \PY{c+c1}{\PYZsh{} To get the same result (for grading purposes), increment the seed by one. }
+      
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+    \PY{k}{return} \PY{n}{parameters}\PY{p}{,} \PY{n}{last\PYZus{}dino\PYZus{}name}
+\end{Verbatim}
+\end{tcolorbox}
+
+    When you run the following cell, you should observe your model
+outputting random-looking characters at the first iteration. After a few
+thousand iterations, your model should learn to generate
+reasonable-looking names.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{90}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{parameters}\PY{p}{,} \PY{n}{last\PYZus{}name} \PY{o}{=} \PY{n}{model}\PY{p}{(}\PY{n}{data}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{,} \PY{n}{ix\PYZus{}to\PYZus{}char}\PY{p}{,} \PY{n}{char\PYZus{}to\PYZus{}ix}\PY{p}{,} \PY{l+m+mi}{22001}\PY{p}{,} \PY{n}{verbose} \PY{o}{=} \PY{k+kc}{True}\PY{p}{)}
+
+\PY{k}{assert} \PY{n}{last\PYZus{}name} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Trodonosaurus}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wrong expected output}\PY{l+s+s2}{\PYZdq{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}033}\PY{l+s+s2}{[92mAll tests passed!}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+j =  0 idx =  2
+single\_example = ilokelesia
+single\_example\_chars ['i', 'l', 'o', 'k', 'e', 'l', 'e', 's', 'i', 'a']
+single\_example\_ix [9, 12, 15, 11, 5, 12, 5, 19, 9, 1]
+ X =  [None, 9, 12, 15, 11, 5, 12, 5, 19, 9, 1]
+ Y =        [9, 12, 15, 11, 5, 12, 5, 19, 9, 1, 0]
+
+Iteration: 0, Loss: 23.084044
+
+Nkzxwtdmfqoeyhsqwasjjjvu
+Kneb
+Kzxwtdmfqoeyhsqwasjjjvu
+Neb
+Zxwtdmfqoeyhsqwasjjjvu
+Eb
+Xwtdmfqoeyhsqwasjjjvu
+
+
+j =  1535 idx =  11
+j =  1536 idx =  22
+Iteration: 2000, Loss: 23.585376
+
+Nesotomaauposaurur
+Lokachus
+Lusiparatocxelus
+Naccherocautosaurus
+Vrhongheritosaurus
+Deaerus
+Tosaurus
+
+
+Iteration: 4000, Loss: 10.708640
+
+Horshamosaurus
+Chebndosekanosaurus
+Coelosaurus
+Hor
+Torsaugosaurus
+Chaburacertoscherocauchaighusicoelurus
+Torcherocomauris
+
+
+Iteration: 6000, Loss: 5.266862
+
+Horshamosaurus
+Chubothaenhamdhubotortyrus
+Coelosaurus
+Horbhoposaurus
+Torthenotos
+Chaburacdus
+Torcherocoptos
+
+
+Iteration: 8000, Loss: 20.399887
+
+Lirytsaurusaurushgros
+Linebatopaantosaurus
+Lusus
+Lenamss
+Tusif
+Degnsaulanusil
+Sisanos
+
+
+Iteration: 10000, Loss: 27.867737
+
+Llttus
+Loga
+Lusrurumus
+Lla
+Tostheltogteusubuoleso
+Hh
+Sus
+
+
+Iteration: 12000, Loss: 29.108458
+
+Lhvorthncnoetlnos
+Hog
+Itosigjllolugorpdolelus
+Lac
+Tos
+Daa
+Rus
+
+
+Iteration: 14000, Loss: 29.445048
+
+Losus
+Loraahrugaaoshuoghurecvairra
+Lusus
+Liaaesur
+Trruahamoiterruathaerud
+Heaerrga
+Rusaprus
+
+
+Iteration: 16000, Loss: 30.505131
+
+Letttomanos
+Lhhaaesoracmustherus
+Lusiupsaurnursus
+Lac
+Usos
+Daacusacanrsupesiplaxchos
+Rus
+
+
+Iteration: 18000, Loss: 27.992077
+
+Litutocianraurustesamhus
+Lor
+Lusauopaurnunpsoaurinos
+La
+Tus
+Ha
+Rus
+
+
+Iteration: 20000, Loss: 28.856063
+
+Lotrsicelor
+Hpra
+Hytrr
+Lea
+Tus
+Ac
+Rus
+
+
+Iteration: 22000, Loss: 29.006625
+
+Lavusaropropthprtatilhrq
+Lea
+Lyutumeerhgthoseatikitucosavapaupcteglaphaconusaur
+Laa
+Tutumehoravhoseatikitucosavapaupaudhgconadontphori
+Da
+Rtsasauritnorubrimksq
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        ---------------------------------------------------------------------------
+
+        AssertionError                            Traceback (most recent call last)
+
+        <ipython-input-90-725c093d6b91> in <module>
+          1 parameters, last\_name = model(data.split("\textbackslash{}n"), ix\_to\_char, char\_to\_ix, 22001, verbose = True)
+          2 
+    ----> 3 assert last\_name == 'Trodonosaurus\textbackslash{}n', "Wrong expected output"
+          4 print("\textbackslash{}033[92mAll tests passed!")
+
+
+        AssertionError: Wrong expected output
+
+    \end{Verbatim}
+
+    \textbf{Expected output}
+
+\begin{verbatim}
+...
+Iteration: 22000, Loss: 22.728886
+
+Onustreofkelus
+Llecagosaurus
+Mystolojmiaterltasaurus
+Ola
+Yuskeolongus
+Eiacosaurus
+Trodonosaurus
+\end{verbatim}
+
+    \hypertarget{conclusion}{%
+\subsubsection{Conclusion}\label{conclusion}}
+
+You can see that your algorithm has started to generate plausible
+dinosaur names towards the end of training. At first, it was generating
+random characters, but towards the end you could begin to see dinosaur
+names with cool endings. Feel free to run the algorithm even longer and
+play with hyperparameters to see if you can get even better results! Our
+implementation generated some really cool names like \texttt{maconucon},
+\texttt{marloralus} and \texttt{macingsersaurus}. Your model hopefully
+also learned that dinosaur names tend to end in \texttt{saurus},
+\texttt{don}, \texttt{aura}, \texttt{tor}, etc.
+
+If your model generates some non-cool names, don't blame the model
+entirely -- not all actual dinosaur names sound cool. (For example,
+\texttt{dromaeosauroides} is an actual dinosaur name and is in the
+training set.) But this model should give you a set of candidates from
+which you can pick the coolest!
+
+This assignment used a relatively small dataset, so that you're able to
+train an RNN quickly on a CPU. Training a model of the English language
+requires a much bigger dataset, and usually much more computation, and
+could run for many hours on GPUs. We ran our dinosaur name for quite
+some time, and so far our favorite name is the great, the fierce, the
+undefeated: \textbf{Mangosaurus}!
+
+    \hypertarget{congratulations}{%
+\subsubsection{Congratulations!}\label{congratulations}}
+
+You've finished the graded portion of this notebook and created a
+working language model! Awesome job.
+
+By now, you've:
+
+\begin{itemize}
+\tightlist
+\item
+  Stored text data for processing using an RNN
+\item
+  Built a character-level text generation model
+\item
+  Explored the vanishing/exploding gradient problem in RNNs
+\item
+  Applied gradient clipping to avoid exploding gradients
+\end{itemize}
+
+You've also hopefully generated some dinosaur names that are cool enough
+to please you and also avoid the wrath of the dinosaurs. If you had fun
+with the assignment, be sure not to miss the ungraded portion, where
+you'll be able to generate poetry like the Bard Himself. Good luck and
+have fun!
+
+    \#\# 4 - Writing like Shakespeare (OPTIONAL/UNGRADED)
+
+The rest of this notebook is optional and is not graded, but it's quite
+fun and informative, so you're highly encouraged to try it out!
+
+A similar task to character-level text generation (but more complicated)
+is generating Shakespearean poems. Instead of learning from a dataset of
+dinosaur names, you can use a collection of Shakespearean poems. Using
+LSTM cells, you can learn longer-term dependencies that span many
+characters in the text--e.g., where a character appearing somewhere a
+sequence can influence what should be a different character, much later
+in the sequence. These long-term dependencies were less important with
+dinosaur names, since the names were quite short.
+
+Let's become poets!
+
+Below, you can implement a Shakespeare poem generator with Keras. Run
+the following cell to load the required packages and models. This may
+take a few minutes.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{\PYZus{}\PYZus{}future\PYZus{}\PYZus{}} \PY{k+kn}{import} \PY{n}{print\PYZus{}function}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{callbacks} \PY{k+kn}{import} \PY{n}{LambdaCallback}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{models} \PY{k+kn}{import} \PY{n}{Model}\PY{p}{,} \PY{n}{load\PYZus{}model}\PY{p}{,} \PY{n}{Sequential}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{layers} \PY{k+kn}{import} \PY{n}{Dense}\PY{p}{,} \PY{n}{Activation}\PY{p}{,} \PY{n}{Dropout}\PY{p}{,} \PY{n}{Input}\PY{p}{,} \PY{n}{Masking}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{layers} \PY{k+kn}{import} \PY{n}{LSTM}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{utils} \PY{k+kn}{import} \PY{n}{get\PYZus{}file}
+\PY{k+kn}{from} \PY{n+nn}{tensorflow}\PY{n+nn}{.}\PY{n+nn}{keras}\PY{n+nn}{.}\PY{n+nn}{preprocessing}\PY{n+nn}{.}\PY{n+nn}{sequence} \PY{k+kn}{import} \PY{n}{pad\PYZus{}sequences}
+\PY{k+kn}{from} \PY{n+nn}{shakespeare\PYZus{}utils} \PY{k+kn}{import} \PY{o}{*}
+\PY{k+kn}{import} \PY{n+nn}{sys}
+\PY{k+kn}{import} \PY{n+nn}{io}
+\end{Verbatim}
+\end{tcolorbox}
+
+    To save you some time, a model has already been trained for
+\textasciitilde1000 epochs on a collection of Shakespearean poems called
+``\href{shakespeare.txt}{The Sonnets}.''
+
+    Let's train the model for one more epoch. When it finishes training for
+an epoch (this will also take a few minutes), you can run
+\texttt{generate\_output}, which will prompt you for an input
+(\texttt{\textless{}}40 characters). The poem will start with your
+sentence, and your RNN Shakespeare will complete the rest of the poem
+for you! For example, try, ``Forsooth this maketh no sense'' (without
+the quotation marks!). Depending on whether you include the space at the
+end, your results might also differ, so try it both ways, and try other
+inputs as well.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{print\PYZus{}callback} \PY{o}{=} \PY{n}{LambdaCallback}\PY{p}{(}\PY{n}{on\PYZus{}epoch\PYZus{}end}\PY{o}{=}\PY{n}{on\PYZus{}epoch\PYZus{}end}\PY{p}{)}
+
+\PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{128}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{callbacks}\PY{o}{=}\PY{p}{[}\PY{n}{print\PYZus{}callback}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Run this cell to try with different inputs without having to re\PYZhy{}train the model }
+\PY{n}{generate\PYZus{}output}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{congratulations-on-finishing-this-notebook}{%
+\subsubsection{Congratulations on finishing this
+notebook!}\label{congratulations-on-finishing-this-notebook}}
+
+The RNN Shakespeare model is very similar to the one you built for
+dinosaur names. The only major differences are: - LSTMs instead of the
+basic RNN to capture longer-range dependencies - The model is a deeper,
+stacked LSTM model (2 layer) - Using Keras instead of Python to simplify
+the code
+
+    \#\# 5 - References - This exercise took inspiration from Andrej
+Karpathy's implementation:
+https://gist.github.com/karpathy/d4dee566867f8291f086. To learn more
+about text generation, also check out Karpathy's
+\href{http://karpathy.github.io/2015/05/21/rnn-effectiveness/}{blog
+post}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}

@@ -1,0 +1,3316 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for grffile with XeLaTeX
+    \def\Gread@@xetex#1{%
+      \IfFileExists{"\Gin@base".bb}%
+      {\Gread@eps{\Gin@base.bb}}%
+      {\Gread@@xetex@aux#1}%
+    }
+    \makeatother
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Building\_a\_Recurrent\_Neural\_Network\_Step\_by\_Step}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        \ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{building-your-recurrent-neural-network---step-by-step}{%
+\section{Building your Recurrent Neural Network - Step by
+Step}\label{building-your-recurrent-neural-network---step-by-step}}
+
+Welcome to Course 5's first assignment, where you'll be implementing key
+components of a Recurrent Neural Network, or RNN, in NumPy!
+
+By the end of this assignment, you'll be able to:
+
+\begin{itemize}
+\tightlist
+\item
+  Define notation for building sequence models
+\item
+  Describe the architecture of a basic RNN
+\item
+  Identify the main components of an LSTM
+\item
+  Implement backpropagation through time for a basic RNN and an LSTM
+\item
+  Give examples of several types of RNN
+\end{itemize}
+
+Recurrent Neural Networks (RNN) are very effective for Natural Language
+Processing and other sequence tasks because they have ``memory.'' They
+can read inputs \(x^{\langle t \rangle}\) (such as words) one at a time,
+and remember some contextual information through the hidden layer
+activations that get passed from one time step to the next. This allows
+a unidirectional (one-way) RNN to take information from the past to
+process later inputs. A bidirectional (two-way) RNN can take context
+from both the past and the future, much like Marty McFly.
+
+\textbf{Notation}: - Superscript \([l]\) denotes an object associated
+with the \(l^{th}\) layer.
+
+\begin{itemize}
+\item
+  Superscript \((i)\) denotes an object associated with the \(i^{th}\)
+  example.
+\item
+  Superscript \(\langle t \rangle\) denotes an object at the \(t^{th}\)
+  time step.
+\item
+  Subscript \(i\) denotes the \(i^{th}\) entry of a vector.
+\end{itemize}
+
+\textbf{Example}:\\
+- \(a^{(2)[3]<4>}_5\) denotes the activation of the 2nd training example
+(2), 3rd layer {[}3{]}, 4th time step \textless4\textgreater, and 5th
+entry in the vector.
+
+\hypertarget{pre-requisites}{%
+\paragraph{Pre-requisites}\label{pre-requisites}}
+
+\begin{itemize}
+\tightlist
+\item
+  You should already be familiar with \texttt{numpy}
+\item
+  To refresh your knowledge of numpy, you can review course 1 of the
+  specialization ``Neural Networks and Deep Learning'':
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Specifically, review the week 2's practice assignment
+    \href{https://www.coursera.org/learn/neural-networks-deep-learning/programming/isoAV/python-basics-with-numpy}{``Python
+    Basics with Numpy (optional assignment)''}
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{be-careful-when-modifying-the-starter-code}{%
+\paragraph{Be careful when modifying the starter
+code!}\label{be-careful-when-modifying-the-starter-code}}
+
+\begin{itemize}
+\tightlist
+\item
+  When working on graded functions, please remember to only modify the
+  code that is between:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\#\# START CODE HERE}
+\end{Highlighting}
+\end{Shaded}
+
+and:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\#\#\# }\RegionMarkerTok{END}\CommentTok{ CODE HERE}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  In particular, avoid modifying the first line of graded routines.
+  These start with:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# GRADED FUNCTION: routine\_name}
+\end{Highlighting}
+\end{Shaded}
+
+The automatic grader (autograder) needs these to locate the function -
+so even a change in spacing will cause issues with the autograder,
+returning `failed' if any of these are modified or missing. Now, let's
+get started!
+
+\hypertarget{important-note-on-submission-to-the-autograder}{%
+\subsection{Important Note on Submission to the
+AutoGrader}\label{important-note-on-submission-to-the-autograder}}
+
+Before submitting your assignment to the AutoGrader, please make sure
+you are not doing the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  You have not added any \emph{extra} \texttt{print} statement(s) in the
+  assignment.
+\item
+  You have not added any \emph{extra} code cell(s) in the assignment.
+\item
+  You have not changed any of the function parameters.
+\item
+  You are not using any global variables inside your graded exercises.
+  Unless specifically instructed to do so, please refrain from it and
+  use the local variables instead.
+\item
+  You are not changing the assignment code where it is not required,
+  like creating \emph{extra} variables.
+\end{enumerate}
+
+If you do any of the following, you will get something like,
+\texttt{Grader\ Error:\ Grader\ feedback\ not\ found} (or similarly
+unexpected) error upon submitting your assignment. Before asking for
+help/debugging the errors in your assignment, check for these first. If
+this is the case, and you don't remember the changes you have made, you
+can get a fresh copy of the assignment by following these
+\href{https://www.coursera.org/learn/nlp-sequence-models/supplement/qHIve/h-ow-to-refresh-your-workspace}{instructions}.
+
+    \hypertarget{table-of-content}{%
+\subsection{Table of Content}\label{table-of-content}}
+
+\begin{itemize}
+\tightlist
+\item
+  Section \ref{0}
+\item
+  Section \ref{1}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Section \ref{1-1}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-1}
+    \end{itemize}
+  \item
+    Section \ref{1-2}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-2}
+    \end{itemize}
+  \end{itemize}
+\item
+  Section \ref{2}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Section \ref{2-1}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-3}
+    \end{itemize}
+  \item
+    Section \ref{2-2}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-4}
+    \end{itemize}
+  \end{itemize}
+\item
+  Section \ref{3}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Section \ref{3-1}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-5}
+    \item
+      Section \ref{ex-6}
+    \end{itemize}
+  \item
+    Section \ref{3-2}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-7}
+    \end{itemize}
+  \item
+    Section \ref{3-3}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Section \ref{ex-8}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+    \#\# Packages
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} v2.2}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{from} \PY{n+nn}{rnn\PYZus{}utils} \PY{k+kn}{import} \PY{o}{*}
+\PY{k+kn}{from} \PY{n+nn}{public\PYZus{}tests} \PY{k+kn}{import} \PY{o}{*}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \#\# 1 - Forward Propagation for the Basic Recurrent Neural Network
+
+Later this week, you'll get a chance to generate music using an RNN! The
+basic RNN that you'll implement has the following structure:
+
+In this example, \(T_x = T_y\).
+
+    Figure 1: Basic RNN model
+
+    \hypertarget{dimensions-of-input-x}{%
+\subsubsection{\texorpdfstring{Dimensions of input
+\(x\)}{Dimensions of input x}}\label{dimensions-of-input-x}}
+
+\hypertarget{input-with-n_x-number-of-units}{%
+\paragraph{\texorpdfstring{Input with \(n_x\) number of
+units}{Input with n\_x number of units}}\label{input-with-n_x-number-of-units}}
+
+\begin{itemize}
+\tightlist
+\item
+  For a single time step of a single input example,
+  \(x^{(i) \langle t \rangle }\) is a one-dimensional input vector
+\item
+  Using language as an example, a language with a 5000-word vocabulary
+  could be one-hot encoded into a vector that has 5000 units. So
+  \(x^{(i)\langle t \rangle}\) would have the shape (5000,)\\
+\item
+  The notation \(n_x\) is used here to denote the number of units in a
+  single time step of a single training example
+\end{itemize}
+
+    \hypertarget{time-steps-of-size-t_x}{%
+\paragraph{\texorpdfstring{Time steps of size
+\(T_{x}\)}{Time steps of size T\_\{x\}}}\label{time-steps-of-size-t_x}}
+
+\begin{itemize}
+\tightlist
+\item
+  A recurrent neural network has multiple time steps, which you'll index
+  with \(t\).
+\item
+  In the lessons, you saw a single training example \(x^{(i)}\)
+  consisting of multiple time steps \(T_x\). In this notebook, \(T_{x}\)
+  will denote the number of timesteps in the longest sequence.
+\end{itemize}
+
+    \hypertarget{batches-of-size-m}{%
+\paragraph{\texorpdfstring{Batches of size
+\(m\)}{Batches of size m}}\label{batches-of-size-m}}
+
+\begin{itemize}
+\tightlist
+\item
+  Let's say we have mini-batches, each with 20 training examples\\
+\item
+  To benefit from vectorization, you'll stack 20 columns of \(x^{(i)}\)
+  examples
+\item
+  For example, this tensor has the shape (5000,20,10)
+\item
+  You'll use \(m\) to denote the number of training examples\\
+\item
+  So, the shape of a mini-batch is \((n_x,m,T_x)\)
+\end{itemize}
+
+    \hypertarget{d-tensor-of-shape-n_xmt_x}{%
+\paragraph{\texorpdfstring{3D Tensor of shape
+\((n_{x},m,T_{x})\)}{3D Tensor of shape (n\_\{x\},m,T\_\{x\})}}\label{d-tensor-of-shape-n_xmt_x}}
+
+\begin{itemize}
+\tightlist
+\item
+  The 3-dimensional tensor \(x\) of shape \((n_x,m,T_x)\) represents the
+  input \(x\) that is fed into the RNN
+\end{itemize}
+
+\hypertarget{taking-a-2d-slice-for-each-time-step-xlangle-t-rangle}{%
+\paragraph{\texorpdfstring{Taking a 2D slice for each time step:
+\(x^{\langle t \rangle}\)}{Taking a 2D slice for each time step: x\^{}\{\textbackslash langle t \textbackslash rangle\}}}\label{taking-a-2d-slice-for-each-time-step-xlangle-t-rangle}}
+
+\begin{itemize}
+\tightlist
+\item
+  At each time step, you'll use a mini-batch of training examples (not
+  just a single example)
+\item
+  So, for each time step \(t\), you'll use a 2D slice of shape
+  \((n_x,m)\)
+\item
+  This 2D slice is referred to as \(x^{\langle t \rangle}\). The
+  variable name in the code is \texttt{xt}.
+\end{itemize}
+
+    \hypertarget{definition-of-hidden-state-a}{%
+\subsubsection{\texorpdfstring{Definition of hidden state
+\(a\)}{Definition of hidden state a}}\label{definition-of-hidden-state-a}}
+
+\begin{itemize}
+\tightlist
+\item
+  The activation \(a^{\langle t \rangle}\) that is passed to the RNN
+  from one time step to another is called a ``hidden state.''
+\end{itemize}
+
+\hypertarget{dimensions-of-hidden-state-a}{%
+\subsubsection{\texorpdfstring{Dimensions of hidden state
+\(a\)}{Dimensions of hidden state a}}\label{dimensions-of-hidden-state-a}}
+
+\begin{itemize}
+\tightlist
+\item
+  Similar to the input tensor \(x\), the hidden state for a single
+  training example is a vector of length \(n_{a}\)
+\item
+  If you include a mini-batch of \(m\) training examples, the shape of a
+  mini-batch is \((n_{a},m)\)
+\item
+  When you include the time step dimension, the shape of the hidden
+  state is \((n_{a}, m, T_x)\)
+\item
+  You'll loop through the time steps with index \(t\), and work with a
+  2D slice of the 3D tensor\\
+\item
+  This 2D slice is referred to as \(a^{\langle t \rangle}\)
+\item
+  In the code, the variable names used are either \texttt{a\_prev} or
+  \texttt{a\_next}, depending on the function being implemented
+\item
+  The shape of this 2D slice is \((n_{a}, m)\)
+\end{itemize}
+
+    \hypertarget{dimensions-of-prediction-haty}{%
+\subsubsection{\texorpdfstring{Dimensions of prediction
+\(\hat{y}\)}{Dimensions of prediction \textbackslash hat\{y\}}}\label{dimensions-of-prediction-haty}}
+
+\begin{itemize}
+\tightlist
+\item
+  Similar to the inputs and hidden states, \(\hat{y}\) is a 3D tensor of
+  shape \((n_{y}, m, T_{y})\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(n_{y}\): number of units in the vector representing the prediction
+  \item
+    \(m\): number of examples in a mini-batch
+  \item
+    \(T_{y}\): number of time steps in the prediction
+  \end{itemize}
+\item
+  For a single time step \(t\), a 2D slice
+  \(\hat{y}^{\langle t \rangle}\) has shape \((n_{y}, m)\)
+\item
+  In the code, the variable names are:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{y\_pred}: \(\hat{y}\)
+  \item
+    \texttt{yt\_pred}: \(\hat{y}^{\langle t \rangle}\)
+  \end{itemize}
+\end{itemize}
+
+    Here's how you can implement an RNN:
+
+\hypertarget{steps}{%
+\subsubsection{Steps:}\label{steps}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Implement the calculations needed for one time step of the RNN.
+\item
+  Implement a loop over \(T_x\) time steps in order to process all the
+  inputs, one at a time.
+\end{enumerate}
+
+    \#\#\# 1.1 - RNN Cell
+
+You can think of the recurrent neural network as the repeated use of a
+single cell. First, you'll implement the computations for a single time
+step. The following figure describes the operations for a single time
+step of an RNN cell:
+
+Figure 2: Basic RNN cell. Takes as input \(x^{\langle t \rangle}\)
+(current input) and \(a^{\langle t - 1\rangle}\) (previous hidden state
+containing information from the past), and outputs
+\(a^{\langle t \rangle}\) which is given to the next RNN cell and also
+used to predict \(\hat{y}^{\langle t \rangle}\)
+
+\textbf{\texttt{RNN\ cell} versus \texttt{RNN\_cell\_forward}}: * Note
+that an RNN cell outputs the hidden state \(a^{\langle t \rangle}\).\\
+* \texttt{RNN\ cell} is shown in the figure as the inner box with solid
+lines\\
+* The function that you'll implement, \texttt{rnn\_cell\_forward}, also
+calculates the prediction \(\hat{y}^{\langle t \rangle}\) *
+\texttt{RNN\_cell\_forward} is shown in the figure as the outer box with
+dashed lines
+
+    \#\#\# Exercise 1 - rnn\_cell\_forward
+
+Implement the RNN cell described in Figure 2.
+
+\textbf{Instructions}: 1. Compute the hidden state with tanh activation:
+\(a^{\langle t \rangle} = \tanh(W_{aa} a^{\langle t-1 \rangle} + W_{ax} x^{\langle t \rangle} + b_a)\)
+2. Using your new hidden state \(a^{\langle t \rangle}\), compute the
+prediction
+\(\hat{y}^{\langle t \rangle} = softmax(W_{ya} a^{\langle t \rangle} + b_y)\).
+(The function \texttt{softmax} is provided) 3. Store
+\((a^{\langle t \rangle}, a^{\langle t-1 \rangle}, x^{\langle t \rangle}, parameters)\)
+in a \texttt{cache} 4. Return \(a^{\langle t \rangle}\) ,
+\(\hat{y}^{\langle t \rangle}\) and \texttt{cache}
+
+\hypertarget{additional-hints}{%
+\paragraph{Additional Hints}\label{additional-hints}}
+
+\begin{itemize}
+\tightlist
+\item
+  A little more information on
+  \href{https://numpy.org/devdocs/reference/generated/numpy.tanh.html}{numpy.tanh}
+\item
+  In this assignment, there's an existing \texttt{softmax} function for
+  you to use. It's located in the file `rnn\_utils.py' and has already
+  been imported.
+\item
+  For matrix multiplication, use
+  \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html}{numpy.dot}
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNQ\PYZus{}C1 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)}
+\PY{c+c1}{\PYZsh{} GRADED FUNCTION: rnn\PYZus{}cell\PYZus{}forward}
+
+\PY{k}{def} \PY{n+nf}{rnn\PYZus{}cell\PYZus{}forward}\PY{p}{(}\PY{n}{xt}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{parameters}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Implements a single forward step of the RNN\PYZhy{}cell as described in Figure (2)}
+
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    xt \PYZhy{}\PYZhy{} your input data at timestep \PYZdq{}t\PYZdq{}, numpy array of shape (n\PYZus{}x, m).}
+\PY{l+s+sd}{    a\PYZus{}prev \PYZhy{}\PYZhy{} Hidden state at timestep \PYZdq{}t\PYZhy{}1\PYZdq{}, numpy array of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{    parameters \PYZhy{}\PYZhy{} python dictionary containing:}
+\PY{l+s+sd}{                        Wax \PYZhy{}\PYZhy{} Weight matrix multiplying the input, numpy array of shape (n\PYZus{}a, n\PYZus{}x)}
+\PY{l+s+sd}{                        Waa \PYZhy{}\PYZhy{} Weight matrix multiplying the hidden state, numpy array of shape (n\PYZus{}a, n\PYZus{}a)}
+\PY{l+s+sd}{                        Wya \PYZhy{}\PYZhy{} Weight matrix relating the hidden\PYZhy{}state to the output, numpy array of shape (n\PYZus{}y, n\PYZus{}a)}
+\PY{l+s+sd}{                        ba \PYZhy{}\PYZhy{}  Bias, numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        by \PYZhy{}\PYZhy{} Bias relating the hidden\PYZhy{}state to the output, numpy array of shape (n\PYZus{}y, 1)}
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    a\PYZus{}next \PYZhy{}\PYZhy{} next hidden state, of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{    yt\PYZus{}pred \PYZhy{}\PYZhy{} prediction at timestep \PYZdq{}t\PYZdq{}, numpy array of shape (n\PYZus{}y, m)}
+\PY{l+s+sd}{    cache \PYZhy{}\PYZhy{} tuple of values needed for the backward pass, contains (a\PYZus{}next, a\PYZus{}prev, xt, parameters)}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{c+c1}{\PYZsh{} Retrieve parameters from \PYZdq{}parameters\PYZdq{}}
+    \PY{n}{Wax} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Waa} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Waa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Wya} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wya}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{ba} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ba}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{by} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{by}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{} (≈2 lines)}
+    \PY{c+c1}{\PYZsh{} compute next activation state using the formula given above}
+    \PY{n}{a\PYZus{}next} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{tanh}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{Wax}\PY{p}{,} \PY{n}{xt}\PY{p}{)} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{Waa}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{)} \PY{o}{+} \PY{n}{ba}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} compute output of the current cell using the formula given above}
+    \PY{n}{yt\PYZus{}pred} \PY{o}{=} \PY{n}{softmax}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{Wya}\PY{p}{,} \PY{n}{a\PYZus{}next}\PY{p}{)} \PY{o}{+} \PY{n}{by}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    
+    \PY{c+c1}{\PYZsh{} store values you need for backward propagation in cache}
+    \PY{n}{cache} \PY{o}{=} \PY{p}{(}\PY{n}{a\PYZus{}next}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{xt}\PY{p}{,} \PY{n}{parameters}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{a\PYZus{}next}\PY{p}{,} \PY{n}{yt\PYZus{}pred}\PY{p}{,} \PY{n}{cache}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{xt\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{a\PYZus{}prev\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Waa}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wax}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wya}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ba}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{by}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{a\PYZus{}next\PYZus{}tmp}\PY{p}{,} \PY{n}{yt\PYZus{}pred\PYZus{}tmp}\PY{p}{,} \PY{n}{cache\PYZus{}tmp} \PY{o}{=} \PY{n}{rnn\PYZus{}cell\PYZus{}forward}\PY{p}{(}\PY{n}{xt\PYZus{}tmp}\PY{p}{,} \PY{n}{a\PYZus{}prev\PYZus{}tmp}\PY{p}{,} \PY{n}{parameters\PYZus{}tmp}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{a\PYZus{}next[4] = }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{a\PYZus{}next\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{a\PYZus{}next.shape = }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{a\PYZus{}next\PYZus{}tmp}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{yt\PYZus{}pred[1] =}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{yt\PYZus{}pred\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{yt\PYZus{}pred.shape = }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{yt\PYZus{}pred\PYZus{}tmp}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} UNIT TESTS}
+\PY{n}{rnn\PYZus{}cell\PYZus{}forward\PYZus{}tests}\PY{p}{(}\PY{n}{rnn\PYZus{}cell\PYZus{}forward}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+a\_next[4] =
+ [ 0.59584544  0.18141802  0.61311866  0.99808218  0.85016201  0.99980978
+ -0.18887155  0.99815551  0.6531151   0.82872037]
+a\_next.shape =
+ (5, 10)
+yt\_pred[1] =
+ [0.9888161  0.01682021 0.21140899 0.36817467 0.98988387 0.88945212
+ 0.36920224 0.9966312  0.9982559  0.17746526]
+yt\_pred.shape =
+ (2, 10)
+\textcolor{ansi-green-intense}{All tests passed}
+    \end{Verbatim}
+
+    \textbf{Expected Output}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a\_next[}\DecValTok{4}\NormalTok{] }\OperatorTok{=} 
+\NormalTok{ [ }\FloatTok{0.59584544}  \FloatTok{0.18141802}  \FloatTok{0.61311866}  \FloatTok{0.99808218}  \FloatTok{0.85016201}  \FloatTok{0.99980978}
+ \OperatorTok{{-}}\FloatTok{0.18887155}  \FloatTok{0.99815551}  \FloatTok{0.6531151}   \FloatTok{0.82872037}\NormalTok{]}
+\NormalTok{a\_next.shape }\OperatorTok{=} 
+\NormalTok{ (}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+\NormalTok{yt\_pred[}\DecValTok{1}\NormalTok{] }\OperatorTok{=}
+\NormalTok{ [ }\FloatTok{0.9888161}   \FloatTok{0.01682021}  \FloatTok{0.21140899}  \FloatTok{0.36817467}  \FloatTok{0.98988387}  \FloatTok{0.88945212}
+  \FloatTok{0.36920224}  \FloatTok{0.9966312}   \FloatTok{0.9982559}   \FloatTok{0.17746526}\NormalTok{]}
+\NormalTok{yt\_pred.shape }\OperatorTok{=} 
+\NormalTok{ (}\DecValTok{2}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+    \#\#\# 1.2 - RNN Forward Pass
+
+\begin{itemize}
+\tightlist
+\item
+  A recurrent neural network (RNN) is a repetition of the RNN cell that
+  you've just built.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If your input sequence of data is 10 time steps long, then you will
+    re-use the RNN cell 10 times
+  \end{itemize}
+\item
+  Each cell takes two inputs at each time step:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(a^{\langle t-1 \rangle}\): The hidden state from the previous cell
+  \item
+    \(x^{\langle t \rangle}\): The current time step's input data
+  \end{itemize}
+\item
+  It has two outputs at each time step:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A hidden state (\(a^{\langle t \rangle}\))
+  \item
+    A prediction (\(y^{\langle t \rangle}\))
+  \end{itemize}
+\item
+  The weights and biases \((W_{aa}, W_{ax}, b_{a}, W_{ay}, b_{y})\) are
+  re-used each time step
+
+  \begin{itemize}
+  \tightlist
+  \item
+    They are maintained between calls to \texttt{rnn\_cell\_forward} in
+    the `parameters' dictionary
+  \end{itemize}
+\end{itemize}
+
+Figure 3: Basic RNN. The input sequence
+\(x = (x^{\langle 1 \rangle}, x^{\langle 2 \rangle}, ..., x^{\langle T_x \rangle})\)
+is carried over \(T_x\) time steps. The network outputs
+\(y = (y^{\langle 1 \rangle}, y^{\langle 2 \rangle}, ..., y^{\langle T_x \rangle})\).
+
+    \#\#\# Exercise 2 - rnn\_forward
+
+Implement the forward propagation of the RNN described in Figure 3.
+
+\textbf{Instructions}: * Create a 3D array of zeros, \(a\) of shape
+\((n_{a}, m, T_{x})\) that will store all the hidden states computed by
+the RNN * Create a 3D array of zeros, \(\hat{y}\), of shape
+\((n_{y}, m, T_{x})\) that will store the predictions\\
+- Note that in this case, \(T_{y} = T_{x}\) (the prediction and input
+have the same number of time steps) * Initialize the 2D hidden state
+\texttt{a\_next} by setting it equal to the initial hidden state,
+\(a_{0}\) * At each time step \(t\): - Get \(x^{\langle t \rangle}\),
+which is a 2D slice of \(x\) for a single time step \(t\) -
+\(x^{\langle t \rangle}\) has shape \((n_{x}, m)\) - \(x\) has shape
+\((n_{x}, m, T_{x})\) - Update the 2D hidden state
+\(a^{\langle t \rangle}\) (variable name \texttt{a\_next}), the
+prediction \(\hat{y}^{\langle t \rangle}\) and the cache by running
+\texttt{rnn\_cell\_forward} - \(a^{\langle t \rangle}\) has shape
+\((n_{a}, m)\) - Store the 2D hidden state in the 3D tensor \(a\), at
+the \(t^{th}\) position - \(a\) has shape \((n_{a}, m, T_{x})\) - Store
+the 2D \(\hat{y}^{\langle t \rangle}\) prediction (variable name
+\texttt{yt\_pred}) in the 3D tensor \(\hat{y}_{pred}\) at the \(t^{th}\)
+position - \(\hat{y}^{\langle t \rangle}\) has shape \((n_{y}, m)\) -
+\(\hat{y}\) has shape \((n_{y}, m, T_x)\) - Append the cache to the list
+of caches * Return the 3D tensor \(a\) and \(\hat{y}\), as well as the
+list of caches
+
+\hypertarget{additional-hints}{%
+\paragraph{Additional Hints}\label{additional-hints}}
+
+\begin{itemize}
+\tightlist
+\item
+  Some helpful documentation on
+  \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html}{np.zeros}
+\item
+  If you have a 3 dimensional numpy array and are indexing by its third
+  dimension, you can use array slicing like this:
+  \texttt{var\_name{[}:,:,i{]}}
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNQ\PYZus{}C2 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)}
+\PY{c+c1}{\PYZsh{} GRADED FUNCTION: rnn\PYZus{}forward}
+
+\PY{k}{def} \PY{n+nf}{rnn\PYZus{}forward}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{a0}\PY{p}{,} \PY{n}{parameters}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Implement the forward propagation of the recurrent neural network described in Figure (3).}
+
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    x \PYZhy{}\PYZhy{} Input data for every time\PYZhy{}step, of shape (n\PYZus{}x, m, T\PYZus{}x).}
+\PY{l+s+sd}{    a0 \PYZhy{}\PYZhy{} Initial hidden state, of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{    parameters \PYZhy{}\PYZhy{} python dictionary containing:}
+\PY{l+s+sd}{                        Waa \PYZhy{}\PYZhy{} Weight matrix multiplying the hidden state, numpy array of shape (n\PYZus{}a, n\PYZus{}a)}
+\PY{l+s+sd}{                        Wax \PYZhy{}\PYZhy{} Weight matrix multiplying the input, numpy array of shape (n\PYZus{}a, n\PYZus{}x)}
+\PY{l+s+sd}{                        Wya \PYZhy{}\PYZhy{} Weight matrix relating the hidden\PYZhy{}state to the output, numpy array of shape (n\PYZus{}y, n\PYZus{}a)}
+\PY{l+s+sd}{                        ba \PYZhy{}\PYZhy{}  Bias numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        by \PYZhy{}\PYZhy{} Bias relating the hidden\PYZhy{}state to the output, numpy array of shape (n\PYZus{}y, 1)}
+
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    a \PYZhy{}\PYZhy{} Hidden states for every time\PYZhy{}step, numpy array of shape (n\PYZus{}a, m, T\PYZus{}x)}
+\PY{l+s+sd}{    y\PYZus{}pred \PYZhy{}\PYZhy{} Predictions for every time\PYZhy{}step, numpy array of shape (n\PYZus{}y, m, T\PYZus{}x)}
+\PY{l+s+sd}{    caches \PYZhy{}\PYZhy{} tuple of values needed for the backward pass, contains (list of caches, x)}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{c+c1}{\PYZsh{} Initialize \PYZdq{}caches\PYZdq{} which will contain the list of all caches}
+    \PY{n}{caches} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{} Retrieve dimensions from shapes of x and parameters[\PYZdq{}Wya\PYZdq{}]}
+    \PY{n}{n\PYZus{}x}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{T\PYZus{}x} \PY{o}{=} \PY{n}{x}\PY{o}{.}\PY{n}{shape}
+    \PY{n}{n\PYZus{}y}\PY{p}{,} \PY{n}{n\PYZus{}a} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wya}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}
+    
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    
+    \PY{c+c1}{\PYZsh{} initialize \PYZdq{}a\PYZdq{} and \PYZdq{}y\PYZus{}pred\PYZdq{} with zeros (≈2 lines)}
+    \PY{n}{a} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{T\PYZus{}x}\PY{p}{)}\PY{p}{)}
+    \PY{n}{y\PYZus{}pred} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}y}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{T\PYZus{}x}\PY{p}{)}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Initialize a\PYZus{}next (≈1 line)}
+    \PY{n}{a\PYZus{}next} \PY{o}{=} \PY{n}{a0}
+    
+    \PY{c+c1}{\PYZsh{} loop over all time\PYZhy{}steps}
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{T\PYZus{}x}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} Update next hidden state, compute the prediction, get the cache (≈1 line)}
+        \PY{n}{a\PYZus{}next}\PY{p}{,} \PY{n}{yt\PYZus{}pred}\PY{p}{,} \PY{n}{cache} \PY{o}{=} \PY{n}{rnn\PYZus{}cell\PYZus{}forward}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{p}{,}\PY{n}{t}\PY{p}{]}\PY{p}{,} \PY{n}{a\PYZus{}next}\PY{p}{,} \PY{n}{parameters}\PY{p}{)}
+        \PY{c+c1}{\PYZsh{} Save the value of the new \PYZdq{}next\PYZdq{} hidden state in a (≈1 line)}
+        \PY{n}{a}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{p}{,}\PY{n}{t}\PY{p}{]} \PY{o}{=} \PY{n}{a\PYZus{}next}
+        \PY{c+c1}{\PYZsh{} Save the value of the prediction in y (≈1 line)}
+        \PY{n}{y\PYZus{}pred}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{p}{,}\PY{n}{t}\PY{p}{]} \PY{o}{=} \PY{n}{yt\PYZus{}pred}
+        \PY{c+c1}{\PYZsh{} Append \PYZdq{}cache\PYZdq{} to \PYZdq{}caches\PYZdq{} (≈1 line)}
+        \PY{n}{caches}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{cache}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    
+    \PY{c+c1}{\PYZsh{} store values needed for backward propagation in cache}
+    \PY{n}{caches} \PY{o}{=} \PY{p}{(}\PY{n}{caches}\PY{p}{,} \PY{n}{x}\PY{p}{)}
+    
+    \PY{k}{return} \PY{n}{a}\PY{p}{,} \PY{n}{y\PYZus{}pred}\PY{p}{,} \PY{n}{caches}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{x\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{a0\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Waa}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wax}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wya}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ba}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{by}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{a\PYZus{}tmp}\PY{p}{,} \PY{n}{y\PYZus{}pred\PYZus{}tmp}\PY{p}{,} \PY{n}{caches\PYZus{}tmp} \PY{o}{=} \PY{n}{rnn\PYZus{}forward}\PY{p}{(}\PY{n}{x\PYZus{}tmp}\PY{p}{,} \PY{n}{a0\PYZus{}tmp}\PY{p}{,} \PY{n}{parameters\PYZus{}tmp}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{a[4][1] = }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{a\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{a.shape = }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{a\PYZus{}tmp}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y\PYZus{}pred[1][3] =}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y\PYZus{}pred\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y\PYZus{}pred.shape = }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y\PYZus{}pred\PYZus{}tmp}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{caches[1][1][3] =}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{caches\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{len(caches) = }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{caches\PYZus{}tmp}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{}UNIT TEST    }
+\PY{n}{rnn\PYZus{}forward\PYZus{}test}\PY{p}{(}\PY{n}{rnn\PYZus{}forward}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+a[4][1] =
+ [-0.99999375  0.77911235 -0.99861469 -0.99833267]
+a.shape =
+ (5, 10, 4)
+y\_pred[1][3] =
+ [0.79560373 0.86224861 0.11118257 0.81515947]
+y\_pred.shape =
+ (2, 10, 4)
+caches[1][1][3] =
+ [-1.1425182  -0.34934272 -0.20889423  0.58662319]
+len(caches) =
+ 2
+\textcolor{ansi-green-intense}{All tests passed}
+    \end{Verbatim}
+
+    \textbf{Expected Output}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a[}\DecValTok{4}\NormalTok{][}\DecValTok{1}\NormalTok{] }\OperatorTok{=} 
+\NormalTok{ [}\OperatorTok{{-}}\FloatTok{0.99999375}  \FloatTok{0.77911235} \OperatorTok{{-}}\FloatTok{0.99861469} \OperatorTok{{-}}\FloatTok{0.99833267}\NormalTok{]}
+\NormalTok{a.shape }\OperatorTok{=} 
+\NormalTok{ (}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\NormalTok{y\_pred[}\DecValTok{1}\NormalTok{][}\DecValTok{3}\NormalTok{] }\OperatorTok{=}
+\NormalTok{ [ }\FloatTok{0.79560373}  \FloatTok{0.86224861}  \FloatTok{0.11118257}  \FloatTok{0.81515947}\NormalTok{]}
+\NormalTok{y\_pred.shape }\OperatorTok{=} 
+\NormalTok{ (}\DecValTok{2}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\NormalTok{caches[}\DecValTok{1}\NormalTok{][}\DecValTok{1}\NormalTok{][}\DecValTok{3}\NormalTok{] }\OperatorTok{=}
+\NormalTok{ [}\OperatorTok{{-}}\FloatTok{1.1425182}  \OperatorTok{{-}}\FloatTok{0.34934272} \OperatorTok{{-}}\FloatTok{0.20889423}  \FloatTok{0.58662319}\NormalTok{]}
+\BuiltInTok{len}\NormalTok{(caches) }\OperatorTok{=} 
+ \DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+    \hypertarget{congratulations}{%
+\subsubsection{Congratulations!}\label{congratulations}}
+
+You've successfully built the forward propagation of a recurrent neural
+network from scratch. Nice work!
+
+\hypertarget{situations-when-this-rnn-will-perform-better}{%
+\paragraph{Situations when this RNN will perform
+better:}\label{situations-when-this-rnn-will-perform-better}}
+
+\begin{itemize}
+\tightlist
+\item
+  This will work well enough for some applications, but it suffers from
+  vanishing gradients.
+\item
+  The RNN works best when each output \(\hat{y}^{\langle t \rangle}\)
+  can be estimated using ``local'' context.\\
+\item
+  ``Local'' context refers to information that is close to the
+  prediction's time step \(t\).
+\item
+  More formally, local context refers to inputs
+  \(x^{\langle t' \rangle}\) and predictions
+  \(\hat{y}^{\langle t \rangle}\) where \(t'\) is close to \(t\).
+\end{itemize}
+
+What you should remember: * The recurrent neural network, or RNN, is
+essentially the repeated use of a single cell. * A basic RNN reads
+inputs one at a time, and remembers information through the hidden layer
+activations (hidden states) that are passed from one time step to the
+next. * The time step dimension determines how many times to re-use the
+RNN cell * Each cell takes two inputs at each time step: * The hidden
+state from the previous cell * The current time step's input data * Each
+cell has two outputs at each time step: * A hidden state * A prediction
+
+In the next section, you'll build a more complex model, the LSTM, which
+is better at addressing vanishing gradients. The LSTM is better able to
+remember a piece of information and save it for many time steps.
+
+    \#\# 2 - Long Short-Term Memory (LSTM) Network
+
+The following figure shows the operations of an LSTM cell:
+
+Figure 4: LSTM cell. This tracks and updates a ``cell state,'' or memory
+variable \(c^{\langle t \rangle}\) at every time step, which can be
+different from \(a^{\langle t \rangle}\).\\
+Note, the \(softmax^{}\) includes a dense layer and softmax.
+
+Similar to the RNN example above, you'll begin by implementing the LSTM
+cell for a single time step. Then, you'll iteratively call it from
+inside a ``for loop'' to have it process an input with \(T_x\) time
+steps.
+
+    \hypertarget{overview-of-gates-and-states}{%
+\subsubsection{Overview of gates and
+states}\label{overview-of-gates-and-states}}
+
+\hypertarget{forget-gate-mathbfgamma_f}{%
+\paragraph{\texorpdfstring{Forget gate
+\(\mathbf{\Gamma}_{f}\)}{Forget gate \textbackslash mathbf\{\textbackslash Gamma\}\_\{f\}}}\label{forget-gate-mathbfgamma_f}}
+
+\begin{itemize}
+\tightlist
+\item
+  Let's assume you are reading words in a piece of text, and plan to use
+  an LSTM to keep track of grammatical structures, such as whether the
+  subject is singular (``puppy'') or plural (``puppies'').
+\item
+  If the subject changes its state (from a singular word to a plural
+  word), the memory of the previous state becomes outdated, so you'll
+  ``forget'' that outdated state.
+\item
+  The ``forget gate'' is a tensor containing values between 0 and 1.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If a unit in the forget gate has a value close to 0, the LSTM will
+    ``forget'' the stored state in the corresponding unit of the
+    previous cell state.
+  \item
+    If a unit in the forget gate has a value close to 1, the LSTM will
+    mostly remember the corresponding value in the stored state.
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{equation}{%
+\subparagraph{Equation}\label{equation}}
+
+\[\mathbf{\Gamma}_f^{\langle t \rangle} = \sigma(\mathbf{W}_f[\mathbf{a}^{\langle t-1 \rangle}, \mathbf{x}^{\langle t \rangle}] + \mathbf{b}_f)\tag{1} \]
+
+\hypertarget{explanation-of-the-equation}{%
+\subparagraph{Explanation of the
+equation:}\label{explanation-of-the-equation}}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\mathbf{W_{f}}\) contains weights that govern the forget gate's
+  behavior.
+\item
+  The previous time step's hidden state \([a^{\langle t-1 \rangle}\) and
+  current time step's input \(x^{\langle t \rangle}]\) are concatenated
+  together and multiplied by \(\mathbf{W_{f}}\).
+\item
+  A sigmoid function is used to make each of the gate tensor's values
+  \(\mathbf{\Gamma}_f^{\langle t \rangle}\) range from 0 to 1.
+\item
+  The forget gate \(\mathbf{\Gamma}_f^{\langle t \rangle}\) has the same
+  dimensions as the previous cell state \(c^{\langle t-1 \rangle}\).
+\item
+  This means that the two can be multiplied together, element-wise.
+\item
+  Multiplying the tensors
+  \(\mathbf{\Gamma}_f^{\langle t \rangle} * \mathbf{c}^{\langle t-1 \rangle}\)
+  is like applying a mask over the previous cell state.
+\item
+  If a single value in \(\mathbf{\Gamma}_f^{\langle t \rangle}\) is 0 or
+  close to 0, then the product is close to 0.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This keeps the information stored in the corresponding unit in
+    \(\mathbf{c}^{\langle t-1 \rangle}\) from being remembered for the
+    next time step.
+  \end{itemize}
+\item
+  Similarly, if one value is close to 1, the product is close to the
+  original value in the previous cell state.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The LSTM will keep the information from the corresponding unit of
+    \(\mathbf{c}^{\langle t-1 \rangle}\), to be used in the next time
+    step.
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{variable-names-in-the-code}{%
+\subparagraph{Variable names in the
+code}\label{variable-names-in-the-code}}
+
+The variable names in the code are similar to the equations, with slight
+differences.\\
+* \texttt{Wf}: forget gate weight \(\mathbf{W}_{f}\) * \texttt{bf}:
+forget gate bias \(\mathbf{b}_{f}\) * \texttt{ft}: forget gate
+\(\Gamma_f^{\langle t \rangle}\)
+
+    \hypertarget{candidate-value-tildemathbfclangle-t-rangle}{%
+\paragraph{\texorpdfstring{Candidate value
+\(\tilde{\mathbf{c}}^{\langle t \rangle}\)}{Candidate value \textbackslash tilde\{\textbackslash mathbf\{c\}\}\^{}\{\textbackslash langle t \textbackslash rangle\}}}\label{candidate-value-tildemathbfclangle-t-rangle}}
+
+\begin{itemize}
+\tightlist
+\item
+  The candidate value is a tensor containing information from the
+  current time step that \textbf{may} be stored in the current cell
+  state \(\mathbf{c}^{\langle t \rangle}\).
+\item
+  The parts of the candidate value that get passed on depend on the
+  update gate.
+\item
+  The candidate value is a tensor containing values that range from -1
+  to 1.
+\item
+  The tilde ``\textasciitilde{}'' is used to differentiate the candidate
+  \(\tilde{\mathbf{c}}^{\langle t \rangle}\) from the cell state
+  \(\mathbf{c}^{\langle t \rangle}\).
+\end{itemize}
+
+\hypertarget{equation}{%
+\subparagraph{Equation}\label{equation}}
+
+\[\mathbf{\tilde{c}}^{\langle t \rangle} = \tanh\left( \mathbf{W}_{c} [\mathbf{a}^{\langle t - 1 \rangle}, \mathbf{x}^{\langle t \rangle}] + \mathbf{b}_{c} \right) \tag{3}\]
+
+\hypertarget{explanation-of-the-equation}{%
+\subparagraph{Explanation of the
+equation}\label{explanation-of-the-equation}}
+
+\begin{itemize}
+\tightlist
+\item
+  The \emph{tanh} function produces values between -1 and 1.
+\end{itemize}
+
+\hypertarget{variable-names-in-the-code}{%
+\subparagraph{Variable names in the
+code}\label{variable-names-in-the-code}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{cct}: candidate value
+  \(\mathbf{\tilde{c}}^{\langle t \rangle}\)
+\end{itemize}
+
+    \hypertarget{update-gate-mathbfgamma_i}{%
+\paragraph{\texorpdfstring{Update gate
+\(\mathbf{\Gamma}_{i}\)}{Update gate \textbackslash mathbf\{\textbackslash Gamma\}\_\{i\}}}\label{update-gate-mathbfgamma_i}}
+
+\begin{itemize}
+\tightlist
+\item
+  You use the update gate to decide what aspects of the candidate
+  \(\tilde{\mathbf{c}}^{\langle t \rangle}\) to add to the cell state
+  \(c^{\langle t \rangle}\).
+\item
+  The update gate decides what parts of a ``candidate'' tensor
+  \(\tilde{\mathbf{c}}^{\langle t \rangle}\) are passed onto the cell
+  state \(\mathbf{c}^{\langle t \rangle}\).
+\item
+  The update gate is a tensor containing values between 0 and 1.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When a unit in the update gate is close to 1, it allows the value of
+    the candidate \(\tilde{\mathbf{c}}^{\langle t \rangle}\) to be
+    passed onto the hidden state \(\mathbf{c}^{\langle t \rangle}\)
+  \item
+    When a unit in the update gate is close to 0, it prevents the
+    corresponding value in the candidate from being passed onto the
+    hidden state.
+  \end{itemize}
+\item
+  Notice that the subscript ``i'' is used and not ``u'', to follow the
+  convention used in the literature.
+\end{itemize}
+
+\hypertarget{equation}{%
+\subparagraph{Equation}\label{equation}}
+
+\[\mathbf{\Gamma}_i^{\langle t \rangle} = \sigma(\mathbf{W}_i[a^{\langle t-1 \rangle}, \mathbf{x}^{\langle t \rangle}] + \mathbf{b}_i)\tag{2} \]
+
+\hypertarget{explanation-of-the-equation}{%
+\subparagraph{Explanation of the
+equation}\label{explanation-of-the-equation}}
+
+\begin{itemize}
+\tightlist
+\item
+  Similar to the forget gate, here
+  \(\mathbf{\Gamma}_i^{\langle t \rangle}\), the sigmoid produces values
+  between 0 and 1.
+\item
+  The update gate is multiplied element-wise with the candidate, and
+  this product
+  (\(\mathbf{\Gamma}_{i}^{\langle t \rangle} * \tilde{c}^{\langle t \rangle}\))
+  is used in determining the cell state
+  \(\mathbf{c}^{\langle t \rangle}\).
+\end{itemize}
+
+\hypertarget{variable-names-in-code-please-note-that-theyre-different-than-the-equations}{%
+\subparagraph{Variable names in code (Please note that they're different
+than the
+equations)}\label{variable-names-in-code-please-note-that-theyre-different-than-the-equations}}
+
+In the code, you'll use the variable names found in the academic
+literature. These variables don't use ``u'' to denote ``update''. *
+\texttt{Wi} is the update gate weight \(\mathbf{W}_i\) (not ``Wu'') *
+\texttt{bi} is the update gate bias \(\mathbf{b}_i\) (not ``bu'') *
+\texttt{it} is the update gate \(\mathbf{\Gamma}_i^{\langle t \rangle}\)
+(not ``ut'')
+
+    \hypertarget{cell-state-mathbfclangle-t-rangle}{%
+\paragraph{\texorpdfstring{Cell state
+\(\mathbf{c}^{\langle t \rangle}\)}{Cell state \textbackslash mathbf\{c\}\^{}\{\textbackslash langle t \textbackslash rangle\}}}\label{cell-state-mathbfclangle-t-rangle}}
+
+\begin{itemize}
+\tightlist
+\item
+  The cell state is the ``memory'' that gets passed onto future time
+  steps.
+\item
+  The new cell state \(\mathbf{c}^{\langle t \rangle}\) is a combination
+  of the previous cell state and the candidate value.
+\end{itemize}
+
+\hypertarget{equation}{%
+\subparagraph{Equation}\label{equation}}
+
+\[ \mathbf{c}^{\langle t \rangle} = \mathbf{\Gamma}_f^{\langle t \rangle}* \mathbf{c}^{\langle t-1 \rangle} + \mathbf{\Gamma}_{i}^{\langle t \rangle} *\mathbf{\tilde{c}}^{\langle t \rangle} \tag{4} \]
+
+\hypertarget{explanation-of-equation}{%
+\subparagraph{Explanation of equation}\label{explanation-of-equation}}
+
+\begin{itemize}
+\tightlist
+\item
+  The previous cell state \(\mathbf{c}^{\langle t-1 \rangle}\) is
+  adjusted (weighted) by the forget gate
+  \(\mathbf{\Gamma}_{f}^{\langle t \rangle}\)
+\item
+  and the candidate value \(\tilde{\mathbf{c}}^{\langle t \rangle}\),
+  adjusted (weighted) by the update gate
+  \(\mathbf{\Gamma}_{i}^{\langle t \rangle}\)
+\end{itemize}
+
+\hypertarget{variable-names-and-shapes-in-the-code}{%
+\subparagraph{Variable names and shapes in the
+code}\label{variable-names-and-shapes-in-the-code}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{c}: cell state, including all time steps, \(\mathbf{c}\) shape
+  \((n_{a}, m, T_x)\)
+\item
+  \texttt{c\_next}: new (next) cell state,
+  \(\mathbf{c}^{\langle t \rangle}\) shape \((n_{a}, m)\)
+\item
+  \texttt{c\_prev}: previous cell state,
+  \(\mathbf{c}^{\langle t-1 \rangle}\), shape \((n_{a}, m)\)
+\end{itemize}
+
+    \hypertarget{output-gate-mathbfgamma_o}{%
+\paragraph{\texorpdfstring{Output gate
+\(\mathbf{\Gamma}_{o}\)}{Output gate \textbackslash mathbf\{\textbackslash Gamma\}\_\{o\}}}\label{output-gate-mathbfgamma_o}}
+
+\begin{itemize}
+\tightlist
+\item
+  The output gate decides what gets sent as the prediction (output) of
+  the time step.
+\item
+  The output gate is like the other gates, in that it contains values
+  that range from 0 to 1.
+\end{itemize}
+
+\hypertarget{equation}{%
+\subparagraph{Equation}\label{equation}}
+
+\[ \mathbf{\Gamma}_o^{\langle t \rangle}=  \sigma(\mathbf{W}_o[\mathbf{a}^{\langle t-1 \rangle}, \mathbf{x}^{\langle t \rangle}] + \mathbf{b}_{o})\tag{5}\]
+
+\hypertarget{explanation-of-the-equation}{%
+\subparagraph{Explanation of the
+equation}\label{explanation-of-the-equation}}
+
+\begin{itemize}
+\tightlist
+\item
+  The output gate is determined by the previous hidden state
+  \(\mathbf{a}^{\langle t-1 \rangle}\) and the current input
+  \(\mathbf{x}^{\langle t \rangle}\)
+\item
+  The sigmoid makes the gate range from 0 to 1.
+\end{itemize}
+
+\hypertarget{variable-names-in-the-code}{%
+\subparagraph{Variable names in the
+code}\label{variable-names-in-the-code}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{Wo}: output gate weight, \(\mathbf{W_o}\)
+\item
+  \texttt{bo}: output gate bias, \(\mathbf{b_o}\)
+\item
+  \texttt{ot}: output gate, \(\mathbf{\Gamma}_{o}^{\langle t \rangle}\)
+\end{itemize}
+
+    \hypertarget{hidden-state-mathbfalangle-t-rangle}{%
+\paragraph{\texorpdfstring{Hidden state
+\(\mathbf{a}^{\langle t \rangle}\)}{Hidden state \textbackslash mathbf\{a\}\^{}\{\textbackslash langle t \textbackslash rangle\}}}\label{hidden-state-mathbfalangle-t-rangle}}
+
+\begin{itemize}
+\tightlist
+\item
+  The hidden state gets passed to the LSTM cell's next time step.
+\item
+  It is used to determine the three gates
+  (\(\mathbf{\Gamma}_{f}, \mathbf{\Gamma}_{u}, \mathbf{\Gamma}_{o}\)) of
+  the next time step.
+\item
+  The hidden state is also used for the prediction
+  \(y^{\langle t \rangle}\).
+\end{itemize}
+
+\hypertarget{equation}{%
+\subparagraph{Equation}\label{equation}}
+
+\[ \mathbf{a}^{\langle t \rangle} = \mathbf{\Gamma}_o^{\langle t \rangle} * \tanh(\mathbf{c}^{\langle t \rangle})\tag{6} \]
+
+\hypertarget{explanation-of-equation}{%
+\subparagraph{Explanation of equation}\label{explanation-of-equation}}
+
+\begin{itemize}
+\tightlist
+\item
+  The hidden state \(\mathbf{a}^{\langle t \rangle}\) is determined by
+  the cell state \(\mathbf{c}^{\langle t \rangle}\) in combination with
+  the output gate \(\mathbf{\Gamma}_{o}\).
+\item
+  The cell state state is passed through the \texttt{tanh} function to
+  rescale values between -1 and 1.
+\item
+  The output gate acts like a ``mask'' that either preserves the values
+  of \(\tanh(\mathbf{c}^{\langle t \rangle})\) or keeps those values
+  from being included in the hidden state
+  \(\mathbf{a}^{\langle t \rangle}\)
+\end{itemize}
+
+\hypertarget{variable-names-and-shapes-in-the-code}{%
+\subparagraph{Variable names and shapes in the
+code}\label{variable-names-and-shapes-in-the-code}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{a}: hidden state, including time steps. \(\mathbf{a}\) has
+  shape \((n_{a}, m, T_{x})\)
+\item
+  \texttt{a\_prev}: hidden state from previous time step.
+  \(\mathbf{a}^{\langle t-1 \rangle}\) has shape \((n_{a}, m)\)
+\item
+  \texttt{a\_next}: hidden state for next time step.
+  \(\mathbf{a}^{\langle t \rangle}\) has shape \((n_{a}, m)\)
+\end{itemize}
+
+    \hypertarget{prediction-mathbfylangle-t-rangle_pred}{%
+\paragraph{\texorpdfstring{Prediction
+\(\mathbf{y}^{\langle t \rangle}_{pred}\)}{Prediction \textbackslash mathbf\{y\}\^{}\{\textbackslash langle t \textbackslash rangle\}\_\{pred\}}}\label{prediction-mathbfylangle-t-rangle_pred}}
+
+\begin{itemize}
+\tightlist
+\item
+  The prediction in this use case is a classification, so you'll use a
+  softmax.
+\end{itemize}
+
+The equation is:
+\[\mathbf{y}^{\langle t \rangle}_{pred} = \textrm{softmax}(\mathbf{W}_{y} \mathbf{a}^{\langle t \rangle} + \mathbf{b}_{y})\]
+
+\hypertarget{variable-names-and-shapes-in-the-code}{%
+\subparagraph{Variable names and shapes in the
+code}\label{variable-names-and-shapes-in-the-code}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{y\_pred}: prediction, including all time steps.
+  \(\mathbf{y}_{pred}\) has shape \((n_{y}, m, T_{x})\). Note that
+  \((T_{y} = T_{x})\) for this example.
+\item
+  \texttt{yt\_pred}: prediction for the current time step \(t\).
+  \(\mathbf{y}^{\langle t \rangle}_{pred}\) has shape \((n_{y}, m)\)
+\end{itemize}
+
+    \#\#\# 2.1 - LSTM Cell
+
+\#\#\# Exercise 3 - lstm\_cell\_forward
+
+Implement the LSTM cell described in Figure 4.
+
+\textbf{Instructions}: 1. Concatenate the hidden state
+\(a^{\langle t-1 \rangle}\) and input \(x^{\langle t \rangle}\) into a
+single matrix:
+
+\[concat = \begin{bmatrix} a^{\langle t-1 \rangle} \\ x^{\langle t \rangle} \end{bmatrix}\]
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Compute all formulas (1 through 6) for the gates, hidden state, and
+  cell state.
+\item
+  Compute the prediction \(y^{\langle t \rangle}\).
+\end{enumerate}
+
+    \hypertarget{additional-hints}{%
+\paragraph{Additional Hints}\label{additional-hints}}
+
+\begin{itemize}
+\tightlist
+\item
+  You can use
+  \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html}{numpy.concatenate}.
+  Check which value to use for the \texttt{axis} parameter.
+\item
+  The functions \texttt{sigmoid()} and \texttt{softmax} are imported
+  from \texttt{rnn\_utils.py}.
+\item
+  Some docs for
+  \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.tanh.html}{numpy.tanh}
+\item
+  Use
+  \href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html}{numpy.dot}
+  for matrix multiplication.
+\item
+  Notice that the variable names \texttt{Wi}, \texttt{bi} refer to the
+  weights and biases of the \textbf{update} gate. There are no variables
+  named ``Wu'' or ``bu'' in this function.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNQ\PYZus{}C3 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)}
+\PY{c+c1}{\PYZsh{} GRADED FUNCTION: lstm\PYZus{}cell\PYZus{}forward}
+
+\PY{k}{def} \PY{n+nf}{lstm\PYZus{}cell\PYZus{}forward}\PY{p}{(}\PY{n}{xt}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{c\PYZus{}prev}\PY{p}{,} \PY{n}{parameters}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Implement a single forward step of the LSTM\PYZhy{}cell as described in Figure (4)}
+
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    xt \PYZhy{}\PYZhy{} your input data at timestep \PYZdq{}t\PYZdq{}, numpy array of shape (n\PYZus{}x, m).}
+\PY{l+s+sd}{    a\PYZus{}prev \PYZhy{}\PYZhy{} Hidden state at timestep \PYZdq{}t\PYZhy{}1\PYZdq{}, numpy array of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{    c\PYZus{}prev \PYZhy{}\PYZhy{} Memory state at timestep \PYZdq{}t\PYZhy{}1\PYZdq{}, numpy array of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{    parameters \PYZhy{}\PYZhy{} python dictionary containing:}
+\PY{l+s+sd}{                        Wf \PYZhy{}\PYZhy{} Weight matrix of the forget gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        bf \PYZhy{}\PYZhy{} Bias of the forget gate, numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        Wi \PYZhy{}\PYZhy{} Weight matrix of the update gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        bi \PYZhy{}\PYZhy{} Bias of the update gate, numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        Wc \PYZhy{}\PYZhy{} Weight matrix of the first \PYZdq{}tanh\PYZdq{}, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        bc \PYZhy{}\PYZhy{}  Bias of the first \PYZdq{}tanh\PYZdq{}, numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        Wo \PYZhy{}\PYZhy{} Weight matrix of the output gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        bo \PYZhy{}\PYZhy{}  Bias of the output gate, numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        Wy \PYZhy{}\PYZhy{} Weight matrix relating the hidden\PYZhy{}state to the output, numpy array of shape (n\PYZus{}y, n\PYZus{}a)}
+\PY{l+s+sd}{                        by \PYZhy{}\PYZhy{} Bias relating the hidden\PYZhy{}state to the output, numpy array of shape (n\PYZus{}y, 1)}
+\PY{l+s+sd}{                        }
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    a\PYZus{}next \PYZhy{}\PYZhy{} next hidden state, of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{    c\PYZus{}next \PYZhy{}\PYZhy{} next memory state, of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{    yt\PYZus{}pred \PYZhy{}\PYZhy{} prediction at timestep \PYZdq{}t\PYZdq{}, numpy array of shape (n\PYZus{}y, m)}
+\PY{l+s+sd}{    cache \PYZhy{}\PYZhy{} tuple of values needed for the backward pass, contains (a\PYZus{}next, c\PYZus{}next, a\PYZus{}prev, c\PYZus{}prev, xt, parameters)}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Note: ft/it/ot stand for the forget/update/output gates, cct stands for the candidate value (c tilde),}
+\PY{l+s+sd}{          c stands for the cell state (memory)}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+
+    \PY{c+c1}{\PYZsh{} Retrieve parameters from \PYZdq{}parameters\PYZdq{}}
+    \PY{n}{Wf} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} forget gate weight}
+    \PY{n}{bf} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Wi} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} update gate weight (notice the variable name)}
+    \PY{n}{bi} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} (notice the variable name)}
+    \PY{n}{Wc} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} candidate value weight}
+    \PY{n}{bc} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Wo} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} output gate weight}
+    \PY{n}{bo} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Wy} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} prediction weight}
+    \PY{n}{by} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{by}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{} Retrieve dimensions from shapes of xt and Wy}
+    \PY{n}{n\PYZus{}x}\PY{p}{,} \PY{n}{m} \PY{o}{=} \PY{n}{xt}\PY{o}{.}\PY{n}{shape}
+    \PY{n}{n\PYZus{}y}\PY{p}{,} \PY{n}{n\PYZus{}a} \PY{o}{=} \PY{n}{Wy}\PY{o}{.}\PY{n}{shape}
+
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    \PY{c+c1}{\PYZsh{} Concatenate a\PYZus{}prev and xt (≈1 line)}
+    \PY{n}{concat} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{p}{(}\PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{xt}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Compute values for ft, it, cct, c\PYZus{}next, ot, a\PYZus{}next using the formulas given figure (4) (≈6 lines)}
+    \PY{n}{ft} \PY{o}{=} \PY{n}{sigmoid}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{Wf}\PY{p}{,} \PY{n}{concat}\PY{p}{)} \PY{o}{+} \PY{n}{bf}\PY{p}{)}
+    \PY{n}{it} \PY{o}{=} \PY{n}{sigmoid}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{Wi}\PY{p}{,} \PY{n}{concat}\PY{p}{)} \PY{o}{+} \PY{n}{bi}\PY{p}{)}
+    \PY{n}{cct} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{tanh}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{Wc}\PY{p}{,} \PY{n}{concat}\PY{p}{)} \PY{o}{+} \PY{n}{bc}\PY{p}{)}
+    \PY{n}{c\PYZus{}next} \PY{o}{=} \PY{n}{ft} \PY{o}{*} \PY{n}{c\PYZus{}prev} \PY{o}{+} \PY{n}{it} \PY{o}{*} \PY{n}{cct}
+    \PY{n}{ot} \PY{o}{=} \PY{n}{sigmoid}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{Wo}\PY{p}{,} \PY{n}{concat}\PY{p}{)} \PY{o}{+} \PY{n}{bo}\PY{p}{)}
+    \PY{n}{a\PYZus{}next} \PY{o}{=} \PY{n}{ot} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{tanh}\PY{p}{(}\PY{n}{c\PYZus{}next}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Compute prediction of the LSTM cell (≈1 line)}
+    \PY{n}{yt\PYZus{}pred} \PY{o}{=} \PY{n}{softmax}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{Wy}\PY{p}{,} \PY{n}{a\PYZus{}next}\PY{p}{)} \PY{o}{+} \PY{n}{by}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+
+    \PY{c+c1}{\PYZsh{} store values needed for backward propagation in cache}
+    \PY{n}{cache} \PY{o}{=} \PY{p}{(}\PY{n}{a\PYZus{}next}\PY{p}{,} \PY{n}{c\PYZus{}next}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{c\PYZus{}prev}\PY{p}{,} \PY{n}{ft}\PY{p}{,} \PY{n}{it}\PY{p}{,} \PY{n}{cct}\PY{p}{,} \PY{n}{ot}\PY{p}{,} \PY{n}{xt}\PY{p}{,} \PY{n}{parameters}\PY{p}{)}
+
+    \PY{k}{return} \PY{n}{a\PYZus{}next}\PY{p}{,} \PY{n}{c\PYZus{}next}\PY{p}{,} \PY{n}{yt\PYZus{}pred}\PY{p}{,} \PY{n}{cache}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{xt\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{a\PYZus{}prev\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{c\PYZus{}prev\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5} \PY{o}{+} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5} \PY{o}{+} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5} \PY{o}{+} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5} \PY{o}{+} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{by}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{a\PYZus{}next\PYZus{}tmp}\PY{p}{,} \PY{n}{c\PYZus{}next\PYZus{}tmp}\PY{p}{,} \PY{n}{yt\PYZus{}tmp}\PY{p}{,} \PY{n}{cache\PYZus{}tmp} \PY{o}{=} \PY{n}{lstm\PYZus{}cell\PYZus{}forward}\PY{p}{(}\PY{n}{xt\PYZus{}tmp}\PY{p}{,} \PY{n}{a\PYZus{}prev\PYZus{}tmp}\PY{p}{,} \PY{n}{c\PYZus{}prev\PYZus{}tmp}\PY{p}{,} \PY{n}{parameters\PYZus{}tmp}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{a\PYZus{}next[4] = }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{a\PYZus{}next\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{a\PYZus{}next.shape = }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{a\PYZus{}next\PYZus{}tmp}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{c\PYZus{}next[2] = }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{c\PYZus{}next\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{c\PYZus{}next.shape = }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{c\PYZus{}next\PYZus{}tmp}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{yt[1] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{yt\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{yt.shape = }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{yt\PYZus{}tmp}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cache[1][3] =}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{cache\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{len(cache) = }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{cache\PYZus{}tmp}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} UNIT TEST}
+\PY{n}{lstm\PYZus{}cell\PYZus{}forward\PYZus{}test}\PY{p}{(}\PY{n}{lstm\PYZus{}cell\PYZus{}forward}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+a\_next[4] =
+ [-0.66408471  0.0036921   0.02088357  0.22834167 -0.85575339  0.00138482
+  0.76566531  0.34631421 -0.00215674  0.43827275]
+a\_next.shape =  (5, 10)
+c\_next[2] =
+ [ 0.63267805  1.00570849  0.35504474  0.20690913 -1.64566718  0.11832942
+  0.76449811 -0.0981561  -0.74348425 -0.26810932]
+c\_next.shape =  (5, 10)
+yt[1] = [0.79913913 0.15986619 0.22412122 0.15606108 0.97057211 0.31146381
+ 0.00943007 0.12666353 0.39380172 0.07828381]
+yt.shape =  (2, 10)
+cache[1][3] =
+ [-0.16263996  1.03729328  0.72938082 -0.54101719  0.02752074 -0.30821874
+  0.07651101 -1.03752894  1.41219977 -0.37647422]
+len(cache) =  10
+\textcolor{ansi-green-intense}{All tests passed}
+    \end{Verbatim}
+
+    \textbf{Expected Output}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a\_next[}\DecValTok{4}\NormalTok{] }\OperatorTok{=} 
+\NormalTok{ [}\OperatorTok{{-}}\FloatTok{0.66408471}  \FloatTok{0.0036921}   \FloatTok{0.02088357}  \FloatTok{0.22834167} \OperatorTok{{-}}\FloatTok{0.85575339}  \FloatTok{0.00138482}
+  \FloatTok{0.76566531}  \FloatTok{0.34631421} \OperatorTok{{-}}\FloatTok{0.00215674}  \FloatTok{0.43827275}\NormalTok{]}
+\NormalTok{a\_next.shape }\OperatorTok{=}\NormalTok{  (}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+\NormalTok{c\_next[}\DecValTok{2}\NormalTok{] }\OperatorTok{=} 
+\NormalTok{ [ }\FloatTok{0.63267805}  \FloatTok{1.00570849}  \FloatTok{0.35504474}  \FloatTok{0.20690913} \OperatorTok{{-}}\FloatTok{1.64566718}  \FloatTok{0.11832942}
+  \FloatTok{0.76449811} \OperatorTok{{-}}\FloatTok{0.0981561}  \OperatorTok{{-}}\FloatTok{0.74348425} \OperatorTok{{-}}\FloatTok{0.26810932}\NormalTok{]}
+\NormalTok{c\_next.shape }\OperatorTok{=}\NormalTok{  (}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+\NormalTok{yt[}\DecValTok{1}\NormalTok{] }\OperatorTok{=}\NormalTok{ [ }\FloatTok{0.79913913}  \FloatTok{0.15986619}  \FloatTok{0.22412122}  \FloatTok{0.15606108}  \FloatTok{0.97057211}  \FloatTok{0.31146381}
+  \FloatTok{0.00943007}  \FloatTok{0.12666353}  \FloatTok{0.39380172}  \FloatTok{0.07828381}\NormalTok{]}
+\NormalTok{yt.shape }\OperatorTok{=}\NormalTok{  (}\DecValTok{2}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+\NormalTok{cache[}\DecValTok{1}\NormalTok{][}\DecValTok{3}\NormalTok{] }\OperatorTok{=}
+\NormalTok{ [}\OperatorTok{{-}}\FloatTok{0.16263996}  \FloatTok{1.03729328}  \FloatTok{0.72938082} \OperatorTok{{-}}\FloatTok{0.54101719}  \FloatTok{0.02752074} \OperatorTok{{-}}\FloatTok{0.30821874}
+  \FloatTok{0.07651101} \OperatorTok{{-}}\FloatTok{1.03752894}  \FloatTok{1.41219977} \OperatorTok{{-}}\FloatTok{0.37647422}\NormalTok{]}
+\BuiltInTok{len}\NormalTok{(cache) }\OperatorTok{=}  \DecValTok{10}
+\end{Highlighting}
+\end{Shaded}
+
+    \#\#\# 2.2 - Forward Pass for LSTM
+
+Now that you have implemented one step of an LSTM, you can iterate this
+over it using a for loop to process a sequence of \(T_x\) inputs.
+
+Figure 5: LSTM over multiple time steps.
+
+~\\
+\#\#\# Exercise 4 - lstm\_forward
+
+Implement \texttt{lstm\_forward()} to run an LSTM over \(T_x\) time
+steps.
+
+\textbf{Instructions} * Get the dimensions \(n_x, n_a, n_y, m, T_x\)
+from the shape of the variables: \texttt{x} and \texttt{parameters} *
+Initialize the 3D tensors \(a\), \(c\) and \(y\) - \(a\): hidden state,
+shape \((n_{a}, m, T_{x})\) - \(c\): cell state, shape
+\((n_{a}, m, T_{x})\) - \(y\): prediction, shape \((n_{y}, m, T_{x})\)
+(Note that \(T_{y} = T_{x}\) in this example) - \textbf{Note} Setting
+one variable equal to the other is a ``copy by reference''. In other
+words, don't do
+\texttt{c\ =\ a\textquotesingle{},\ otherwise\ both\ these\ variables\ point\ to\ the\ same\ underlying\ variable.\ *\ Initialize\ the\ 2D\ tensor\ \$a\^{}\{\textbackslash{}langle\ t\ \textbackslash{}rangle\}\$\ \ \ \ \ \ -\ \$a\^{}\{\textbackslash{}langle\ t\ \textbackslash{}rangle\}\$\ stores\ the\ hidden\ state\ for\ time\ step\ \$t\$.\ \ The\ variable\ name\ is}a\_next\texttt{.\ \ \ \ \ -\ \$a\^{}\{\textbackslash{}langle\ 0\ \textbackslash{}rangle\}\$,\ the\ initial\ hidden\ state\ at\ time\ step\ 0,\ is\ passed\ in\ when\ calling\ the\ function.\ The\ variable\ name\ is}a0\texttt{.\ \ \ \ \ -\ \$a\^{}\{\textbackslash{}langle\ t\ \textbackslash{}rangle\}\$\ and\ \$a\^{}\{\textbackslash{}langle\ 0\ \textbackslash{}rangle\}\$\ represent\ a\ single\ time\ step,\ so\ they\ both\ have\ the\ shape\ \ \$(n\_\{a\},\ m)\$\ \ \ \ \ \ -\ Initialize\ \$a\^{}\{\textbackslash{}langle\ t\ \textbackslash{}rangle\}\$\ by\ setting\ it\ to\ the\ initial\ hidden\ state\ (\$a\^{}\{\textbackslash{}langle\ 0\ \textbackslash{}rangle\}\$)\ that\ is\ passed\ into\ the\ function.\ *\ Initialize\ \$c\^{}\{\textbackslash{}langle\ t\ \textbackslash{}rangle\}\$\ with\ zeros.\ \ \ \ \ \ -\ The\ variable\ name\ is}c\_next\texttt{-\ \$c\^{}\{\textbackslash{}langle\ t\ \textbackslash{}rangle\}\$\ represents\ a\ single\ time\ step,\ so\ its\ shape\ is\ \$(n\_\{a\},\ m)\$\ \ \ \ \ -\ **Note**:\ create}c\_next\texttt{as\ its\ own\ variable\ with\ its\ own\ location\ in\ memory.\ \ Do\ not\ initialize\ it\ as\ a\ slice\ of\ the\ 3D\ tensor\ \$c\$.\ \ In\ other\ words,\ **don\textquotesingle{}t**\ do}c\_next
+=
+c{[}:,:,0{]}\texttt{.\ *\ For\ each\ time\ step,\ do\ the\ following:\ \ \ \ \ -\ From\ the\ 3D\ tensor\ \$x\$,\ get\ a\ 2D\ slice\ \$x\^{}\{\textbackslash{}langle\ t\ \textbackslash{}rangle\}\$\ at\ time\ step\ \$t\$\ \ \ \ \ -\ Call\ the}lstm\_cell\_forward`
+function that you defined previously, to get the hidden state, cell
+state, prediction, and cache - Store the hidden state, cell state and
+prediction (the 2D tensors) inside the 3D tensors - Append the cache to
+the list of caches
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{39}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNQ\PYZus{}C4 (UNIQUE CELL IDENTIFIER, DO NOT EDIT)}
+\PY{c+c1}{\PYZsh{} GRADED FUNCTION: lstm\PYZus{}forward}
+
+\PY{k}{def} \PY{n+nf}{lstm\PYZus{}forward}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{a0}\PY{p}{,} \PY{n}{parameters}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Implement the forward propagation of the recurrent neural network using an LSTM\PYZhy{}cell described in Figure (4).}
+
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    x \PYZhy{}\PYZhy{} Input data for every time\PYZhy{}step, of shape (n\PYZus{}x, m, T\PYZus{}x).}
+\PY{l+s+sd}{    a0 \PYZhy{}\PYZhy{} Initial hidden state, of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{    parameters \PYZhy{}\PYZhy{} python dictionary containing:}
+\PY{l+s+sd}{                        Wf \PYZhy{}\PYZhy{} Weight matrix of the forget gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        bf \PYZhy{}\PYZhy{} Bias of the forget gate, numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        Wi \PYZhy{}\PYZhy{} Weight matrix of the update gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        bi \PYZhy{}\PYZhy{} Bias of the update gate, numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        Wc \PYZhy{}\PYZhy{} Weight matrix of the first \PYZdq{}tanh\PYZdq{}, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        bc \PYZhy{}\PYZhy{} Bias of the first \PYZdq{}tanh\PYZdq{}, numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        Wo \PYZhy{}\PYZhy{} Weight matrix of the output gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        bo \PYZhy{}\PYZhy{} Bias of the output gate, numpy array of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        Wy \PYZhy{}\PYZhy{} Weight matrix relating the hidden\PYZhy{}state to the output, numpy array of shape (n\PYZus{}y, n\PYZus{}a)}
+\PY{l+s+sd}{                        by \PYZhy{}\PYZhy{} Bias relating the hidden\PYZhy{}state to the output, numpy array of shape (n\PYZus{}y, 1)}
+\PY{l+s+sd}{                        }
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    a \PYZhy{}\PYZhy{} Hidden states for every time\PYZhy{}step, numpy array of shape (n\PYZus{}a, m, T\PYZus{}x)}
+\PY{l+s+sd}{    y \PYZhy{}\PYZhy{} Predictions for every time\PYZhy{}step, numpy array of shape (n\PYZus{}y, m, T\PYZus{}x)}
+\PY{l+s+sd}{    c \PYZhy{}\PYZhy{} The value of the cell state, numpy array of shape (n\PYZus{}a, m, T\PYZus{}x)}
+\PY{l+s+sd}{    caches \PYZhy{}\PYZhy{} tuple of values needed for the backward pass, contains (list of all the caches, x)}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+
+    \PY{c+c1}{\PYZsh{} Initialize \PYZdq{}caches\PYZdq{}, which will track the list of all the caches}
+    \PY{n}{caches} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    \PY{n}{Wy} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{c+c1}{\PYZsh{} saving parameters[\PYZsq{}Wy\PYZsq{}] in a local variable in case students use Wy instead of parameters[\PYZsq{}Wy\PYZsq{}]}
+    \PY{c+c1}{\PYZsh{} Retrieve dimensions from shapes of x and parameters[\PYZsq{}Wy\PYZsq{}] (≈2 lines)}
+    \PY{n}{n\PYZus{}x}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{T\PYZus{}x} \PY{o}{=} \PY{n}{x}\PY{o}{.}\PY{n}{shape}
+    \PY{n}{n\PYZus{}y}\PY{p}{,} \PY{n}{n\PYZus{}a} \PY{o}{=} \PY{n}{Wy}\PY{o}{.}\PY{n}{shape}
+    
+    \PY{c+c1}{\PYZsh{} initialize \PYZdq{}a\PYZdq{}, \PYZdq{}c\PYZdq{} and \PYZdq{}y\PYZdq{} with zeros (≈3 lines)}
+    \PY{n}{a} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{T\PYZus{}x}\PY{p}{)}\PY{p}{)}
+    \PY{n}{c} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{T\PYZus{}x}\PY{p}{)}\PY{p}{)}
+    \PY{n}{y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}y}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{T\PYZus{}x}\PY{p}{)}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Initialize a\PYZus{}next and c\PYZus{}next (≈2 lines)}
+    \PY{n}{a\PYZus{}next} \PY{o}{=} \PY{n}{a0}
+    \PY{n}{c\PYZus{}next} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{m}\PY{p}{)}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} loop over all time\PYZhy{}steps}
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{T\PYZus{}x}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} Get the 2D slice \PYZsq{}xt\PYZsq{} from the 3D input \PYZsq{}x\PYZsq{} at time step \PYZsq{}t\PYZsq{}}
+        \PY{n}{xt} \PY{o}{=} \PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{p}{,}\PY{n}{t}\PY{p}{]}
+        \PY{c+c1}{\PYZsh{} Update next hidden state, next memory state, compute the prediction, get the cache (≈1 line)}
+        \PY{n}{a\PYZus{}next}\PY{p}{,} \PY{n}{c\PYZus{}next}\PY{p}{,} \PY{n}{yt}\PY{p}{,} \PY{n}{cache} \PY{o}{=} \PY{n}{lstm\PYZus{}cell\PYZus{}forward}\PY{p}{(}\PY{n}{xt}\PY{p}{,} \PY{n}{a\PYZus{}next}\PY{p}{,} \PY{n}{c\PYZus{}next}\PY{p}{,} \PY{n}{parameters}\PY{p}{)}
+        \PY{c+c1}{\PYZsh{} Save the value of the new \PYZdq{}next\PYZdq{} hidden state in a (≈1 line)}
+        \PY{n}{a}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{p}{,}\PY{n}{t}\PY{p}{]} \PY{o}{=} \PY{n}{a\PYZus{}next}
+        \PY{c+c1}{\PYZsh{} Save the value of the next cell state (≈1 line)}
+        \PY{n}{c}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{p}{,}\PY{n}{t}\PY{p}{]}  \PY{o}{=} \PY{n}{c\PYZus{}next}
+        \PY{c+c1}{\PYZsh{} Save the value of the prediction in y (≈1 line)}
+        \PY{n}{y}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{p}{,}\PY{n}{t}\PY{p}{]} \PY{o}{=} \PY{n}{yt}
+        \PY{c+c1}{\PYZsh{} Append the cache into caches (≈1 line)}
+        \PY{n}{caches}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{cache}\PY{p}{)}
+        
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    
+    \PY{c+c1}{\PYZsh{} store values needed for backward propagation in cache}
+    \PY{n}{caches} \PY{o}{=} \PY{p}{(}\PY{n}{caches}\PY{p}{,} \PY{n}{x}\PY{p}{)}
+
+    \PY{k}{return} \PY{n}{a}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{c}\PY{p}{,} \PY{n}{caches}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{40}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{x\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}
+\PY{n}{a0\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5} \PY{o}{+} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5} \PY{o}{+} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5} \PY{o}{+} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5} \PY{o}{+} \PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{by}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{a\PYZus{}tmp}\PY{p}{,} \PY{n}{y\PYZus{}tmp}\PY{p}{,} \PY{n}{c\PYZus{}tmp}\PY{p}{,} \PY{n}{caches\PYZus{}tmp} \PY{o}{=} \PY{n}{lstm\PYZus{}forward}\PY{p}{(}\PY{n}{x\PYZus{}tmp}\PY{p}{,} \PY{n}{a0\PYZus{}tmp}\PY{p}{,} \PY{n}{parameters\PYZus{}tmp}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{a[4][3][6] = }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{a\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{a.shape = }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{a\PYZus{}tmp}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y[1][4][3] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y.shape = }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{y\PYZus{}tmp}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{caches[1][1][1] =}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{caches\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{c[1][2][1]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{c\PYZus{}tmp}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{len(caches) = }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{caches\PYZus{}tmp}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} UNIT TEST    }
+\PY{n}{lstm\PYZus{}forward\PYZus{}test}\PY{p}{(}\PY{n}{lstm\PYZus{}forward}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+a[4][3][6] =  0.17211776753291672
+a.shape =  (5, 10, 7)
+y[1][4][3] = 0.9508734618501101
+y.shape =  (2, 10, 7)
+caches[1][1][1] =
+ [ 0.82797464  0.23009474  0.76201118 -0.22232814 -0.20075807  0.18656139
+  0.41005165]
+c[1][2][1] -0.8555449167181981
+len(caches) =  2
+\textcolor{ansi-green-intense}{All tests passed}
+    \end{Verbatim}
+
+    \textbf{Expected Output}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a[}\DecValTok{4}\NormalTok{][}\DecValTok{3}\NormalTok{][}\DecValTok{6}\NormalTok{] }\OperatorTok{=}  \FloatTok{0.172117767533}
+\NormalTok{a.shape }\OperatorTok{=}\NormalTok{  (}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{7}\NormalTok{)}
+\NormalTok{y[}\DecValTok{1}\NormalTok{][}\DecValTok{4}\NormalTok{][}\DecValTok{3}\NormalTok{] }\OperatorTok{=} \FloatTok{0.95087346185}
+\NormalTok{y.shape }\OperatorTok{=}\NormalTok{  (}\DecValTok{2}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{7}\NormalTok{)}
+\NormalTok{caches[}\DecValTok{1}\NormalTok{][}\DecValTok{1}\NormalTok{][}\DecValTok{1}\NormalTok{] }\OperatorTok{=}
+\NormalTok{ [ }\FloatTok{0.82797464}  \FloatTok{0.23009474}  \FloatTok{0.76201118} \OperatorTok{{-}}\FloatTok{0.22232814} \OperatorTok{{-}}\FloatTok{0.20075807}  \FloatTok{0.18656139}
+  \FloatTok{0.41005165}\NormalTok{]}
+\NormalTok{c[}\DecValTok{1}\NormalTok{][}\DecValTok{2}\NormalTok{][}\DecValTok{1}\NormalTok{] }\OperatorTok{{-}}\FloatTok{0.855544916718}
+\BuiltInTok{len}\NormalTok{(caches) }\OperatorTok{=}  \DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+    \hypertarget{congratulations}{%
+\subsubsection{Congratulations!}\label{congratulations}}
+
+You have now implemented the forward passes for both the basic RNN and
+the LSTM. When using a deep learning framework, implementing the forward
+pass is sufficient to build systems that achieve great performance. The
+framework will take care of the rest.
+
+What you should remember:
+
+\begin{itemize}
+\tightlist
+\item
+  An LSTM is similar to an RNN in that they both use hidden states to
+  pass along information, but an LSTM also uses a cell state, which is
+  like a long-term memory, to help deal with the issue of vanishing
+  gradients
+\item
+  An LSTM cell consists of a cell state, or long-term memory, a hidden
+  state, or short-term memory, along with 3 gates that constantly update
+  the relevancy of its inputs:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A forget gate, which decides which input units should be remembered
+    and passed along. It's a tensor with values between 0 and 1.
+
+    \begin{itemize}
+    \tightlist
+    \item
+      If a unit has a value close to 0, the LSTM will ``forget'' the
+      stored state in the previous cell state.
+    \item
+      If it has a value close to 1, the LSTM will mostly remember the
+      corresponding value.
+    \end{itemize}
+  \item
+    An update gate, again a tensor containing values between 0 and 1. It
+    decides on what information to throw away, and what new information
+    to add.
+
+    \begin{itemize}
+    \tightlist
+    \item
+      When a unit in the update gate is close to 1, the value of its
+      candidate is passed on to the hidden state.
+    \item
+      When a unit in the update gate is close to 0, it's prevented from
+      being passed onto the hidden state.
+    \end{itemize}
+  \item
+    And an output gate, which decides what gets sent as the output of
+    the time step
+  \end{itemize}
+\end{itemize}
+
+Let's recap all you've accomplished so far. You have:
+
+\begin{itemize}
+\tightlist
+\item
+  Used notation for building sequence models
+\item
+  Become familiar with the architecture of a basic RNN and an LSTM, and
+  can describe their components
+\end{itemize}
+
+The rest of this notebook is optional, and will not be graded, but as
+always, you are encouraged to push your own understanding! Good luck and
+have fun.
+
+    ~\\
+\#\# 3 - Backpropagation in Recurrent Neural Networks (OPTIONAL /
+UNGRADED)
+
+In modern deep learning frameworks, you only have to implement the
+forward pass, and the framework takes care of the backward pass, so most
+deep learning engineers do not need to bother with the details of the
+backward pass. If, however, you are an expert in calculus (or are just
+curious) and want to see the details of backprop in RNNs, you can work
+through this optional portion of the notebook.
+
+When in an earlier
+\href{https://www.coursera.org/learn/neural-networks-deep-learning/lecture/0VSHe/derivatives-with-a-computation-graph}{course}
+you implemented a simple (fully connected) neural network, you used
+backpropagation to compute the derivatives with respect to the cost to
+update the parameters. Similarly, in recurrent neural networks you can
+calculate the derivatives with respect to the cost in order to update
+the parameters. The backprop equations are quite complicated, and so
+were not derived in lecture. However, they're briefly presented for your
+viewing pleasure below.
+
+    Note that this notebook does not implement the backward path from the
+Loss `J' backwards to `a'. This would have included the dense layer and
+softmax, which are a part of the forward path. This is assumed to be
+calculated elsewhere and the result passed to \texttt{rnn\_backward} in
+`da'. It is further assumed that loss has been adjusted for batch size
+(m) and division by the number of examples is not required here.
+
+    This section is optional and ungraded, because it's more difficult and
+has fewer details regarding its implementation. Note that this section
+only implements key elements of the full path!
+
+Onward, brave one:
+
+    ~\\
+\#\#\# 3.1 - Basic RNN Backward Pass
+
+Begin by computing the backward pass for the basic RNN cell. Then, in
+the following sections, iterate through the cells.
+
+Figure 6: The RNN cell's backward pass. Just like in a fully-connected
+neural network, the derivative of the cost function \(J\) backpropagates
+through the time steps of the RNN by following the chain rule from
+calculus. Internal to the cell, the chain rule is also used to calculate
+\((\frac{\partial J}{\partial W_{ax}},\frac{\partial J}{\partial W_{aa}},\frac{\partial J}{\partial b})\)
+to update the parameters \((W_{ax}, W_{aa}, b_a)\). The operation can
+utilize the cached results from the forward path.
+
+    Recall from lecture that the shorthand for the partial derivative of
+cost relative to a variable is \texttt{dVariable}. For example,
+\(\frac{\partial J}{\partial W_{ax}}\) is \(dW_{ax}\). This will be used
+throughout the remaining sections.
+
+    Figure 7: This implementation of \texttt{rnn\_cell\_backward} does
+\textbf{not} include the output dense layer and softmax which are
+included in \texttt{rnn\_cell\_forward}.
+
+\(da_{next}\) is \(\frac{\partial{J}}{\partial a^{\langle t \rangle}}\)
+and includes loss from previous stages and current stage output logic.
+The addition shown in green will be part of your implementation of
+\texttt{rnn\_backward}.
+
+    \hypertarget{equations}{%
+\subparagraph{Equations}\label{equations}}
+
+To compute \texttt{rnn\_cell\_backward}, you can use the following
+equations. It's a good exercise to derive them by hand. Here, \(*\)
+denotes element-wise multiplication while the absence of a symbol
+indicates matrix multiplication.
+
+\begin{align}
+\displaystyle a^{\langle t \rangle} &= \tanh(W_{ax} x^{\langle t \rangle} + W_{aa} a^{\langle t-1 \rangle} + b_{a})\tag{-} \\[8pt]
+\displaystyle \frac{\partial \tanh(x)} {\partial x} &= 1 - \tanh^2(x) \tag{-} \\[8pt]
+\displaystyle {dtanh} &= da_{next} * ( 1 - \tanh^2(W_{ax}x^{\langle t \rangle}+W_{aa} a^{\langle t-1 \rangle} + b_{a})) \tag{0} \\[8pt]
+\displaystyle  {dW_{ax}} &= dtanh \cdot x^{\langle t \rangle T}\tag{1} \\[8pt]
+\displaystyle dW_{aa} &= dtanh \cdot a^{\langle t-1 \rangle T}\tag{2} \\[8pt]
+\displaystyle db_a& = \sum_{batch}dtanh\tag{3} \\[8pt]
+\displaystyle dx^{\langle t \rangle} &= { W_{ax}}^T \cdot dtanh\tag{4} \\[8pt]
+\displaystyle da_{prev} &= { W_{aa}}^T \cdot dtanh\tag{5}
+\end{align}
+
+    \#\#\# Exercise 5 - rnn\_cell\_backward
+
+Implementing \texttt{rnn\_cell\_backward}.
+
+The results can be computed directly by implementing the equations
+above. However, you have an option to simplify them by computing `dz'
+and using the chain rule.\\
+This can be further simplified by noting that
+\(\tanh(W_{ax}x^{\langle t \rangle}+W_{aa} a^{\langle t-1 \rangle} + b_{a})\)
+was computed and saved as \texttt{a\_next} in the forward pass.
+
+To calculate \texttt{dba}, the `batch' above is a sum across all `m'
+examples (axis= 1). Note that you should use the
+\texttt{keepdims\ =\ True} option.
+
+It may be worthwhile to review Course 1
+\href{https://www.coursera.org/learn/neural-networks-deep-learning/lecture/0VSHe/derivatives-with-a-computation-graph}{Derivatives
+with a Computation Graph} through
+\href{https://www.coursera.org/learn/neural-networks-deep-learning/lecture/6dDj7/backpropagation-intuition-optional}{Backpropagation
+Intuition}, which decompose the calculation into steps using the chain
+rule.\\
+Matrix vector derivatives are described
+\href{http://cs231n.stanford.edu/vecDerivs.pdf}{here}, though the
+equations above incorporate the required transformations.
+
+\textbf{Note}: \texttt{rnn\_cell\_backward} does \textbf{not} include
+the calculation of loss from \(y \langle t \rangle\). This is
+incorporated into the incoming \texttt{da\_next}. This is a slight
+mismatch with \texttt{rnn\_cell\_forward}, which includes a dense layer
+and softmax.
+
+\textbf{Note on the code}:
+
+\(\displaystyle dx^{\langle t \rangle}\) is represented by dxt,\\
+\(\displaystyle d W_{ax}\) is represented by dWax,\\
+\(\displaystyle da_{prev}\) is represented by da\_prev,\\
+\(\displaystyle dW_{aa}\) is represented by dWaa,\\
+\(\displaystyle db_{a}\) is represented by dba,\\
+\texttt{dz} is not derived above but can optionally be derived by
+students to simplify the repeated calculations.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{52}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNGRADED FUNCTION: rnn\PYZus{}cell\PYZus{}backward}
+
+\PY{k}{def} \PY{n+nf}{rnn\PYZus{}cell\PYZus{}backward}\PY{p}{(}\PY{n}{da\PYZus{}next}\PY{p}{,} \PY{n}{cache}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Implements the backward pass for the RNN\PYZhy{}cell (single time\PYZhy{}step).}
+
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    da\PYZus{}next \PYZhy{}\PYZhy{} Gradient of loss with respect to next hidden state}
+\PY{l+s+sd}{    cache \PYZhy{}\PYZhy{} python dictionary containing useful values (output of rnn\PYZus{}cell\PYZus{}forward())}
+
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    gradients \PYZhy{}\PYZhy{} python dictionary containing:}
+\PY{l+s+sd}{                        dx \PYZhy{}\PYZhy{} Gradients of input data, of shape (n\PYZus{}x, m)}
+\PY{l+s+sd}{                        da\PYZus{}prev \PYZhy{}\PYZhy{} Gradients of previous hidden state, of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{                        dWax \PYZhy{}\PYZhy{} Gradients of input\PYZhy{}to\PYZhy{}hidden weights, of shape (n\PYZus{}a, n\PYZus{}x)}
+\PY{l+s+sd}{                        dWaa \PYZhy{}\PYZhy{} Gradients of hidden\PYZhy{}to\PYZhy{}hidden weights, of shape (n\PYZus{}a, n\PYZus{}a)}
+\PY{l+s+sd}{                        dba \PYZhy{}\PYZhy{} Gradients of bias vector, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{c+c1}{\PYZsh{} Retrieve values from cache}
+    \PY{p}{(}\PY{n}{a\PYZus{}next}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{xt}\PY{p}{,} \PY{n}{parameters}\PY{p}{)} \PY{o}{=} \PY{n}{cache}
+    
+    \PY{c+c1}{\PYZsh{} Retrieve values from parameters}
+    \PY{n}{Wax} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Waa} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Waa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{Wya} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wya}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{ba} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ba}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+    \PY{n}{by} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{by}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    \PY{c+c1}{\PYZsh{} compute the gradient of dtanh term using a\PYZus{}next and da\PYZus{}next (≈1 line)}
+    \PY{n}{dtanh} \PY{o}{=} \PY{n}{da\PYZus{}next} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{a\PYZus{}next} \PY{o}{*} \PY{n}{a\PYZus{}next}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} compute the gradient of the loss with respect to Wax (≈2 lines)}
+    \PY{n}{dxt} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{Wax}\PY{p}{)}\PY{p}{,} \PY{n}{dtanh}\PY{p}{)}
+    \PY{n}{dWax} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{dtanh}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{xt}\PY{p}{)}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} compute the gradient with respect to Waa (≈2 lines)}
+    \PY{n}{da\PYZus{}prev} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{Waa}\PY{p}{)}\PY{p}{,} \PY{n}{dtanh}\PY{p}{)}
+    \PY{n}{dWaa} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{matmul}\PY{p}{(}\PY{n}{dtanh}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{a\PYZus{}prev}\PY{p}{)}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} compute the gradient with respect to b (≈1 line)}
+    \PY{n}{dba} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{dtanh}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{keepdims}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    
+    \PY{c+c1}{\PYZsh{} Store the gradients in a python dictionary}
+    \PY{n}{gradients} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dxt}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{da\PYZus{}prev}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWax}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWaa}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dba}\PY{p}{\PYZcb{}}
+    
+    \PY{k}{return} \PY{n}{gradients}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{53}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{xt\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{a\PYZus{}prev\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wax}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Waa}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wya}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ba}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{by}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{a\PYZus{}next\PYZus{}tmp}\PY{p}{,} \PY{n}{yt\PYZus{}tmp}\PY{p}{,} \PY{n}{cache\PYZus{}tmp} \PY{o}{=} \PY{n}{rnn\PYZus{}cell\PYZus{}forward}\PY{p}{(}\PY{n}{xt\PYZus{}tmp}\PY{p}{,} \PY{n}{a\PYZus{}prev\PYZus{}tmp}\PY{p}{,} \PY{n}{parameters\PYZus{}tmp}\PY{p}{)}
+
+\PY{n}{da\PYZus{}next\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{gradients\PYZus{}tmp} \PY{o}{=} \PY{n}{rnn\PYZus{}cell\PYZus{}backward}\PY{p}{(}\PY{n}{da\PYZus{}next\PYZus{}tmp}\PY{p}{,} \PY{n}{cache\PYZus{}tmp}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][2][3] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][3][1] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+gradients["dxt"][1][2] = -1.3872130506020925
+gradients["dxt"].shape = (3, 10)
+gradients["da\_prev"][2][3] = -0.15239949377395495
+gradients["da\_prev"].shape = (5, 10)
+gradients["dWax"][3][1] = 0.4107728249354584
+gradients["dWax"].shape = (5, 3)
+gradients["dWaa"][1][2] = 1.1503450668497135
+gradients["dWaa"].shape = (5, 5)
+gradients["dba"][4] = [0.20023491]
+gradients["dba"].shape = (5, 1)
+    \end{Verbatim}
+
+    \textbf{Expected Output}:
+
+gradients{[}``dxt''{]}{[}1{]}{[}2{]} =
+
+-1.3872130506
+
+\begin{verbatim}
+<tr>
+    <td>
+        <b>gradients["dxt"].shape</b> =
+    </td>
+    <td>
+       (3, 10)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["da_prev"][2][3]</b> =
+    </td>
+    <td>
+       -0.152399493774
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["da_prev"].shape</b> =
+    </td>
+    <td>
+       (5, 10)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWax"][3][1]</b> =
+    </td>
+    <td>
+       0.410772824935
+    </td>
+</tr>
+        <tr>
+    <td>
+        <b>gradients["dWax"].shape</b> =
+    </td>
+    <td>
+       (5, 3)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWaa"][1][2]</b> = 
+    </td>
+    <td>
+       1.15034506685
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWaa"].shape</b> =
+    </td>
+    <td>
+       (5, 5)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dba"][4]</b> = 
+    </td>
+    <td>
+       [ 0.20023491]
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dba"].shape</b> = 
+    </td>
+    <td>
+       (5, 1)
+    </td>
+</tr>
+\end{verbatim}
+
+    \#\#\# Exercise 6 - rnn\_backward
+
+Computing the gradients of the cost with respect to
+\(a^{\langle t \rangle}\) at every time step \(t\) is useful because it
+is what helps the gradient backpropagate to the previous RNN cell. To do
+so, you need to iterate through all the time steps starting at the end,
+and at each step, you increment the overall \(db_a\), \(dW_{aa}\),
+\(dW_{ax}\) and you store \(dx\).
+
+\textbf{Instructions}:
+
+Implement the \texttt{rnn\_backward} function. Initialize the return
+variables with zeros first, and then loop through all the time steps
+while calling the \texttt{rnn\_cell\_backward} at each time time step,
+updating the other variables accordingly.
+
+    \begin{itemize}
+\tightlist
+\item
+  Note that this notebook does not implement the backward path from the
+  Loss `J' backwards to `a'.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This would have included the dense layer and softmax which are a
+    part of the forward path.
+  \item
+    This is assumed to be calculated elsewhere and the result passed to
+    \texttt{rnn\_backward} in `da'.
+  \item
+    You must combine this with the loss from the previous stages when
+    calling \texttt{rnn\_cell\_backward} (see figure 7 above).
+  \end{itemize}
+\item
+  It is further assumed that loss has been adjusted for batch size (m).
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Therefore, division by the number of examples is not required here.
+  \end{itemize}
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{58}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNGRADED FUNCTION: rnn\PYZus{}backward}
+
+\PY{k}{def} \PY{n+nf}{rnn\PYZus{}backward}\PY{p}{(}\PY{n}{da}\PY{p}{,} \PY{n}{caches}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Implement the backward pass for a RNN over an entire sequence of input data.}
+
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    da \PYZhy{}\PYZhy{} Upstream gradients of all hidden states, of shape (n\PYZus{}a, m, T\PYZus{}x)}
+\PY{l+s+sd}{    caches \PYZhy{}\PYZhy{} tuple containing information from the forward pass (rnn\PYZus{}forward)}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    gradients \PYZhy{}\PYZhy{} python dictionary containing:}
+\PY{l+s+sd}{                        dx \PYZhy{}\PYZhy{} Gradient w.r.t. the input data, numpy\PYZhy{}array of shape (n\PYZus{}x, m, T\PYZus{}x)}
+\PY{l+s+sd}{                        da0 \PYZhy{}\PYZhy{} Gradient w.r.t the initial hidden state, numpy\PYZhy{}array of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{                        dWax \PYZhy{}\PYZhy{} Gradient w.r.t the input\PYZsq{}s weight matrix, numpy\PYZhy{}array of shape (n\PYZus{}a, n\PYZus{}x)}
+\PY{l+s+sd}{                        dWaa \PYZhy{}\PYZhy{} Gradient w.r.t the hidden state\PYZsq{}s weight matrix, numpy\PYZhy{}arrayof shape (n\PYZus{}a, n\PYZus{}a)}
+\PY{l+s+sd}{                        dba \PYZhy{}\PYZhy{} Gradient w.r.t the bias, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+        
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    
+    \PY{c+c1}{\PYZsh{} Retrieve values from the first cache (t=1) of caches (≈2 lines)}
+    \PY{p}{(}\PY{n}{caches}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o}{=} \PY{n}{caches}
+    \PY{p}{(}\PY{n}{a1}\PY{p}{,} \PY{n}{a0}\PY{p}{,} \PY{n}{x1}\PY{p}{,} \PY{n}{parameters}\PY{p}{)} \PY{o}{=} \PY{n}{caches}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{} Retrieve dimensions from da\PYZsq{}s and x1\PYZsq{}s shapes (≈2 lines)}
+    \PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{T\PYZus{}x} \PY{o}{=} \PY{n}{da}\PY{o}{.}\PY{n}{shape}
+    \PY{n}{n\PYZus{}x}\PY{p}{,} \PY{n}{m} \PY{o}{=} \PY{n}{x1}\PY{o}{.}\PY{n}{shape} 
+    
+    \PY{c+c1}{\PYZsh{} initialize the gradients with the right sizes (≈6 lines)}
+    \PY{n}{dx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}x}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{T\PYZus{}x}\PY{p}{)}\PY{p}{)}
+    \PY{n}{dWax} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{n\PYZus{}x}\PY{p}{)}\PY{p}{)}
+    \PY{n}{dWaa} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{n\PYZus{}a}\PY{p}{)}\PY{p}{)}
+    \PY{n}{dba} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+    \PY{n}{da0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{m}\PY{p}{)}\PY{p}{)}
+    \PY{n}{da\PYZus{}prevt} \PY{o}{=} \PY{n}{da}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{p}{,}\PY{n}{T\PYZus{}x} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{} Loop through all the time steps}
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{reversed}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n}{T\PYZus{}x}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} Compute gradients at time step t. Choose wisely the \PYZdq{}da\PYZus{}next\PYZdq{} and the \PYZdq{}cache\PYZdq{} to use in the backward propagation step. (≈1 line)}
+        \PY{n}{gradients} \PY{o}{=} \PY{n}{rnn\PYZus{}cell\PYZus{}backward}\PY{p}{(}\PY{n}{da\PYZus{}prevt}\PY{p}{,} \PY{n}{caches}\PY{p}{[}\PY{n}{t} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+        \PY{c+c1}{\PYZsh{} Retrieve derivatives from gradients (≈ 1 line)}
+        \PY{n}{dxt}\PY{p}{,} \PY{n}{da\PYZus{}prevt}\PY{p}{,} \PY{n}{dWaxt}\PY{p}{,} \PY{n}{dWaat}\PY{p}{,} \PY{n}{dbat} \PY{o}{=} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{gradients}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{c+c1}{\PYZsh{} Increment global derivatives w.r.t parameters by adding their derivative at time\PYZhy{}step t (≈4 lines)}
+        \PY{n}{dx}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{n}{t}\PY{p}{]} \PY{o}{=} \PY{n}{dxt} 
+        \PY{n}{dWax} \PY{o}{+}\PY{o}{=} \PY{n}{dWaxt}
+        \PY{n}{dWaa} \PY{o}{+}\PY{o}{=} \PY{n}{dWaat} 
+        \PY{n}{dba} \PY{o}{+}\PY{o}{=} \PY{n}{dbat}
+        
+    \PY{c+c1}{\PYZsh{} Set da0 to the gradient of a which has been backpropagated through all time\PYZhy{}steps (≈1 line) }
+    \PY{n}{da0} \PY{o}{=} \PY{k+kc}{None}
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+
+    \PY{c+c1}{\PYZsh{} Store the gradients in a python dictionary}
+    \PY{n}{gradients} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dx}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{da0}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWax}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWaa}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dba}\PY{p}{\PYZcb{}}
+    
+    \PY{k}{return} \PY{n}{gradients}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{59}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{x\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{a0\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wax}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Waa}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wya}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ba}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{by}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{a\PYZus{}tmp}\PY{p}{,} \PY{n}{y\PYZus{}tmp}\PY{p}{,} \PY{n}{caches\PYZus{}tmp} \PY{o}{=} \PY{n}{rnn\PYZus{}forward}\PY{p}{(}\PY{n}{x\PYZus{}tmp}\PY{p}{,} \PY{n}{a0\PYZus{}tmp}\PY{p}{,} \PY{n}{parameters\PYZus{}tmp}\PY{p}{)}
+\PY{n}{da\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{gradients\PYZus{}tmp} \PY{o}{=} \PY{n}{rnn\PYZus{}backward}\PY{p}{(}\PY{n}{da\PYZus{}tmp}\PY{p}{,} \PY{n}{caches\PYZus{}tmp}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dx}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dx}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{da0}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][2][3] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{da0}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][3][1] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWax}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWaa}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dba}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+gradients["dx"][1][2] = [-0.00268429  0.28508385  0.11782283  0.03309917]
+gradients["dx"].shape = (3, 10, 4)
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        ---------------------------------------------------------------------------
+
+        TypeError                                 Traceback (most recent call last)
+
+        <ipython-input-59-9af401171061> in <module>
+         15 print("gradients[\textbackslash{}"dx\textbackslash{}"][1][2] =", gradients\_tmp["dx"][1][2])
+         16 print("gradients[\textbackslash{}"dx\textbackslash{}"].shape =", gradients\_tmp["dx"].shape)
+    ---> 17 print("gradients[\textbackslash{}"da0\textbackslash{}"][2][3] =", gradients\_tmp["da0"][2][3])
+         18 print("gradients[\textbackslash{}"da0\textbackslash{}"].shape =", gradients\_tmp["da0"].shape)
+         19 print("gradients[\textbackslash{}"dWax\textbackslash{}"][3][1] =", gradients\_tmp["dWax"][3][1])
+
+
+        TypeError: 'NoneType' object is not subscriptable
+
+    \end{Verbatim}
+
+    \textbf{Expected Output}:
+
+gradients{[}``dx''{]}{[}1{]}{[}2{]} =
+
+{[}-2.07101689 -0.59255627 0.02466855 0.01483317{]}
+
+\begin{verbatim}
+<tr>
+    <td>
+        <b>gradients["dx"].shape</b> =
+    </td>
+    <td>
+       (3, 10, 4)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["da0"][2][3]</b> =
+    </td>
+    <td>
+       -0.314942375127
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["da0"].shape</b> =
+    </td>
+    <td>
+       (5, 10)
+    </td>
+</tr>
+     <tr>
+    <td>
+        <b>gradients["dWax"][3][1]</b> =
+    </td>
+    <td>
+       11.2641044965
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWax"].shape</b> =
+    </td>
+    <td>
+       (5, 3)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWaa"][1][2]</b> = 
+    </td>
+    <td>
+       2.30333312658
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWaa"].shape</b> =
+    </td>
+    <td>
+       (5, 5)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dba"][4]</b> = 
+    </td>
+    <td>
+       [-0.74747722]
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dba"].shape</b> = 
+    </td>
+    <td>
+       (5, 1)
+    </td>
+</tr>
+\end{verbatim}
+
+    \#\#\# 3.2 - LSTM Backward Pass
+
+    \hypertarget{one-step-backward}{%
+\paragraph{1. One Step Backward}\label{one-step-backward}}
+
+The LSTM backward pass is slightly more complicated than the forward
+pass.
+
+Figure 8: LSTM Cell Backward. Note the output functions, while part of
+the \texttt{lstm\_cell\_forward}, are not included in
+\texttt{lstm\_cell\_backward}
+
+The equations for the LSTM backward pass are provided below. (If you
+enjoy calculus exercises feel free to try deriving these from scratch
+yourself.)
+
+    \hypertarget{gate-derivatives}{%
+\paragraph{2. Gate Derivatives}\label{gate-derivatives}}
+
+Note the location of the gate derivatives (\(\gamma\)..) between the
+dense layer and the activation function (see graphic above). This is
+convenient for computing parameter derivatives in the next step.
+\begin{align}
+d\gamma_o^{\langle t \rangle} &= da_{next}*\tanh(c_{next}) * \Gamma_o^{\langle t \rangle}*\left(1-\Gamma_o^{\langle t \rangle}\right)\tag{7} \\[8pt]
+dp\widetilde{c}^{\langle t \rangle} &= \left(dc_{next}*\Gamma_u^{\langle t \rangle}+ \Gamma_o^{\langle t \rangle}* (1-\tanh^2(c_{next})) * \Gamma_u^{\langle t \rangle} * da_{next} \right) * \left(1-\left(\widetilde c^{\langle t \rangle}\right)^2\right) \tag{8} \\[8pt]
+d\gamma_u^{\langle t \rangle} &= \left(dc_{next}*\widetilde{c}^{\langle t \rangle} + \Gamma_o^{\langle t \rangle}* (1-\tanh^2(c_{next})) * \widetilde{c}^{\langle t \rangle} * da_{next}\right)*\Gamma_u^{\langle t \rangle}*\left(1-\Gamma_u^{\langle t \rangle}\right)\tag{9} \\[8pt]
+d\gamma_f^{\langle t \rangle} &= \left(dc_{next}* c_{prev} + \Gamma_o^{\langle t \rangle} * (1-\tanh^2(c_{next})) * c_{prev} * da_{next}\right)*\Gamma_f^{\langle t \rangle}*\left(1-\Gamma_f^{\langle t \rangle}\right)\tag{10}
+\end{align}
+
+\hypertarget{parameter-derivatives}{%
+\paragraph{3. Parameter Derivatives}\label{parameter-derivatives}}
+
+\$ dW\_f = d\gamma\_f\^{}\{\langle t \rangle\}
+
+\begin{bmatrix} a_{prev} \\ x_t\end{bmatrix}
+
+\^{}T \tag{11} \$ \$ dW\_u = d\gamma\_u\^{}\{\langle t \rangle\}
+
+\begin{bmatrix} a_{prev} \\ x_t\end{bmatrix}
+
+\^{}T \tag{12} \$ \$ dW\_c = dp\widetilde c\^{}\{\langle t \rangle\}
+
+\begin{bmatrix} a_{prev} \\ x_t\end{bmatrix}
+
+\^{}T \tag{13} \$ \$ dW\_o = d\gamma\_o\^{}\{\langle t \rangle\}
+
+\begin{bmatrix} a_{prev} \\ x_t\end{bmatrix}
+
+\^{}T \tag{14}\$
+
+To calculate \(db_f, db_u, db_c, db_o\) you just need to sum across all
+`m' examples (axis= 1) on
+\(d\gamma_f^{\langle t \rangle}, d\gamma_u^{\langle t \rangle}, dp\widetilde c^{\langle t \rangle}, d\gamma_o^{\langle t \rangle}\)
+respectively. Note that you should have the \texttt{keepdims\ =\ True}
+option.
+
+\(\displaystyle db_f = \sum_{batch}d\gamma_f^{\langle t \rangle}\tag{15}\)
+\(\displaystyle db_u = \sum_{batch}d\gamma_u^{\langle t \rangle}\tag{16}\)
+\(\displaystyle db_c = \sum_{batch}dp\widetilde c^{\langle t \rangle}\tag{17}\)
+\(\displaystyle db_o = \sum_{batch}d\gamma_o^{\langle t \rangle}\tag{18}\)
+
+Finally, you will compute the derivative with respect to the previous
+hidden state, previous memory state, and input.
+
+\$ da\_\{prev\} = W\_f\^{}T d\gamma\_f\^{}\{\langle t \rangle\} +
+W\_u\^{}T d\gamma\_u\^{}\{\langle t \rangle\}+ W\_c\^{}T
+dp\widetilde c\^{}\{\langle t \rangle\} + W\_o\^{}T
+d\gamma\_o\^{}\{\langle t \rangle\} \tag{19}\$
+
+Here, to account for concatenation, the weights for equations 19 are the
+first n\_a, (i.e.~\(W_f = W_f[:,:n_a]\) etc\ldots)
+
+\$ dc\_\{prev\} = dc\_\{next\}*\Gamma\_f\^{}\{\langle t \rangle\} +
+\Gamma\emph{o\^{}\{\langle t \rangle\} * (1-
+\tanh\^{}2(c}\{next\}))*\Gamma\_f\^{}\{\langle t \rangle\}*da\_\{next\}
+\tag{20}\$
+
+\$ dx\^{}\{\langle t \rangle\} = W\_f\^{}T d\gamma\_f\^{}\{\langle t
+\rangle\} + W\_u\^{}T d\gamma\_u\^{}\{\langle t \rangle\}+ W\_c\^{}T
+dp\widetilde c\^{}\{\langle t \rangle\} + W\_o\^{}T
+d\gamma\_o\^{}\{\langle t \rangle\}\tag{21} \$
+
+where the weights for equation 21 are from n\_a to the end,
+(i.e.~\(W_f = W_f[:,n_a:]\) etc\ldots)
+
+\#\#\# Exercise 7 - lstm\_cell\_backward
+
+Implement \texttt{lstm\_cell\_backward} by implementing equations
+\(7-21\) below.
+
+\textbf{Note}:
+
+In the code:
+
+\(d\gamma_o^{\langle t \rangle}\) is represented by \texttt{dot},\\
+\(dp\widetilde{c}^{\langle t \rangle}\) is represented by
+\texttt{dcct},\\
+\(d\gamma_u^{\langle t \rangle}\) is represented by \texttt{dit},\\
+\(d\gamma_f^{\langle t \rangle}\) is represented by \texttt{dft}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNGRADED FUNCTION: lstm\PYZus{}cell\PYZus{}backward}
+
+\PY{k}{def} \PY{n+nf}{lstm\PYZus{}cell\PYZus{}backward}\PY{p}{(}\PY{n}{da\PYZus{}next}\PY{p}{,} \PY{n}{dc\PYZus{}next}\PY{p}{,} \PY{n}{cache}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Implement the backward pass for the LSTM\PYZhy{}cell (single time\PYZhy{}step).}
+
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    da\PYZus{}next \PYZhy{}\PYZhy{} Gradients of next hidden state, of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{    dc\PYZus{}next \PYZhy{}\PYZhy{} Gradients of next cell state, of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{    cache \PYZhy{}\PYZhy{} cache storing information from the forward pass}
+
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    gradients \PYZhy{}\PYZhy{} python dictionary containing:}
+\PY{l+s+sd}{                        dxt \PYZhy{}\PYZhy{} Gradient of input data at time\PYZhy{}step t, of shape (n\PYZus{}x, m)}
+\PY{l+s+sd}{                        da\PYZus{}prev \PYZhy{}\PYZhy{} Gradient w.r.t. the previous hidden state, numpy array of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{                        dc\PYZus{}prev \PYZhy{}\PYZhy{} Gradient w.r.t. the previous memory state, of shape (n\PYZus{}a, m, T\PYZus{}x)}
+\PY{l+s+sd}{                        dWf \PYZhy{}\PYZhy{} Gradient w.r.t. the weight matrix of the forget gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        dWi \PYZhy{}\PYZhy{} Gradient w.r.t. the weight matrix of the update gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        dWc \PYZhy{}\PYZhy{} Gradient w.r.t. the weight matrix of the memory gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        dWo \PYZhy{}\PYZhy{} Gradient w.r.t. the weight matrix of the output gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        dbf \PYZhy{}\PYZhy{} Gradient w.r.t. biases of the forget gate, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        dbi \PYZhy{}\PYZhy{} Gradient w.r.t. biases of the update gate, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        dbc \PYZhy{}\PYZhy{} Gradient w.r.t. biases of the memory gate, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        dbo \PYZhy{}\PYZhy{} Gradient w.r.t. biases of the output gate, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+
+    \PY{c+c1}{\PYZsh{} Retrieve information from \PYZdq{}cache\PYZdq{}}
+    \PY{p}{(}\PY{n}{a\PYZus{}next}\PY{p}{,} \PY{n}{c\PYZus{}next}\PY{p}{,} \PY{n}{a\PYZus{}prev}\PY{p}{,} \PY{n}{c\PYZus{}prev}\PY{p}{,} \PY{n}{ft}\PY{p}{,} \PY{n}{it}\PY{p}{,} \PY{n}{cct}\PY{p}{,} \PY{n}{ot}\PY{p}{,} \PY{n}{xt}\PY{p}{,} \PY{n}{parameters}\PY{p}{)} \PY{o}{=} \PY{n}{cache}
+    
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    \PY{c+c1}{\PYZsh{} Retrieve dimensions from xt\PYZsq{}s and a\PYZus{}next\PYZsq{}s shape (≈2 lines)}
+    \PY{n}{n\PYZus{}x}\PY{p}{,} \PY{n}{m} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{m} \PY{o}{=} \PY{k+kc}{None}
+    
+    \PY{c+c1}{\PYZsh{} Compute gates related derivatives. Their values can be found by looking carefully at equations (7) to (10) (≈4 lines)}
+    \PY{n}{dot} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dcct} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dit} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dft} \PY{o}{=} \PY{k+kc}{None}
+    
+    \PY{c+c1}{\PYZsh{} Compute parameters related derivatives. Use equations (11)\PYZhy{}(18) (≈8 lines)}
+    \PY{n}{dWf} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dWi} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dWc} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dWo} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dbf} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dbi} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dbc} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dbo} \PY{o}{=} \PY{k+kc}{None}
+
+    \PY{c+c1}{\PYZsh{} Compute derivatives w.r.t previous hidden state, previous memory state and input. Use equations (19)\PYZhy{}(21). (≈3 lines)}
+    \PY{n}{da\PYZus{}prev} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dc\PYZus{}prev} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dxt} \PY{o}{=} \PY{k+kc}{None}
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    
+    
+    
+    \PY{c+c1}{\PYZsh{} Save gradients in dictionary}
+    \PY{n}{gradients} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dxt}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{da\PYZus{}prev}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dc\PYZus{}prev}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dc\PYZus{}prev}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWf}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dbf}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWi}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dbi}\PY{p}{,}
+                \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWc}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dbc}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWo}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dbo}\PY{p}{\PYZcb{}}
+
+    \PY{k}{return} \PY{n}{gradients}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{xt\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{a\PYZus{}prev\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{c\PYZus{}prev\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{o}{+}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{o}{+}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{o}{+}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{o}{+}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{by}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{a\PYZus{}next\PYZus{}tmp}\PY{p}{,} \PY{n}{c\PYZus{}next\PYZus{}tmp}\PY{p}{,} \PY{n}{yt\PYZus{}tmp}\PY{p}{,} \PY{n}{cache\PYZus{}tmp} \PY{o}{=} \PY{n}{lstm\PYZus{}cell\PYZus{}forward}\PY{p}{(}\PY{n}{xt\PYZus{}tmp}\PY{p}{,} \PY{n}{a\PYZus{}prev\PYZus{}tmp}\PY{p}{,} \PY{n}{c\PYZus{}prev\PYZus{}tmp}\PY{p}{,} \PY{n}{parameters\PYZus{}tmp}\PY{p}{)}
+
+\PY{n}{da\PYZus{}next\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{dc\PYZus{}next\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{gradients\PYZus{}tmp} \PY{o}{=} \PY{n}{lstm\PYZus{}cell\PYZus{}backward}\PY{p}{(}\PY{n}{da\PYZus{}next\PYZus{}tmp}\PY{p}{,} \PY{n}{dc\PYZus{}next\PYZus{}tmp}\PY{p}{,} \PY{n}{cache\PYZus{}tmp}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dxt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][2][3] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da\PYZus{}prev}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dc\PYZus{}prev}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][2][3] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dc\PYZus{}prev}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dc\PYZus{}prev}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dc\PYZus{}prev}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWf}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][3][1] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWf}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWi}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWi}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWc}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][3][1] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWc}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWo}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWo}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbf}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbf}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbi}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbi}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbc}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbc}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbo}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbo}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \textbf{Expected Output}:
+
+gradients{[}``dxt''{]}{[}1{]}{[}2{]} =
+
+3.23055911511
+
+\begin{verbatim}
+<tr>
+    <td>
+        <b>gradients["dxt"].shape</b> =
+    </td>
+    <td>
+       (3, 10)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["da_prev"][2][3]</b> =
+    </td>
+    <td>
+       -0.0639621419711
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["da_prev"].shape</b> =
+    </td>
+    <td>
+       (5, 10)
+    </td>
+</tr>
+     <tr>
+    <td>
+        <b>gradients["dc_prev"][2][3]</b> =
+    </td>
+    <td>
+       0.797522038797
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dc_prev"].shape</b> =
+    </td>
+    <td>
+       (5, 10)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWf"][3][1]</b> = 
+    </td>
+    <td>
+       -0.147954838164
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWf"].shape</b> =
+    </td>
+    <td>
+       (5, 8)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWi"][1][2]</b> = 
+    </td>
+    <td>
+       1.05749805523
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWi"].shape</b> = 
+    </td>
+    <td>
+       (5, 8)
+    </td>
+</tr>
+<tr>
+    <td>
+        <b>gradients["dWc"][3][1]</b> = 
+    </td>
+    <td>
+       2.30456216369
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWc"].shape</b> = 
+    </td>
+    <td>
+       (5, 8)
+    </td>
+</tr>
+<tr>
+    <td>
+        <b>gradients["dWo"][1][2]</b> = 
+    </td>
+    <td>
+       0.331311595289
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWo"].shape</b> = 
+    </td>
+    <td>
+       (5, 8)
+    </td>
+</tr>
+<tr>
+    <td>
+        <b>gradients["dbf"][4]</b> = 
+    </td>
+    <td>
+       [ 0.18864637]
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbf"].shape</b> = 
+    </td>
+    <td>
+       (5, 1)
+    </td>
+</tr>
+<tr>
+    <td>
+        <b>gradients["dbi"][4]</b> = 
+    </td>
+    <td>
+       [-0.40142491]
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbi"].shape</b> = 
+    </td>
+    <td>
+       (5, 1)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbc"][4]</b> = 
+    </td>
+    <td>
+       [ 0.25587763]
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbc"].shape</b> = 
+    </td>
+    <td>
+       (5, 1)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbo"][4]</b> = 
+    </td>
+    <td>
+       [ 0.13893342]
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbo"].shape</b> = 
+    </td>
+    <td>
+       (5, 1)
+    </td>
+</tr>
+\end{verbatim}
+
+    \#\#\# 3.3 Backward Pass through the LSTM RNN
+
+This part is very similar to the \texttt{rnn\_backward} function you
+implemented above. You will first create variables of the same dimension
+as your return variables. You will then iterate over all the time steps
+starting from the end and call the one step function you implemented for
+LSTM at each iteration. You will then update the parameters by summing
+them individually. Finally return a dictionary with the new gradients.
+
+\#\#\# Exercise 8 - lstm\_backward
+
+Implement the \texttt{lstm\_backward} function.
+
+\textbf{Instructions}: Create a for loop starting from \(T_x\) and going
+backward. For each step, call \texttt{lstm\_cell\_backward} and update
+your old gradients by adding the new gradients to them. Note that
+\texttt{dxt} is not updated, but is stored.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} UNGRADED FUNCTION: lstm\PYZus{}backward}
+
+\PY{k}{def} \PY{n+nf}{lstm\PYZus{}backward}\PY{p}{(}\PY{n}{da}\PY{p}{,} \PY{n}{caches}\PY{p}{)}\PY{p}{:}
+    
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+\PY{l+s+sd}{    Implement the backward pass for the RNN with LSTM\PYZhy{}cell (over a whole sequence).}
+
+\PY{l+s+sd}{    Arguments:}
+\PY{l+s+sd}{    da \PYZhy{}\PYZhy{} Gradients w.r.t the hidden states, numpy\PYZhy{}array of shape (n\PYZus{}a, m, T\PYZus{}x)}
+\PY{l+s+sd}{    caches \PYZhy{}\PYZhy{} cache storing information from the forward pass (lstm\PYZus{}forward)}
+
+\PY{l+s+sd}{    Returns:}
+\PY{l+s+sd}{    gradients \PYZhy{}\PYZhy{} python dictionary containing:}
+\PY{l+s+sd}{                        dx \PYZhy{}\PYZhy{} Gradient of inputs, of shape (n\PYZus{}x, m, T\PYZus{}x)}
+\PY{l+s+sd}{                        da0 \PYZhy{}\PYZhy{} Gradient w.r.t. the previous hidden state, numpy array of shape (n\PYZus{}a, m)}
+\PY{l+s+sd}{                        dWf \PYZhy{}\PYZhy{} Gradient w.r.t. the weight matrix of the forget gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        dWi \PYZhy{}\PYZhy{} Gradient w.r.t. the weight matrix of the update gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        dWc \PYZhy{}\PYZhy{} Gradient w.r.t. the weight matrix of the memory gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        dWo \PYZhy{}\PYZhy{} Gradient w.r.t. the weight matrix of the output gate, numpy array of shape (n\PYZus{}a, n\PYZus{}a + n\PYZus{}x)}
+\PY{l+s+sd}{                        dbf \PYZhy{}\PYZhy{} Gradient w.r.t. biases of the forget gate, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        dbi \PYZhy{}\PYZhy{} Gradient w.r.t. biases of the update gate, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        dbc \PYZhy{}\PYZhy{} Gradient w.r.t. biases of the memory gate, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{                        dbo \PYZhy{}\PYZhy{} Gradient w.r.t. biases of the output gate, of shape (n\PYZus{}a, 1)}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+
+    \PY{c+c1}{\PYZsh{} Retrieve values from the first cache (t=1) of caches.}
+    \PY{p}{(}\PY{n}{caches}\PY{p}{,} \PY{n}{x}\PY{p}{)} \PY{o}{=} \PY{n}{caches}
+    \PY{p}{(}\PY{n}{a1}\PY{p}{,} \PY{n}{c1}\PY{p}{,} \PY{n}{a0}\PY{p}{,} \PY{n}{c0}\PY{p}{,} \PY{n}{f1}\PY{p}{,} \PY{n}{i1}\PY{p}{,} \PY{n}{cc1}\PY{p}{,} \PY{n}{o1}\PY{p}{,} \PY{n}{x1}\PY{p}{,} \PY{n}{parameters}\PY{p}{)} \PY{o}{=} \PY{n}{caches}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+    
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} START CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+    \PY{c+c1}{\PYZsh{} Retrieve dimensions from da\PYZsq{}s and x1\PYZsq{}s shapes (≈2 lines)}
+    \PY{n}{n\PYZus{}a}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{T\PYZus{}x} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{n\PYZus{}x}\PY{p}{,} \PY{n}{m} \PY{o}{=} \PY{k+kc}{None}
+    
+    \PY{c+c1}{\PYZsh{} initialize the gradients with the right sizes (≈12 lines)}
+    \PY{n}{dx} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{da0} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{da\PYZus{}prevt} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dc\PYZus{}prevt} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dWf} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dWi} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dWc} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dWo} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dbf} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dbi} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dbc} \PY{o}{=} \PY{k+kc}{None}
+    \PY{n}{dbo} \PY{o}{=} \PY{k+kc}{None}
+    
+    \PY{c+c1}{\PYZsh{} loop back over the whole sequence}
+    \PY{k}{for} \PY{n}{t} \PY{o+ow}{in} \PY{n+nb}{reversed}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{k+kc}{None}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{} Compute all gradients using lstm\PYZus{}cell\PYZus{}backward. Choose wisely the \PYZdq{}da\PYZus{}next\PYZdq{} (same as done for Ex 6).}
+        \PY{n}{gradients} \PY{o}{=} \PY{k+kc}{None}
+        \PY{c+c1}{\PYZsh{} Store or add the gradient to the parameters\PYZsq{} previous step\PYZsq{}s gradient}
+        \PY{n}{da\PYZus{}prevt} \PY{o}{=} \PY{k+kc}{None}
+        \PY{n}{dc\PYZus{}prevt} \PY{o}{=} \PY{k+kc}{None}
+        \PY{n}{dx}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{p}{,}\PY{n}{t}\PY{p}{]} \PY{o}{=} \PY{k+kc}{None}
+        \PY{n}{dWf} \PY{o}{+}\PY{o}{=} \PY{k+kc}{None}
+        \PY{n}{dWi} \PY{o}{+}\PY{o}{=} \PY{k+kc}{None}
+        \PY{n}{dWc} \PY{o}{+}\PY{o}{=} \PY{k+kc}{None}
+        \PY{n}{dWo} \PY{o}{+}\PY{o}{=} \PY{k+kc}{None}
+        \PY{n}{dbf} \PY{o}{+}\PY{o}{=} \PY{k+kc}{None}
+        \PY{n}{dbi} \PY{o}{+}\PY{o}{=} \PY{k+kc}{None}
+        \PY{n}{dbc} \PY{o}{+}\PY{o}{=} \PY{k+kc}{None}
+        \PY{n}{dbo} \PY{o}{+}\PY{o}{=} \PY{k+kc}{None}
+    \PY{c+c1}{\PYZsh{} Set the first activation\PYZsq{}s gradient to the backpropagated gradient da\PYZus{}prev.}
+    \PY{n}{da0} \PY{o}{=} \PY{k+kc}{None}
+    
+    \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} END CODE HERE \PYZsh{}\PYZsh{}\PYZsh{}}
+
+    \PY{c+c1}{\PYZsh{} Store the gradients in a python dictionary}
+    \PY{n}{gradients} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dx}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{da0}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWf}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dbf}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWi}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dbi}\PY{p}{,}
+                \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWc}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dbc}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dWo}\PY{p}{,}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{dbo}\PY{p}{\PYZcb{}}
+    
+    \PY{k}{return} \PY{n}{gradients}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{x\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{7}\PY{p}{)}
+\PY{n}{a0\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+
+\PY{n}{parameters\PYZus{}tmp} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{o}{+}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{o}{+}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{o}{+}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bo}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{o}{+}\PY{l+m+mi}{3}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}       \PY{c+c1}{\PYZsh{} unused, but needed for lstm\PYZus{}forward}
+\PY{n}{parameters\PYZus{}tmp}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{by}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}       \PY{c+c1}{\PYZsh{} unused, but needed for lstm\PYZus{}forward}
+
+\PY{n}{a\PYZus{}tmp}\PY{p}{,} \PY{n}{y\PYZus{}tmp}\PY{p}{,} \PY{n}{c\PYZus{}tmp}\PY{p}{,} \PY{n}{caches\PYZus{}tmp} \PY{o}{=} \PY{n}{lstm\PYZus{}forward}\PY{p}{(}\PY{n}{x\PYZus{}tmp}\PY{p}{,} \PY{n}{a0\PYZus{}tmp}\PY{p}{,} \PY{n}{parameters\PYZus{}tmp}\PY{p}{)}
+
+\PY{n}{da\PYZus{}tmp} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{gradients\PYZus{}tmp} \PY{o}{=} \PY{n}{lstm\PYZus{}backward}\PY{p}{(}\PY{n}{da\PYZus{}tmp}\PY{p}{,} \PY{n}{caches\PYZus{}tmp}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dx}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dx}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{da0}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][2][3] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{da0}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{da0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWf}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][3][1] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWf}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWi}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWi}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWc}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][3][1] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWc}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWo}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][1][2] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dWo}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dWo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbf}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbf}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbi}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbi}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbc}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbc}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbc}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbo}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{][4] =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gradients[}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{dbo}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{].shape =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{gradients\PYZus{}tmp}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dbo}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \textbf{Expected Output}:
+
+gradients{[}``dx''{]}{[}1{]}{[}2{]} =
+
+{[}0.00218254 0.28205375 -0.48292508 -0.43281115{]}
+
+\begin{verbatim}
+<tr>
+    <td>
+        <b>gradients["dx"].shape</b> =
+    </td>
+    <td>
+       (3, 10, 4)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["da0"][2][3]</b> =
+    </td>
+    <td>
+       0.312770310257
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["da0"].shape</b> =
+    </td>
+    <td>
+       (5, 10)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWf"][3][1]</b> = 
+    </td>
+    <td>
+       -0.0809802310938
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWf"].shape</b> =
+    </td>
+    <td>
+       (5, 8)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWi"][1][2]</b> = 
+    </td>
+    <td>
+       0.40512433093
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWi"].shape</b> = 
+    </td>
+    <td>
+       (5, 8)
+    </td>
+</tr>
+<tr>
+    <td>
+        <b>gradients["dWc"][3][1]</b> = 
+    </td>
+    <td>
+       -0.0793746735512
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWc"].shape</b> = 
+    </td>
+    <td>
+       (5, 8)
+    </td>
+</tr>
+<tr>
+    <td>
+        <b>gradients["dWo"][1][2]</b> = 
+    </td>
+    <td>
+       0.038948775763
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dWo"].shape</b> = 
+    </td>
+    <td>
+       (5, 8)
+    </td>
+</tr>
+<tr>
+    <td>
+        <b>gradients["dbf"][4]</b> = 
+    </td>
+    <td>
+       [-0.15745657]
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbf"].shape</b> = 
+    </td>
+    <td>
+       (5, 1)
+    </td>
+</tr>
+<tr>
+    <td>
+        <b>gradients["dbi"][4]</b> = 
+    </td>
+    <td>
+       [-0.50848333]
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbi"].shape</b> = 
+    </td>
+    <td>
+       (5, 1)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbc"][4]</b> = 
+    </td>
+    <td>
+       [-0.42510818]
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbc"].shape</b> = 
+    </td>
+    <td>
+       (5, 1)
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbo"][4]</b> = 
+    </td>
+    <td>
+       [ -0.17958196]
+    </td>
+</tr>
+    <tr>
+    <td>
+        <b>gradients["dbo"].shape</b> = 
+    </td>
+    <td>
+       (5, 1)
+    </td>
+</tr>
+\end{verbatim}
+
+    \hypertarget{congratulations-on-completing-this-assignment}{%
+\subsubsection{Congratulations on completing this
+assignment!}\label{congratulations-on-completing-this-assignment}}
+
+You now understand how recurrent neural networks work! In the next
+exercise, you'll use an RNN to build a character-level language model.
+See you there!
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
